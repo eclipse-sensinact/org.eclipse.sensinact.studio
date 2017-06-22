@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Common
+Bundle-SymbolicName: org.eclipse.sensinact.studio.ui.common
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.sensinact.studio.ui.common.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.sensinact.studio.ui.common.dialog,
+ org.eclipse.sensinact.studio.ui.common.images,
+ org.eclipse.sensinact.studio.ui.common.notification,
+ org.eclipse.sensinact.studio.ui.common.widget,
+ org.eclipse.sensinact.studio.ui.common.widget.MultiColumnTableWidget

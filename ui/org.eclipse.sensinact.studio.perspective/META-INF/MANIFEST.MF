@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sensinact Studio Main Perspective
+Bundle-SymbolicName: org.eclipse.sensinact.studio.perspective;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.sensinact.studio.perspective.Activator
+Bundle-Vendor: CEA LETI
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.sensinact.studio.perspective
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.sensinact.studio.view.outdoor,
+ org.eclipse.sensinact.studio.navigator.device,
+ org.eclipse.sensinact.studio.view.visualizer
+Import-Package: org.osgi.framework

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="resource" nsURI="http://SENSINACT_RESOURCE/0.1" nsPrefix="resource">
+  <eClassifiers xsi:type="ecore:EClass" name="Studio">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gateways" upperBound="-1"
+        eType="#//Gateway" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="friendlyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" upperBound="-1"
+        eType="#//Service" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="friendlyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" upperBound="-1"
+        eType="#//Resource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//NamedElement">
+    <eOperations name="getAccessMethod" upperBound="-1" eType="#//AccessMethod">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel" references="#//Resource/getAccessMethod">
+        <details key="body" value="EList&lt;AccessMethod> accessMethodByType = new EObjectContainmentEList&lt;AccessMethod>(AccessMethod.class, this, ResourcePackage.RESOURCE__ACCESS_METHOD);&#xA;&#x9;&#x9;for (AccessMethod accessMethod : getAccessMethod()) {&#xA;&#x9;&#x9;&#x9;if (accessMethod.getType().equals(type))&#xA;&#x9;&#x9;&#x9;&#x9;accessMethodByType.add(accessMethod);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return accessMethodByType;"/>
+      </eAnnotations>
+      <eParameters name="type" eType="#//AccessMethodType"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="friendlyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accessMethod" upperBound="-1"
+        eType="#//AccessMethod" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Resource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SensorData" eSuperTypes="#//Resource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StateVariable" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifier" upperBound="-1"
+        eType="#//Action" eOpposite="#//Action/state"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
+        eType="#//StateVariable" eOpposite="#//StateVariable/modifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metadata" upperBound="-1"
+        eType="#//Metadata" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Metadata" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AccessMethod">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AccessMethodType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="AccessMethodType">
+    <eLiterals name="GET" literal="GET"/>
+    <eLiterals name="SET"/>
+    <eLiterals name="ACT"/>
+    <eLiterals name="SUBSCRIBE"/>
+    <eLiterals name="UNSUBSCRIBE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gateway" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="device" upperBound="-1"
+        eType="#//Device" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

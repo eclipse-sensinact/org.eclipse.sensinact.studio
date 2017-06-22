@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.sensinact.studio.language.sensinact
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.eclipse.sensinact.studio.language.sensinact; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib,
+ org.eclipse.emf.common,
+ org.eclipse.sensinact.studio.model.manager;bundle-version="1.0.0",
+ org.eclipse.sensinact.studio.model.resource;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.eclipse.sensinact.studio.language.validation,
+ org.eclipse.sensinact.studio.language.sensinact.impl,
+ org.eclipse.sensinact.studio.language.scoping,
+ org.eclipse.sensinact.studio.language.sensinact.util,
+ org.eclipse.sensinact.studio.language.parser.antlr.internal,
+ org.eclipse.sensinact.studio.language.parser.antlr,
+ org.eclipse.sensinact.studio.language,
+ org.eclipse.sensinact.studio.language.services,
+ org.eclipse.sensinact.studio.language.sensinact,
+ org.eclipse.sensinact.studio.language.serializer,
+ org.eclipse.sensinact.studio.language.generator
+Import-Package: org.apache.log4j

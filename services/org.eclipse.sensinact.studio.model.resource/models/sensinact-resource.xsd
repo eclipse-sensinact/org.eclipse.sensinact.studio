@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2017 CEA.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+     Contributors:
+        CEA - initial API and implementation and/or initial documentation
+
+-->
+<schema targetNamespace="http://eclipse.org/sensinact/resource" 
+elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:sensinact="http://eclipse.org/sensinact/resource">
+
+	<simpleType name="assign_enum">
+		<restriction base="string">
+			<enumeration value="EACH"/>
+			<enumeration value="EMPTY"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="update_enum">
+		<restriction base="string">
+			<enumeration value="INIT"/>
+			<enumeration value="AUTO"/>
+			<enumeration value="NONE"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="type_enum">
+		<restriction base="string">
+			<enumeration value="GET"/>
+			<enumeration value="SET"/>
+			<enumeration value="ACT"/>
+			<enumeration value="SUBSCRIBE"/>
+			<enumeration value="UNSUBSCRIBE"/>
+			<enumeration value="HELLO"/>
+			<enumeration value="GOODBYE"/>
+			<enumeration value="SERVICES_ENUMERATION"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="policy_enum">
+		<restriction base="string">
+			<enumeration value="VARIABLE"/>
+			<enumeration value="SENSOR"/>
+			<enumeration value="PROPERTY"/>
+			<enumeration value="ACTION"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="scope_enum">
+		<restriction base="string">
+			<enumeration value="DEVICE"/>
+			<enumeration value="SERVICE"/>
+		</restriction>
+	</simpleType>
+	
+	<complexType name="policies">
+		<sequence>
+			<element name="policy" type="sensinact:policy" minOccurs="0" maxOccurs="4"/>
+		</sequence>
+	</complexType>
+	  
+	<complexType name="policy">
+		<simpleContent>
+			<extension base="QName">
+				<attribute name="name" type="sensinact:policy_enum" use="required"/>
+				<attribute name="update" type="sensinact:update_enum" use="optional" default="NONE"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="simpleContent" abstract="true">
+		<simpleContent>
+			<extension base="anySimpleType"/>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="binaryHexContent" abstract="false">
+		<simpleContent>
+			<restriction base="sensinact:simpleContent">
+				<simpleType>
+					<restriction base="hexBinary">
+						<whiteSpace value="collapse"/>
+					</restriction>
+				</simpleType>
+			</restriction>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="stringContent" abstract="false">
+		<simpleContent>
+			<restriction base="sensinact:simpleContent">
+				<simpleType>
+					<restriction base="string">
+						<whiteSpace value="collapse"/>
+					</restriction>
+				</simpleType>
+			</restriction>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="valueType">
+		<simpleContent>
+			<extension base="sensinact:simpleContent">
+				<attribute name="target" type="string" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="restrictedValueType">
+		<simpleContent>
+			<extension base="sensinact:simpleContent"/>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="typeType">
+		<simpleContent>
+			<extension base="QName">
+				<attribute name="target" type="string" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="restrictedTypeType">
+		<simpleContent>
+			<extension base="QName"/>
+		</simpleContent>
+	</complexType>
+	
+	<complexType name="nameTypeValue" abstract="true"/>
+	
+	<complexType name="parameter" >
+		<complexContent>
+			<extension base="sensinact:nameTypeValue">
+				<sequence>
+					<element name="type" type="sensinact:restrictedTypeType" minOccurs="1" maxOccurs="1"/>
+				</sequence>
+				<attribute name="name" type="string" use="required"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="parameters" >
+		<sequence>
+			<element name="parameter" type="sensinact:parameter" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="reference" >
+		<complexContent>
+			<extension base="sensinact:nameTypeValue">
+				<sequence>
+					<element name="type" type="sensinact:restrictedTypeType" minOccurs="1" maxOccurs="1"/>
+					<element name="value" type="sensinact:restrictedValueType" minOccurs="1" maxOccurs="1"/>
+				</sequence>
+				<attribute name="name" type="string" use="required"/>
+				<attribute name="policy" type="sensinact:policy_enum" use="optional" fixed="VARIABLE"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="references" >
+		<sequence>
+			<element name="reference" type="sensinact:reference" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="assignation" type="sensinact:assign_enum" use="required">
+			<annotation>
+				<documentation>
+				Defines whether the assignation of the specified value(s) 
+				to referenced StateVariableResource(s) is done after each call or only when 
+				the act method is called without parameter
+				</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+	
+	<simpleType name="nameTypeValueKeyWordsExcludedString">
+		<restriction base="string">
+			<pattern value="([^ntv]|n[^a]|t[^y]|v[^a]|na[^m]|ty[^p]|va[^l]|nam[^e]|typ[^e]|val[^u]|name[a-z0-9]|type[a-z0-9]|valu[^e]|value[a-z0-9])[a-z0-9_\-]*"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="modifiableKeyWordExcludedString">
+		<restriction base="string">
+			<pattern value="([^m]|m[^o]|mo[^d]|mod[^i]|modi[^f]|modif[^i]|modifi[^a]|modifia[^b]|modifiab[^l]|modifiabl[^e]|modifiable[a-z0-9])[a-z0-9_\-]*"/>
+		</restriction>
+	</simpleType>
+	
+	<complexType name="metadata">
+		<complexContent>
+			<extension base="sensinact:nameTypeValue">
+				<sequence>
+					<element name="type" type="sensinact:restrictedTypeType" minOccurs="1" maxOccurs="1"/>
+					<element name="value" type="sensinact:valueType" minOccurs="0" maxOccurs="unbounded"/>
+				</sequence>
+				<attribute name="name" use="required" type="sensinact:modifiableKeyWordExcludedString"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="attribute">
+		<complexContent>
+			<extension base="sensinact:nameTypeValue">
+				<sequence>
+					<element name="type" type="sensinact:typeType" minOccurs="1" maxOccurs="unbounded"/>
+					<element name="value" type="sensinact:valueType" minOccurs="0" maxOccurs="unbounded"/>
+					<element name="metadata"  minOccurs="0" maxOccurs="unbounded" type="sensinact:metadata">
+						<unique name="uniqueMetadataValueTarget">
+							<selector xpath="./sensinact:value"/>
+							<field xpath="@target"/>
+						</unique>
+					</element>
+				</sequence>
+				<attribute name="name" use="required" type="sensinact:nameTypeValueKeyWordsExcludedString"/>
+				<attribute name="modifiable" type="boolean" default="false" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="command">
+		<sequence maxOccurs="1" minOccurs="1">	
+			<element name="identifier" type="sensinact:simpleContent" minOccurs="1" maxOccurs="1"/>	 
+		</sequence>
+		<attribute name="type" type="sensinact:type_enum" use="required"/>
+	</complexType>	
+	
+	<complexType name="commands">
+		<sequence maxOccurs="1" minOccurs="1">	
+			<element name="command" type="sensinact:command" minOccurs="0" maxOccurs="8"/>	 
+		</sequence>	
+	</complexType>
+	
+	<complexType name="resourceInfo" abstract="true">
+		<sequence maxOccurs="1" minOccurs="1">	
+			<element name="policy" type="sensinact:policy" minOccurs="0" maxOccurs="1"/>	
+			<element name="identifier" type="sensinact:simpleContent" minOccurs="1" maxOccurs="1"/>	 
+			<element name="attribute" type="sensinact:attribute" minOccurs="0" maxOccurs="unbounded">
+				<unique name="uniqueAttributeTypeTarget">
+					<selector xpath="./sensinact:type"/>
+					<field xpath="@target"/>
+				</unique>
+				<unique name="uniqueAttributeValueTarget">
+					<selector xpath="./sensinact:value"/>
+					<field xpath="@target"/>
+				</unique>
+			</element>				
+		</sequence>	
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="scope" type="sensinact:scope_enum" use="required"/>
+		<attribute name="target" type="string" use="optional"/>
+	</complexType>
+	
+	<complexType name="resourceInfoData" abstract="true">
+		<complexContent>
+			<extension base="sensinact:resourceInfo">			
+				<sequence>
+					<element name="type" type="sensinact:typeType" minOccurs="1" maxOccurs="unbounded">
+						<annotation>
+							<documentation>Type of the associated Resource's 'value' attribute </documentation>
+						</annotation>
+					</element>
+					<element name="value" type="sensinact:valueType" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>Value of the associated Resource's 'value' attribute </documentation>
+						</annotation>
+					</element>	
+					<element name="metadata" type="sensinact:metadata" minOccurs="0" maxOccurs="unbounded">
+						<annotation>
+							<documentation>Metadata of the associated Resource's 'value' attribute</documentation>
+						</annotation>
+						<unique name="uniqueResourceInfoMetadataValueTarget">
+							<selector xpath="./sensinact:value"/>
+							<field xpath="@target"/>
+						</unique>
+					</element>
+				</sequence>
+				<attribute name="modifiable" type="boolean" use="optional" default="false" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="resourceInfoVariable" >
+		<complexContent>
+			<extension base="sensinact:resourceInfoData">
+				<attribute name="policy" type="sensinact:policy_enum" use="optional" fixed="VARIABLE"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="resourceInfoProperty" >
+		<complexContent>
+			<extension base="sensinact:resourceInfoData">
+				<attribute name="policy" type="sensinact:policy_enum" use="optional" fixed="PROPERTY"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="resourceInfoSensor" >
+		<complexContent>
+			<extension base="sensinact:resourceInfoData">
+				<attribute name="policy" type="sensinact:policy_enum" use="optional" fixed="SENSOR"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="resourceInfoAction" >
+		<complexContent>
+			<extension base="sensinact:resourceInfo">			
+				<sequence>
+					<element name="references" type="sensinact:references" minOccurs="0" maxOccurs="2"/>
+					<element name="parameters" type="sensinact:parameters" minOccurs="0" maxOccurs="unbounded"/>
+				</sequence>
+				<attribute name="removeWithoutParameter" type="boolean" use="optional" default="false"/>
+				<attribute name="policy" type="sensinact:policy_enum" use="optional" fixed="ACTION"/>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="devices">
+		<annotation>
+			<documentation>Defines devices to reified before any discovering process</documentation>
+		</annotation>
+		<sequence>
+			<element name="device" type="sensinact:device" minOccurs="0" maxOccurs="unbounded">	
+				<unique name="uniqueServiceName">
+					<selector xpath="./sensinact:service"/>
+					<field xpath="@name"></field>
+				</unique>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="device">
+		<sequence>
+			<element name="service" type="sensinact:service" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="identifier" type="string"/>
+	</complexType>
+	
+	<complexType name="service">
+		<attribute name="name" type="string"/>
+	</complexType>
+
+	<complexType name="resourceInfos">
+		<sequence>
+			<element name="policies" type="sensinact:policies" minOccurs="0" maxOccurs="1"/>
+			<element name="commands" type="sensinact:commands" minOccurs="0" maxOccurs="1">
+				<unique name="uniqueCommandType">
+					<selector xpath="./sensinact:command"/>
+					<field xpath="@type"/>
+				</unique>
+			</element>
+			<element name="resourceInfo" type="sensinact:resourceInfo" minOccurs="0" maxOccurs="unbounded">
+				<unique name="references_call">
+					<selector xpath="./sensinact:references"/>
+					<field xpath="@assign"/>
+				</unique>						
+				<unique name="uniqueResourceInfoTypeTarget">
+					<selector xpath="./sensinact:type"/>
+					<field xpath="@target"/>
+				</unique>
+				<unique name="uniqueResourceInfoValueTarget">
+					<selector xpath="./sensinact:value"/>
+					<field xpath="@target"/>
+				</unique>
+				<unique name="uniqueAttributeName">
+					<selector xpath="./sensinact:attribute"/>
+					<field xpath="@name"/>
+				</unique>
+			  	<key name="resourceInfoPolicy">
+			    	<selector xpath="."/>
+			    	<field xpath="@policy"/>
+			  	</key>
+			  	<keyref name="resourceInfoPolicyRef" refer="sensinact:resourceInfoPolicy">
+			    	<selector xpath="./sensinact:policy"/>
+			    	<field xpath="@name"/>
+			  	</keyref>
+			</element>
+			<element name="devices" type="sensinact:devices" minOccurs="0" maxOccurs="1">			
+				<unique name="uniqueDeviceIdentifier">
+					<selector xpath="./sensinact:device"/>
+					<field xpath="@identifier"/>
+				</unique>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="resourceInfos" type="sensinact:resourceInfos">
+		<key name="resourceInfoName">
+	    	<selector xpath="./sensinact:resourceInfo"/>
+	    	<field xpath="@name"/>
+	  	</key>
+	  	<key name="resourceInfoVariable">
+	    	<selector xpath="./sensinact:resourceInfo"/>
+	    	<field xpath="@name"/>
+	    	<field xpath="@policy"/>
+	  	</key>
+	  	<keyref name="resourceInfoVariableRef" refer="sensinact:resourceInfoVariable">
+	    	<selector xpath="./sensinact:resourceInfo/sensinact:references/sensinact:reference"/>
+	    	<field xpath="@name"/>
+	    	<field xpath="@policy"/>
+	  	</keyref>
+	  	<unique name="policyRef">
+		   	<selector xpath="./sensinact:policies/sensinact:policy"/>
+		   	<field xpath="@name"/>
+		</unique>
+	</element>
+
+</schema>

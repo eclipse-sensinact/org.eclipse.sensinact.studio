@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sensinact Studio Device Navigator
+Bundle-SymbolicName: org.eclipse.sensinact.studio.navigator.device;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.sensinact.studio.navigator.device.Activator
+Bundle-Vendor: CEA LETI
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.ui.navigator,
+ org.eclipse.ui,
+ org.restlet,
+ org.eclipse.core.runtime,
+ org.eclipse.sensinact.studio.model.resource,
+ org.json,
+ org.eclipse.sensinact.studio.view.outdoor,
+ org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.model.manager,
+ org.apache.log4j,
+ org.eclipse.sensinact.studio.ui.common,
+ org.eclipse.emf.transaction,
+ org.eclipse.jface,
+ org.eclipse.sensinact.studio.preferences
+Export-Package: org.eclipse.sensinact.studio.navigator.device
+Import-Package: org.apache.log4j,org.eclipse.jetty.websocket.client,org.eclipse.jetty.websocket.api.annotations,org.eclipse.jetty.websocket.api,org.eclipse.jetty.util.component

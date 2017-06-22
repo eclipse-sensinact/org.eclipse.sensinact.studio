@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.sensinact.studio.model.resource/src-gen"
+    modelPluginID="org.eclipse.sensinact.studio.model.resource" modelName="Resource"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>resource.ecore</foreignModel>
+  <genPackages prefix="Resource" basePackage="org.eclipse.sensinact.studio" disposableProviderFactory="true"
+      ecorePackage="resource.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="resource.ecore#//AccessMethodType">
+      <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/GET"/>
+      <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/SET"/>
+      <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/ACT"/>
+      <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/SUBSCRIBE"/>
+      <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/UNSUBSCRIBE"/>
+    </genEnums>
+    <genClasses ecoreClass="resource.ecore#//Devices">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Devices/device"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Device">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//Device/friendlyName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Device/service"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//TypedElement/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//TypedElement/value"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Service">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//Service/friendlyName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Service/resource"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//Resource/friendlyName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Resource/attribute"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Resource/accessMethod"/>
+      <genOperations ecoreOperation="resource.ecore#//Resource/getAccessMethod">
+        <genParameters ecoreParameter="resource.ecore#//Resource/getAccessMethod/type"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Property"/>
+    <genClasses ecoreClass="resource.ecore#//SensorData"/>
+    <genClasses ecoreClass="resource.ecore#//StateVariable">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference resource.ecore#//StateVariable/modifier"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Action">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference resource.ecore#//Action/state"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Attribute">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Attribute/metadata"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Metadata"/>
+    <genClasses ecoreClass="resource.ecore#//AccessMethod">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//AccessMethod/parameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//AccessMethod/type"/>
+    </genClasses>
+    <genClasses ecoreClass="resource.ecore#//Parameter"/>
+  </genPackages>
+</genmodel:GenModel>

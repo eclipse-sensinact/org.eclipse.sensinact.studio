@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Piax
+Bundle-SymbolicName: org.eclipse.sensinact.studio.view.piax;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.sensinact.studio.view.piax.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.apache.log4j,
+ org.eclipse.sensinact.studio.model.resource,
+ org.json,
+ org.eclipse.sensinact.studio.model.manager,
+ org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.ui.common,
+ org.eclipse.sensinact.studio.preferences
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sensinact Studio Outdoor View
+Bundle-SymbolicName: org.eclipse.sensinact.studio.view.outdoor;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.sensinact.studio.view.outdoor.Activator
+Bundle-Vendor: CEA LETI
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.sensinact.studio.model.resource,
+ org.eclipse.sensinact.studio.webapp.outdoor,
+ org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.model.manager,
+ org.apache.log4j,
+ org.eclipse.sensinact.studio.preferences
+Export-Package: org.eclipse.sensinact.studio.view.outdoor
+Import-Package: org.apache.log4j
