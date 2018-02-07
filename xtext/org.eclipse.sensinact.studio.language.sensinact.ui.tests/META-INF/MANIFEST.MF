@@ -10,13 +10,15 @@ Require-Bundle: org.eclipse.sensinact.studio.language.sensinact.ui,
  org.eclipse.xtext.junit4,
  org.eclipse.xtext.xbase.junit,
  org.eclipse.core.runtime,
- org.eclipse.ui.workbench
+ org.eclipse.ui.workbench;resolution:=optional,
+ org.eclipse.xtext.testing,
+ org.eclipse.xtext.xbase.testing
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.eclipse.sensinact.studio.language.ui.tests
+Export-Package: org.eclipse.sensinact.studio.language.ui.tests;x-internal=true
 Import-Package: org.hamcrest.core,
- org.junit,
- org.junit.runners.model,
- org.junit.runner,
- org.junit.runners,
- org.junit.runner.manipulation,
- org.junit.runner.notification
+ org.junit;version="4.5.0",
+ org.junit.runners.model;version="4.5.0",
+ org.junit.runner;version="4.5.0",
+ org.junit.runners;version="4.5.0",
+ org.junit.runner.manipulation;version="4.5.0",
+ org.junit.runner.notification;version="4.5.0"
