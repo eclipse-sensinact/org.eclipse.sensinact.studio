@@ -8,12 +8,22 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-var init = eval('(' + synchronusGET("/webapp/outdoor/init") + ')');
 
+// For debug purpose, for the eclipse webview...
+function toStr(obj) {
+  var output="";
+  for(var i in obj) {
+    var v = obj[i];
+    output += i + ":" + v + "\n"
+  }
+  return output;
+}
+
+var init = eval('(' + synchronusGET("/webapp/outdoor/init") + ')');
 
 var map = L.map('map',{maxZoom:23}).setView([init.lat, init.lng], init.zoom);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 23,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	maxZoom: 23,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors - <a href="#" onclick="window.location.reload()">reload</a>'
 }).addTo(map);
 
 imageBounds4022 = [[45.19317,5.70630],[45.19350,5.70675]];
@@ -35,8 +45,8 @@ map.on('zoomend', function(e) {
   }
 });
 
-var markers = [];
 
+var markers = {};
 
 function synchronusGET(url){
     return $.ajax({
@@ -68,8 +78,8 @@ function updateDeviceLocation(lat, lng, deviceName) {
 		marker.on('dragend', markerDrag);
 		marker.on('click',function(e) {updatePopupAtInit(e,deviceName);} );
 		markers[deviceName] = marker;
-    }else {
-    	markerCache.setLatLng([lat, lng]);
+    } else {
+    	markerCache.setLatLng(new L.latLng(lat, lng));
     	markerCache.update();
     }
     return Boolean("true");
@@ -84,6 +94,7 @@ function deleteMarker(deviceName) {
     return Boolean("true");
 }
 
+
 function markerDrag(e) {
   var text = e.target._popup._content;
   var latlng = e.target._latlng;  
@@ -97,8 +108,16 @@ function markerDrag(e) {
       type: "POST",
       url: "/webapp/updatelocation/" + deviceName,
       async: false,
-      data: JSON.stringify({"lat": latlng.lat, "lng": latlng.lng })
+      data: JSON.stringify({"lat": latlng.lat, "lng": latlng.lng }),
+      error : function(resultat, statut, erreur) {
+          var oldLatLng = JSON.parse(resultat.responseText);
+          var oldLat = oldLatLng.lat;
+          var oldLng = oldLatLng.lng;
+          updateDeviceLocation(oldLat, oldLng, deviceName);
+          alert("The location of " + deviceName + " device is not updatable");
+      }
   });
+  
 }
 
 function updatePopupAtInit(e, deviceName) {

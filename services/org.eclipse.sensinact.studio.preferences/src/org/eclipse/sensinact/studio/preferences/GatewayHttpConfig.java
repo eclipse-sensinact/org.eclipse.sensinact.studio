@@ -10,6 +10,7 @@
  */
 package org.eclipse.sensinact.studio.preferences;
 
+import java.awt.datatransfer.StringSelection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -60,6 +61,10 @@ public class GatewayHttpConfig {
 		
 		this.username = username == null ? "" : username;
 		this.password = password == null ? "" : password;
+	}
+	
+	public boolean hasAuthentication() {
+		return username != null && (!username.isEmpty());
 	}
 	
 	public String getName() {

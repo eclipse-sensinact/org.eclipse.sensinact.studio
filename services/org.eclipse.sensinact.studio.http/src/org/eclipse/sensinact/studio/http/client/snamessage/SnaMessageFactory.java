@@ -18,7 +18,6 @@ import org.eclipse.sensinact.studio.http.client.snamessage.gateway.LifecycleReso
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.LifecycleServiceAppearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.LifecycleServiceDisappearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseAct;
-import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseCustom;
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseDescribe;
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseGet;
 import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseSet;
@@ -43,16 +42,17 @@ public class SnaMessageFactory {
 		try {
 			String type = jsonObject.optString("type", null);
 
+			// NO TYPE : JSON PATH
 			if (type == null) {
-				SnaMessage message;
 				try {
-					message = new ResponseCustom(jsonObject.toString(),new JSONObject("{type:'custom',uri:'custom://'}"));
-					return message;
-				} catch (JSONException e1) {
-					throw new RuntimeException();
+					return new JsonPathResponse(jsonObject);
+				}
+				catch (Exception e) {
+					throw new RuntimeException("No type detected and it's not a json path message", e);
 				}
 			}
 
+			// Attribute Update
 			if (type.equals(UpdateAttribute.KEY)) {
 				// check nested message
 				try {

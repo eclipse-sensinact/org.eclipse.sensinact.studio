@@ -52,7 +52,7 @@ class SensinactProposalProvider extends AbstractSensinactProposalProvider {
 		} // service completion
 		else if ("serviceID".equals(feature)) {
 			// Ensure to fetch the info during the code completion
-			ModelUpdater.getInstance().updateServices(gatewayID, deviceID);
+			ModelUpdater.getInstance().updateServices(gatewayID, deviceID, false);
 
 			var candidates = ModelEditor.getInstance().getServicesId(gatewayID, deviceID);
 			for (candidate : candidates) {

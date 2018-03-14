@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
 import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessageFactory;
-import org.eclipse.sensinact.studio.http.client.snamessage.gateway.ResponseCustom;
 import org.eclipse.sensinact.studio.model.resource.utils.JsonUtil;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
@@ -52,32 +51,25 @@ public class GatewayHttpClient {
 	public static SnaMessage sendGetRequest(Segments segments, Map<String, String> params) throws IOException {
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
 		ClientResource clientResource = new ClientResource(getContext(gwInfo), gwInfo.getURL().toString());
-		setAuthentication(clientResource, gwInfo);
+		if (gwInfo.hasAuthentication())
+			setAuthentication(clientResource, gwInfo);
 		clientResource.setRetryOnError(false);
 		segments.addToClientResource(clientResource);
 		
-		if (params != null)
-			for (String param : params.keySet()){
-				System.out.println("ADDDING:"+param+"="+params.get(param));
-				clientResource.addQueryParameter(new Parameter(param, params.get(param)));
-				
+		if (params != null) {
+			for (String param : params.keySet()) {
+				clientResource.addQueryParameter(new Parameter(param, params.get(param)));			
 			}
+		}
+		
 		String json = null;
 		try {
 			json = clientResource.get().getText();
-			System.out.println("SENDING GET request:"+clientResource.getRequest().toString());
 			return SnaMessageFactory.build(segments.getGateway(), new JSONObject(json));
-		} catch (JSONException e) {
-			try {
-				return new ResponseCustom(json,new JSONObject("{type:'custom',uri:'custom://'}"));
-			} catch (JSONException e1) {
-				throw new RuntimeException();
-			}
 		} catch (Exception e) {
 			try {
 				return SnaMessage.build(new JSONObject(json),e, segments);
 			} catch (JSONException e1) {
-				e.printStackTrace();
 				throw new IllegalArgumentException(json);
 			}
 		} 
@@ -89,7 +81,6 @@ public class GatewayHttpClient {
 			try {
 				jsonParameters.put(JsonUtil.createNameTypeValue(parameter.name, parameter.type, parameter.value));
 			} catch (JSONException e) {
-				e.printStackTrace();
 				throw new IOException(e);
 			}
 		}
@@ -122,7 +113,6 @@ public class GatewayHttpClient {
 	private static SnaMessage sendPostRequest(Segments segments, String jsonRequest,Collection<Parameter> queryParameter) throws IOException {
 		
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
-		System.out.println("SENDING POST request:"+jsonRequest+" to:"+gwInfo.getURL().toString());
 		ClientResource clientResource = new ClientResource(getContext(gwInfo), Method.POST, gwInfo.getURL().toString()) {
 			@Override
 			public Representation handleInbound(Response response) {
@@ -145,18 +135,9 @@ public class GatewayHttpClient {
 		String jsonResponse = sw.toString();
 		
 		try {
-			System.out.println("RESPONSE -->"+jsonResponse);
 			return SnaMessageFactory.build(segments.getGateway(), new JSONObject(jsonResponse));
 		} catch (Exception e) {
-			SnaMessage message;
-			try {
-				message = new ResponseCustom(jsonResponse,new JSONObject("{type:'custom',uri:'custom://'}"));
-				return message;
-			} catch (JSONException e1) {
-				throw new RuntimeException();
-			}
-			
-			
+			throw new IllegalArgumentException(jsonResponse);
 		}
 	}
 

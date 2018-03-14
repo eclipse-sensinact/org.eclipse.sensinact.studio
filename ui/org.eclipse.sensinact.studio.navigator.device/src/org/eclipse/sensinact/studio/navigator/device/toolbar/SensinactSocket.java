@@ -13,7 +13,6 @@ package org.eclipse.sensinact.studio.navigator.device.toolbar;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
@@ -31,7 +30,6 @@ import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@SuppressWarnings("serial")
 @WebSocket(maxTextMessageSize = 64 * 1024)
 public class SensinactSocket {
 

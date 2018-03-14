@@ -11,6 +11,7 @@
 package org.eclipse.sensinact.studio.model.manager.http;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalTime;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
@@ -20,6 +21,7 @@ import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.Response;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
 
@@ -31,26 +33,40 @@ public class UpdateLocationRoute extends SensinactServerResource {
 	private static final Logger logger = Logger.getLogger(UpdateLocationRoute.class);
 	
 	@Post("json")
-	public Response getValue(String params) {
+	public Response getValue(String params) throws UnsupportedEncodingException {
 		Response response = getResponse();
 
-		try {
-			String gatewayName = getRequestAttribute("gateway");
-			String deviceName = getRequestAttribute("device");
-			
+		DeviceLocationManager locationManager = DeviceLocationManager.getInstance();
+		String gatewayName = getRequestAttribute("gateway");
+		String deviceName = getRequestAttribute("device");
+		DeviceDescriptor deviceDescriptor = new DeviceDescriptor(gatewayName, deviceName);
+		GPScoordinates oldLocation = locationManager.getKnownLocation(deviceDescriptor);
+		
+		
+		try {		
 			JSONObject jsonMsg = new JSONObject(params);
 			double lat = (Double) jsonMsg.get("lat");
 			double lng = (Double) jsonMsg.get("lng");
-			DeviceLocationManager.getInstance().updateLocationInServer(new DeviceDescriptor(gatewayName, deviceName), new GPScoordinates(lat, lng));
-			response.setStatus(Status.SUCCESS_OK);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("DeviceInfoRoute - decode error", e);
-			response.setStatus(Status.SERVER_ERROR_INTERNAL);
+			boolean isUpdated = locationManager.updateLocationInServer(deviceDescriptor, new GPScoordinates(lat, lng));
+			if (isUpdated) {
+				response.setStatus(Status.SUCCESS_OK);
+				setCoordinatesInEntity(response, lat, lng);
+			}
+			else {
+				response.setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+				setCoordinatesInEntity(response, oldLocation.getLat(), oldLocation.getLng());
+			}
 		} catch (JSONException e) {
 			logger.error("Update Location Route", e);
+			setCoordinatesInEntity(response, oldLocation.getLat(), oldLocation.getLng());
 			response.setStatus(Status.SERVER_ERROR_INTERNAL);
 		}
 
 		return response;
+	}
+
+	private void setCoordinatesInEntity(Response response, double lat, double lng) {
+		String msg = "{\"lat\": " + lat + ", \"lng\": " + lng + "}";
+		response.setEntity(msg, MediaType.APPLICATION_JSON);		
 	}
 }

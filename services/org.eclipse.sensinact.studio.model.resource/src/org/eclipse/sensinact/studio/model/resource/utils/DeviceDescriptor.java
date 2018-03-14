@@ -35,34 +35,35 @@ public class DeviceDescriptor {
 	public String toString() {
 		return getGateway() + "/" + getDevice();
 	}
-	
-	public boolean equals(Object other) {
-		if (this == other)
-			return true;
-		if (!(other instanceof ResourceDescriptor))
-			return false;
-		final ResourceDescriptor that = (ResourceDescriptor) other;
-		return eqStr(this.getGateway(), that.getGateway()) && eqStr(this.getDevice(), that.getDevice());
-	}
 
+	@Override
 	public int hashCode() {
-		return hash(gateway) * hash(device);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((device == null) ? 0 : device.hashCode());
+		result = prime * result + ((gateway == null) ? 0 : gateway.hashCode());
+		return result;
 	}
 
-	private boolean eqStr(String str1, String str2) {
-		if (str1 == null)
-			if (str2 == null)
-				return true;
-			else
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DeviceDescriptor other = (DeviceDescriptor) obj;
+		if (device == null) {
+			if (other.device != null)
 				return false;
-		else
-			return str1.equals(str2);
-	}
-	
-	private int hash(String str) {
-		if (str == null)
-			return 2;
-		else
-			return str.hashCode();
+		} else if (!device.equals(other.device))
+			return false;
+		if (gateway == null) {
+			if (other.gateway != null)
+				return false;
+		} else if (!gateway.equals(other.gateway))
+			return false;
+		return true;
 	}
 }

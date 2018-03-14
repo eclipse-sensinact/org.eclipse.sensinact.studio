@@ -39,7 +39,7 @@ class SensinactScopeProvider extends AbstractSensinactScopeProvider {
 	}
 	
 	def DSL_SENSINACT getEca(EObject object) {
-		if (object == null)
+		if (object === null)
 			return null;
 		if (object instanceof DSL_SENSINACT)
 			return object as DSL_SENSINACT;

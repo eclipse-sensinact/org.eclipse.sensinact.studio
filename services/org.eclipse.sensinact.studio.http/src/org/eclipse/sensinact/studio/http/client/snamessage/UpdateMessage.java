@@ -20,7 +20,4 @@ public abstract class UpdateMessage extends SnaMessage {
 	public UpdateMessage(JSONObject json) {
 		super(json);
 	}
-
-	
-
 }

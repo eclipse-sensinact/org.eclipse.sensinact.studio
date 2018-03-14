@@ -41,7 +41,7 @@ public class DeviceInfoRoute extends SensinactServerResource {
 			sb.append("<b>" + fullName + "</b><br/>");
 			List<String> serviceIds = ModelEditor.getInstance().getServicesId(gatewayName, deviceName);
 			if(serviceIds.size()==0){
-				ModelUpdater.getInstance().updateServicesRecursive(gatewayName, deviceName);
+				ModelUpdater.getInstance().updateServices(gatewayName, deviceName, true);
 				serviceIds = ModelEditor.getInstance().getServicesId(gatewayName, deviceName);
 			}
 			for (String serviceId : serviceIds) {

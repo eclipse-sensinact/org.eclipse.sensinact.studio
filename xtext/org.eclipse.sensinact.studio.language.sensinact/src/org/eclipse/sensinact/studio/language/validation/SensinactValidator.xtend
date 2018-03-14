@@ -56,7 +56,7 @@ class SensinactValidator extends AbstractSensinactValidator {
 		var name = ref.getName();
 
 		var superEntity = (ref.eContainer() as DSL_SENSINACT);
-		if (superEntity != null) {
+		if (superEntity !== null) {
 			for (other : superEntity.resources) {
 				if (name.equals(other.getName())) {
 					nameOccurences++;
@@ -109,9 +109,9 @@ class SensinactValidator extends AbstractSensinactValidator {
 	}
 
 	def getNbParams(DSL_ListParam params) {
-		if (params == null)
+		if (params === null)
 			return 0;
-		if (params.param == null)
+		if (params.param === null)
 			return 0;
 		return params.param.size;
 	}
@@ -130,10 +130,10 @@ class SensinactValidator extends AbstractSensinactValidator {
 
 
 			// finding method
-			if (descriptor != null && actionType != null) {
+			if (descriptor !== null && actionType !== null) {
 				var method = ModelEditor.getInstance().getAccessMethodWithTypeNbParams(descriptor, actionType, nbParams);
 												
-				if (method == null) {
+				if (method === null) {
 					var String msg = null;
 					if (nbParams == 0) {
 						msg = "This action type without parameters is not available for this resource";
@@ -179,7 +179,7 @@ class SensinactValidator extends AbstractSensinactValidator {
 
 	def timestamp(DSL_CEP_DURATION duration) {
 		var retval = BigDecimal.ZERO;
-		if (duration != null && duration.units != null) {
+		if (duration !== null && duration.units !== null) {
 			for (unit : duration.units) {
 				if (unit instanceof DSL_CEP_DURATION_MIN) {
 					var min = unit as DSL_CEP_DURATION_MIN;

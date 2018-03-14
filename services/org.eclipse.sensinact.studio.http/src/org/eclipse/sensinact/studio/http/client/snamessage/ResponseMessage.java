@@ -20,17 +20,25 @@ public class ResponseMessage extends SnaMessage {
 
 	private int statusCode;
 
-	public ResponseMessage(JSONObject jsonObject) {
-		super(jsonObject);
-		try {
-			statusCode = jsonObject.getInt("statusCode");
-		} catch (JSONException e) {
-			e.printStackTrace();
-			statusCode = -1;
-			//throw new IllegalArgumentException(this.getClass().getName() + " json malformed");
-		}
+	public ResponseMessage(JSONObject json, String type, String uri) {
+		super(json, type, uri);
+		statusCode = getStatusCode(json);
+	}
+	
+	public ResponseMessage(JSONObject json) {
+		super(json);
+		statusCode = getStatusCode(json);
 	}
 
+	private static int getStatusCode(JSONObject json) {
+		try {
+			return json.getInt("statusCode");
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
 	public int getStatusCode() {
 		return statusCode;
 	}

@@ -32,6 +32,7 @@ public class Segments {
 	private final String gateway;
 
 	private static final String ROOT_SEGMENT = "sensinact";
+	private static final String JSON_ROOT_SEGMENT = "jsonpath:sensinact";
 	private static final String PROVIDERS  = "providers";
 	private static final String SERVICES = "services";
 	private static final String RESOURCES = "resources";
@@ -82,7 +83,6 @@ public class Segments {
 		public BuilderDevice device(DeviceDescriptor descriptor) {
 			return new BuilderDevice(descriptor.getGateway(), descriptor.getDevice());
 		}
-		
 	}
 	
 	public static class BuilderGateway {
@@ -102,8 +102,13 @@ public class Segments {
 		public BuilderReady devices() {
 			return new BuilderReady(gateway, ROOT_SEGMENT, PROVIDERS);
 		}
-		public BuilderJsonPath jsonpath(DeviceDescriptor descriptor) {
-			return new BuilderJsonPath(descriptor.getGateway(), descriptor.getDevice());
+		
+		public BuilderReady jsonPath() {
+			return new BuilderReady(gateway, JSON_ROOT_SEGMENT);
+		}
+		
+		public BuilderReady jsonPath(String expr) {
+			return new BuilderReady(gateway, JSON_ROOT_SEGMENT + "?" + expr);
 		}
 	}
 	
@@ -123,20 +128,7 @@ public class Segments {
 			return new BuilderService(gateway, device, serviceId);
 		}
 	}
-	
-	public static class BuilderJsonPath {
-		private final String gateway;
-		private final String device;
-		public BuilderJsonPath(String gateway,String device) {
-			this.gateway = gateway;
-			this.device=device;
-		}
 		
-		public BuilderReady getResult() {
-			return new BuilderReady(gateway, "jsonpath", "filter");
-		}
-	}
-	
 	public static class BuilderLocation {
 		private final String gateway;
 		public BuilderLocation(String gateway) {

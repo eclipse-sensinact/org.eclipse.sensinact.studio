@@ -33,8 +33,13 @@ public class ResponseDescribeResource extends ResponseDescribe {
 		name = info.getString("name");
 		
 		JSONArray jsonAms = info.getJSONArray("accessMethods");
+		// double array...
 		for (int i=0; i< jsonAms.length(); i++) {
-			accessMethods.add(new RestAM(jsonAms.getJSONObject(i)));
+			JSONArray jsonAmsInside = jsonAms.getJSONArray(i);
+			for (int j=0; j < jsonAmsInside.length(); j++) {
+				JSONObject element = jsonAmsInside.getJSONObject(j);
+				accessMethods.add(new RestAM(element));	
+			}
 		}
 
 		type = info.getString("type");

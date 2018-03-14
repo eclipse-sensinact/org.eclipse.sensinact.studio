@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.http.server.GatewayHttpServer;
 import org.eclipse.sensinact.studio.http.server.serverstarted.PortUpdate;
 import org.eclipse.sensinact.studio.http.server.serverstarted.ResourceAddedUpdate;
@@ -47,6 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Nicolas Hili, Etienne Gandrille
@@ -71,11 +73,10 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 
 	@PostConstruct
 	public void createControls(final Composite parent) {
-
 		parent.setLayout(null);
 		parent.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
 		browser = new Browser(parent, SWT.NONE);
-
+		
 		// Invisible shell and composite for Drag'n Drop feature
 		dndShell = new Shell(Display.getCurrent(), SWT.ON_TOP);
 		dndShell.open();
@@ -138,14 +139,21 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 
 	@Override
 	public void deviceLocationUpdated(final GPScoordinates coordinate, final DeviceDescriptor descriptor) {
+		
+		System.out.println("before!!");
 		Display.getDefault().asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
 				String dev = "'" + descriptor.toString() + "'";
-				browser.execute("updateDeviceLocation(" + coordinate.getLat() + "," + coordinate.getLng() + "," + dev + ");");
+				String cmd = "updateDeviceLocation(" + coordinate.getLat() + "," + coordinate.getLng() + "," + dev + ");";
+				System.out.println(cmd);
+				browser.execute(cmd);
 			}
 		});
+		System.out.println("after!!");
+		
+		
 	}
 
 	@Override
@@ -273,23 +281,34 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 				String dropText = (String) event.data;
 
 				if (event.widget instanceof DropTarget) {					
+					// Retrieve lat and lng
 					Point relativePos = ((DropTarget) event.widget).getControl().toControl(event.x, event.y);
 					String cmd1 = "return computeCoordinates(" + relativePos.x + "," + relativePos.y + ");";
 					Object[] coordinates = (Object[]) browser.evaluate(cmd1);
 					Double lat = (Double) coordinates[0];
 					Double lng = (Double) coordinates[1];
 
+					// Retrieve gateway and device
 					String[] tab = dropText.split("/");
 					String gateway = tab[0];
 					if (gateway.startsWith("["))
 						gateway = gateway.substring(1);
 					String device = tab[1];
 					
-					String dev = "'" + gateway + "/" + device + "'";
-					String cmd2 = "return updateDeviceLocation(" + lat + "," + lng + "," + dev + ");";
-					System.out.println(cmd2);
-					browser.evaluate(cmd2);
-					DeviceLocationManager.getInstance().updateLocationInServer(new DeviceDescriptor(gateway, device), new GPScoordinates(lat, lng));
+					// try to update on server
+					boolean locationUpdated = DeviceLocationManager.getInstance().updateLocationInServer(new DeviceDescriptor(gateway, device), new GPScoordinates(lat, lng));
+					
+					if (locationUpdated) {
+						String dev = "'" + gateway + "/" + device + "'";
+						String cmd = "return updateDeviceLocation(" + lat + "," + lng + "," + dev + ");";
+						System.out.println(cmd);
+						browser.evaluate(cmd);
+					} else {
+						// DropTarget target = (DropTarget) event.getSource();
+						// Shell shell = target.getControl().getShell();
+						Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();						
+						MessageDialog.openWarning(shell, "Error", "The location of " + device + " device is NOT updatable");
+					}
 				}
 			}
 		}

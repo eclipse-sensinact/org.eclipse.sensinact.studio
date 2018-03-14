@@ -79,16 +79,32 @@ public class DeviceLocationManager {
 		}
 	}
 	
-	public void updateLocationInServer(DeviceDescriptor deviceDescriptor, GPScoordinates newCoordinates) {
+	public GPScoordinates getKnownLocation(DeviceDescriptor deviceDescriptor) {
+		return locations.get(deviceDescriptor);
+	}
+	
+	/**
+	 * 
+	 * @param deviceDescriptor
+	 * @param newCoordinates
+	 * @return true if success, false if update location failed. It happens when the location is not updatable. 
+	 */
+	public boolean updateLocationInServer(DeviceDescriptor deviceDescriptor, GPScoordinates newCoordinates) {
 		if (needUpdate(deviceDescriptor, newCoordinates)) {
-			locations.put(deviceDescriptor, newCoordinates);
-			ModelUpdater.getInstance().updateLocationOnServer(deviceDescriptor, newCoordinates);
+			if (ModelUpdater.getInstance().updateLocationOnServer(deviceDescriptor, newCoordinates)) {
+				locations.put(deviceDescriptor, newCoordinates);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
 		}
 	}
 	
 	private boolean needUpdate(DeviceDescriptor deviceDescriptor, GPScoordinates newCoordinates) {
 		GPScoordinates oldCoordinates = locations.get(deviceDescriptor);
-		return (! newCoordinates.equals(oldCoordinates)) ;
+		return (! newCoordinates.equals(oldCoordinates));
 	}
 	
 	@Override

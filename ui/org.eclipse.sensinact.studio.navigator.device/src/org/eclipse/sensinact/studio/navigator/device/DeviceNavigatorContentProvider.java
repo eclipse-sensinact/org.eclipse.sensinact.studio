@@ -74,7 +74,7 @@ public class DeviceNavigatorContentProvider implements ITreeContentProvider {
 				DeviceImpl device=(DeviceImpl)parentElement;
 				GatewayImpl gateway=(GatewayImpl)device.eContainer();
 				if(ModelEditor.getInstance().getServicesId(gateway.getName(),device.getName()).size()==0){
-					ModelUpdater.getInstance().updateServicesOnly(gateway.getName(),device.getName());
+					ModelUpdater.getInstance().updateServices(gateway.getName(),device.getName(), true);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

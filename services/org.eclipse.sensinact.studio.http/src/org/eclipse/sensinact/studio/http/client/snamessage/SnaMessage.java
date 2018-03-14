@@ -23,7 +23,7 @@ public class SnaMessage {
 	private final String uri;
 	private final JSONObject json;
 	
-	public SnaMessage(JSONObject json,String type,String uri){
+	public SnaMessage(JSONObject json, String type, String uri) {
 		this.json=json;
 		this.type=type;
 		this.uri=uri;
