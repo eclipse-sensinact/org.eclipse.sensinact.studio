@@ -10,11 +10,17 @@
  */
 package org.eclipse.sensinact.studio.model.manager.http;
 
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.sensinact.studio.http.client.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgFactory;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionManager;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
@@ -29,16 +35,23 @@ public class GatewayHttpServerRoute extends SensinactServerResource {
 	@Post("json")
 	public Response getValue(String params) {
 		try {
-			String content = new String(params.getBytes());
-			String id = getRequestAttribute("id");
-
-			logger.debug("Callback recieved : " + content);
-			Status status = SubscriptionManager.getInstance().callbackRecieved(content, id);
-
+			// CALLBACK : we need to check the embedded messages
+			JSONObject json = new JSONObject(params);
+			String id = json.getString("callbackId");
+			JSONArray array = json.getJSONArray("messages");
+			
+			List<MsgSensinact> messages = new ArrayList<MsgSensinact>(); 
+			for (int i=0; i<array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+				messages.add(MsgFactory.build(object));
+			}
+			
+			Status status = Agent.getInstance().callbackRecieved(id, messages);
+			
 			Response response = getResponse();
 			response.setStatus(status);
 			return response;
-		} catch (UnsupportedEncodingException e) {
+		} catch (JSONException e) {
 			logger.error("DeviceInfoRoute - decode error", e);
 			return null;
 		}

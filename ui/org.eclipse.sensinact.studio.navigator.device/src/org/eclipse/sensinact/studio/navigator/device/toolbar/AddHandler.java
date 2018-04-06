@@ -23,7 +23,8 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Etienne Gandrille
- */public class AddHandler extends SnaHandler {
+ */
+public class AddHandler extends SnaHandler {
 
 	private static final Logger logger = Logger.getLogger(AddHandler.class);
 	

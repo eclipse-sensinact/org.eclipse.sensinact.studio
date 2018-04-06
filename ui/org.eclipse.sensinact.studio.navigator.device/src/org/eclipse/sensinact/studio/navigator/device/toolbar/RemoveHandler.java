@@ -15,12 +15,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
-import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
-import org.eclipse.sensinact.studio.view.outdoor.OutdoorDeploymentView;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.sensinact.studio.resource.Gateway;
+import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 
 /**
  * @author Etienne Gandrille

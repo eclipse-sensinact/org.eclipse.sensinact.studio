@@ -10,9 +10,7 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,14 +20,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.sensinact.studio.http.client.agent.Agent;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
+import org.eclipse.sensinact.studio.resource.Gateway;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.sensinact.studio.resource.Gateway;
 
 /**
  * @author Etienne Gandrille
@@ -51,7 +49,7 @@ public class ConnectHandler extends SnaHandler {
 			if (gwConfig == null) {
 				MessageDialog.openError(parent, "Error", "Can't find gateway info.");
 				logger.error("Error while getting gateway config for " + name);
-			} else if (ModelUpdater.getInstance().isConnected(name)) {
+			} else if (Agent.getInstance().isConnected(name)) {
 				MessageDialog.openError(parent, "Error", "Gateway already connected.");
 			} else {
 				connect(parent, gwConfig);
@@ -93,6 +91,5 @@ public class ConnectHandler extends SnaHandler {
 		} catch (Exception e2) {
 			logger.error("Exception during update", e2);
 		}
-		
 	}
 }

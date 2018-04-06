@@ -15,6 +15,9 @@ import java.net.URLDecoder;
 
 import org.restlet.resource.ServerResource;
 
+/**
+ * @author Etienne Gandrille
+ */
 public abstract class SensinactServerResource extends ServerResource {
 
 	protected String getRequestAttribute(String name) throws UnsupportedEncodingException {		

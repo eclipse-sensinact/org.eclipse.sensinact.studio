@@ -19,7 +19,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+/**
+ * @author Jander Nascimento
+ */
 public class SensinactWebSocketConnectionManager implements Cloneable {
+	
 	private static final Logger logger = Logger.getLogger(SensinactWebSocketConnectionManager.class);
 	private static SensinactWebSocketConnectionManager instance;
 	private HashMap<String, WebSocketClient> servers=new HashMap<String, WebSocketClient>();
@@ -35,7 +39,6 @@ public class SensinactWebSocketConnectionManager implements Cloneable {
 		}
 
 		return instance;
-
 	}
 
 	public void connect(String gatewayName, URI url) throws ConnectException {
@@ -72,5 +75,4 @@ public class SensinactWebSocketConnectionManager implements Cloneable {
 	protected Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException("This class is a singleton and cannot be cloned");
 	}
-
 }

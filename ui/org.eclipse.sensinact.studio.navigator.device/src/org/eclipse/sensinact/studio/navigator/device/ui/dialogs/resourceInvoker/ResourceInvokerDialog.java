@@ -15,12 +15,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionListener;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.methodprovider.MethodProvider;
+import org.eclipse.sensinact.studio.resource.AccessMethod;
+import org.eclipse.sensinact.studio.resource.AccessMethodType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -30,13 +30,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import org.eclipse.sensinact.studio.resource.AccessMethod;
-import org.eclipse.sensinact.studio.resource.AccessMethodType;
-
 /**
- * @author Nicolas Hili
+ * @author Nicolas Hili, Etienne Gandrille
  */
-public class ResourceInvokerDialog extends TitleAreaDialog implements SubscriptionListener {
+public class ResourceInvokerDialog extends TitleAreaDialog {
 
 	private static final Logger logger = Logger.getLogger(ResourceInvokerDialog.class);
 	
@@ -178,10 +175,12 @@ public class ResourceInvokerDialog extends TitleAreaDialog implements Subscripti
 			AccessMethodType type = method.getType();
 			Segments segments = new Segments.Builder().resource(descriptor).method(type).build();
 			if (type.equals(AccessMethodType.GET)) {
-				return GatewayHttpClient.sendGetRequest(segments).getFullDescription();	
+				MsgSensinact msg = GatewayHttpClient.sendGetRequest(segments);
+				return msg.getType() + "\n" + msg.toString();
 			} else {
 				RequestParameter[] params = parameterComposite.getParametersValues(method);
-				return GatewayHttpClient.sendPostRequest(segments,null, params).getFullDescription();
+				MsgSensinact msg = GatewayHttpClient.sendPostRequest(segments,null, params);
+				return msg.getType() + "\n" + msg.toString();
 			}
 		} catch (Exception e) {
 			logger.error("action failure", e);
@@ -190,19 +189,14 @@ public class ResourceInvokerDialog extends TitleAreaDialog implements Subscripti
 	}
 	
 	/**
-	 * This method is called when the user selected an GET access method.
-	 * It sends an GET request to the gateway and get the result of the request
+	 * This method is called when the user selected an SUBSCRIBE access method.
+	 * It sends a SUBSCRIBE request to the gateway and get the result of the request
 	 * @return the result of the request
 	 */
 	private String subscribePressed() 
 	{
-		try {
-			String id = SubscriptionManager.getInstance().subscribeResource(descriptor, this);
-			return "Subscribe success id=" + id;
-		} catch (Exception e) {
-			logger.error("Subscribe failure", e);
-			return "[ERROR] " + e.getMessage();
-		}
+		// TODO update this class with implements SubscriptionListener {
+		return "Not yet implemented";
 	}
 
 	/**
@@ -214,29 +208,7 @@ public class ResourceInvokerDialog extends TitleAreaDialog implements Subscripti
 	 */
 	private String unsubscribePressed() 
 	{
-		try {
-			SubscriptionManager.getInstance().unsubscribeResource(descriptor, this);
-			return "unsubscribe success";
-		} catch (Exception e) {
-			logger.error("Unsubscribe failure",e);
-			return "[ERROR] " + e.getMessage();
-		}
-	}
-
-	@Override
-	public void onEvent(SnaMessage response, ResourceDescriptor resource)
-	{	
-//		Segments segments = new Segments.Builder().resource(resource
-//				).method(AccessMethodType.GET).build();
-//		//String msg = "";
-//		try {
-//			//msg = GatewayHttpClient.sendGetRequest(segments).getPrettyPrintedValue();
-//		} catch (Exception e) 
-//		{
-//			logger.error("unsubscribe failure", e);
-//			//msg = e.getMessage();
-//		}
-		resultLabel.setText("[SUBSCRIBE EVENT] " + response.getPrettyPrintedValue());
-		
+		// TODO update this class with implements SubscriptionListener {
+		return "Not yet implemented";
 	}
 }

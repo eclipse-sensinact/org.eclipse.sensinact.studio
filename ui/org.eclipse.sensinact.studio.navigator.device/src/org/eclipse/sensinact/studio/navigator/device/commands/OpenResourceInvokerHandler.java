@@ -18,7 +18,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.ResourceInvokerDialog;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.methodprovider.GUIDefinedMethodProvider;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import org.eclipse.sensinact.studio.resource.Device;

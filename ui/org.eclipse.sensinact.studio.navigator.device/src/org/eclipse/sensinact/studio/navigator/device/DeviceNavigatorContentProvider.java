@@ -108,5 +108,4 @@ public class DeviceNavigatorContentProvider implements ITreeContentProvider {
 		}
 		return eobject.eContents().size()>0;
 	}
-
 }

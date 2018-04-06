@@ -14,10 +14,6 @@ package org.eclipse.sensinact.studio.model.resource.utils;
  * @author Etienne Gandrille
  */
 public class Constants {
-
-	public static final ResourceDescriptor createLastEventRD(String gatewayID) {
-		return new ResourceDescriptor(gatewayID, "sensiNact", "system", "event");
-	}
 	
 	public static final ResourceDescriptor createInstallAppRD(String gatewayID) {
 		return new ResourceDescriptor(gatewayID, "AppManager", "admin", "INSTALL");

@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.emf.common,
  org.eclipse.sensinact.studio.model.manager;bundle-version="1.0.0",
  org.eclipse.sensinact.studio.model.resource;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.sensinact.studio.language.validation,
  org.eclipse.sensinact.studio.language.sensinact.impl,
  org.eclipse.sensinact.studio.language.scoping,

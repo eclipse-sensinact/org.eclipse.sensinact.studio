@@ -10,17 +10,19 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.sensinact.studio.http.client.agent.Agent;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
-import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
-
+import org.json.JSONException;
 import org.eclipse.sensinact.studio.resource.Gateway;
 
 /**
@@ -43,7 +45,7 @@ public class DisconnectHandler extends SnaHandler {
 			if (gwConfig == null) {
 				MessageDialog.openError(parent, "Error", "Can't find gateway info.");
 				logger.error("Error while getting gateway config for " + name);
-			} else if ( ! ModelUpdater.getInstance().isConnected(name)) {
+			} else if ( ! Agent.getInstance().isConnected(name)) {
 				MessageDialog.openError(parent, "Error", "Gateway is not connected.");
 			} else {
 				disconnect(parent, gwConfig);
@@ -56,7 +58,11 @@ public class DisconnectHandler extends SnaHandler {
 	}
 
 	private void disconnect(Shell parent, GatewayHttpConfig gwConfig) {
-		ModelUpdater.getInstance().unsubscribeLastEvent(gwConfig.getName());
+		try {
+			Agent.getInstance().unsubscribe(gwConfig);
+		} catch (IOException | JSONException e) {
+			logger.warn("Error while disconnecting gateway", e);
+		}
 		SensinactWebSocketConnectionManager.getInstance().disconnect(gwConfig.getName());
 		ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());
 	}

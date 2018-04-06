@@ -12,8 +12,6 @@ package org.eclipse.sensinact.studio.navigator.device.filter;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.sensinact.studio.model.manager.listener.modelset.ResourceModelSetListener;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Composite;
@@ -24,7 +22,6 @@ import org.eclipse.ui.dialogs.PatternFilter;
  * Class that allows to interfere with the filter submitted to the tree
  * 
  * @author Jander Nascimento
- *
  */
 public class SensinactFilteredTree extends FilteredTree {
 

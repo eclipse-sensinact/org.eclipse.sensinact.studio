@@ -10,26 +10,25 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.client.agent.Agent;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
-import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
-import org.eclipse.sensinact.studio.model.resource.utils.Constants;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @author Jander Nascimento
+ */
 @WebSocket(maxTextMessageSize = 64 * 1024)
 public class SensinactSocket {
 
@@ -55,14 +54,12 @@ public class SensinactSocket {
         this.closeLatch.countDown();
         try {
         	GatewayHttpConfig gwConfig = ConfigurationManager.getGateway(gatewayID);
-            ModelUpdater.getInstance().unsubscribeLastEvent(gwConfig.getName());
+            Agent.getInstance().unsubscribe(gwConfig);
     		SensinactWebSocketConnectionManager.getInstance().disconnect(gwConfig.getName());
     		ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());	
         }catch(Exception e){
-        	logger.log(Priority.DEBUG, (Object)("Websocket clients was disconnected from the server "+gatewayID));
+        	logger.debug("Websocket clients was disconnected from the server "+gatewayID);
         }
-        
-        
     }
 
     @OnWebSocketConnect
@@ -73,28 +70,32 @@ public class SensinactSocket {
 
     @OnWebSocketMessage
     public void onMessage(String msg) {
-    	logger.log(Priority.INFO, (Object)("Websocket message received from "+gatewayID));
+    	logger.info("Websocket message received from "+gatewayID);
     	String uri;
 		try {
 			JSONObject jsonMessage=new JSONObject(msg);
 			uri = jsonMessage.getString("uri");		
-			SubscriptionManager sm=SubscriptionManager.getInstance();
-			List<String> subscriptionids=sm.getSubscriptionIDFromResourceURI(uri);
+			//SubscriptionManager sm=SubscriptionManager.getInstance();
+			
+			// TODO update this with new subscription model
+			
+			/*
+			// List<String> subscriptionids=sm.getSubscriptionIDFromResourceURI(uri);
 			//Find subscription with a given destination
 			if(subscriptionids.size()!=0)
 			for(String subscriptionID:subscriptionids){
-				logger.log(Priority.DEBUG, (Object)("Sending notification to subscriptionID:"+subscriptionID));
+				logger.debug("Sending notification to subscriptionID:"+subscriptionID);
 				sm.callbackRecieved(msg, subscriptionID);
 			}
 			else {
 				//Case so far the notification was not dispatched, dispatch system message if that correspond to one
-				String subscriptionID=sm.getSubscriptionId(Constants.createLastEventRD(gatewayID));
+				String subscriptionID=sm.getSubscriptionId(new ResourceDescriptor(gatewayID, null, null, null));
 				sm.callbackRecieved(msg, subscriptionID);
 			}
+			*/
 		} catch (JSONException e) {
-			logger.log(Priority.DEBUG, (Object)("Error receiving message:"+e.getMessage()));
-		}
-    	
+			logger.debug("Error receiving message:"+e.getMessage());
+		}    	
     }
     
     public Session getSession(){

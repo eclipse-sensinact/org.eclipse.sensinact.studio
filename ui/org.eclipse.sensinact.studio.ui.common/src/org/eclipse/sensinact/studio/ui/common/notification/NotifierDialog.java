@@ -288,7 +288,5 @@ public class NotifierDialog {
 
         };
         Display.getDefault().timerExec(FADE_TIMER, run);
-
     }
-
 }

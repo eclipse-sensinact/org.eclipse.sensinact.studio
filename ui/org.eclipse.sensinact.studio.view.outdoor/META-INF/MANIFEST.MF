@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.sensinact.studio.view.outdoor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.sensinact.studio.view.outdoor.Activator
 Bundle-Vendor: CEA LETI
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

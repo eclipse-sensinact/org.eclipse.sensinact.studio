@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.sensinact.studio.language.sensinact,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.sensinact.studio.model.manager
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.sensinact.studio.language.ui.quickfix,
  org.eclipse.sensinact.studio.language.sensinact.ui.internal,
  org.eclipse.sensinact.studio.language.ui.contentassist

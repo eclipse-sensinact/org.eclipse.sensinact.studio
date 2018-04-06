@@ -20,10 +20,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
-
 import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.language.sensinact.Sensinact;
 
@@ -67,12 +65,16 @@ public abstract class SnaAppHandler extends SnaHandler {
 		return fileName;
 	}
 	
-	protected void displayResult(Shell shell, String title, String fileName, SnaMessage response) {
+	protected void displayResult(Shell shell, String title, String fileName /*, SnaMessage response*/) {
+		// Update with new API
+		
+		/*
 		String description = response.getFullDescription() + "\n" + "filename: " + fileName;
 		if (response.isValid())
 			MessageDialog.openInformation(shell, title, description);
 		else 
 			MessageDialog.openError(shell, title, description);
+			*/
 	}
 	
 	protected void displayResult(Shell shell, String title, String fileName, Exception e) {

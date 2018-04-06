@@ -36,6 +36,9 @@ public class Segments {
 	private static final String PROVIDERS  = "providers";
 	private static final String SERVICES = "services";
 	private static final String RESOURCES = "resources";
+	private static final String LOGIN = "login";
+	private static final String AGENT_SUBSCRIBE = "SUBSCRIBE";
+	private static final String AGENT_UNSUBSCRIBE = "UNSUBSCRIBE";
 	
 	private Segments(String gateway, List<String> segments) {
 		this.gateway = gateway;
@@ -109,6 +112,18 @@ public class Segments {
 		
 		public BuilderReady jsonPath(String expr) {
 			return new BuilderReady(gateway, JSON_ROOT_SEGMENT + "?" + expr);
+		}
+
+		public BuilderReady login() {
+			return new BuilderReady(gateway, LOGIN);
+		}
+
+		public BuilderReady subscribeAgent() {
+			return new BuilderReady(gateway, ROOT_SEGMENT, AGENT_SUBSCRIBE);
+		}
+		
+		public BuilderReady unsubscribeAgent() {
+			return new BuilderReady(gateway, ROOT_SEGMENT, AGENT_UNSUBSCRIBE);
 		}
 	}
 	

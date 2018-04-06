@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
+import org.eclipse.sensinact.studio.http.client.agent.Agent;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.swt.widgets.Display;
@@ -40,15 +40,23 @@ public class ConnectJob extends Job{
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		super.setThread(new Thread());
-		monitor.beginTask("Connecting..", 100);
+		monitor.beginTask("Connecting...", 100);
 		try {
 
-			ModelUpdater mu = ModelUpdater.getInstance();
 			if (monitor.isCanceled()) {
 				throw new InterruptedException("Operation Canceled");
 			}
 			monitor.setTaskName("Subscribing to server events");
-			Boolean callbackRegistered=mu.subscribeLastEvent(gateway.getName());
+
+			boolean callbackRegistered;
+			try {
+				Agent.getInstance().subscribe(gateway);
+				callbackRegistered = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				callbackRegistered = false;
+			}
+			
 			Boolean websocketConnected=false;
 			monitor.worked(50);
 			monitor.setTaskName("Connecting websocket");
@@ -83,9 +91,4 @@ public class ConnectJob extends Job{
 		
 		return Status.OK_STATUS;
 	}
-
-
-	
-	
-
 }

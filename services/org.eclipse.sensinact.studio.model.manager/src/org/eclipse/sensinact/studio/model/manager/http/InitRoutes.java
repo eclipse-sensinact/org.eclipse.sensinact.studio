@@ -22,6 +22,6 @@ public abstract class InitRoutes {
 		RouteUtil.attachRoute("/webapp/deviceinfo/{gateway}/{device}/{service}", ServiceInfoRoute.class);
 		RouteUtil.attachRoute("/webapp/performAction/{gateway}/{device}/{service}/{ressource}", PerformActionRoute.class);
 		RouteUtil.attachRoute("/webapp/updatelocation/{gateway}/{device}", UpdateLocationRoute.class);
-		RouteUtil.attachRoute("/callback/{id}", GatewayHttpServerRoute.class);
+		RouteUtil.attachRoute("/callback", GatewayHttpServerRoute.class);
 	}
 }

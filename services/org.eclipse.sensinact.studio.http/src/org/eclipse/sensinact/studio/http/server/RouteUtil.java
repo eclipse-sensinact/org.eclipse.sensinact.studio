@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import org.restlet.Application;
 import org.restlet.resource.ServerResource;
 
+/**
+ * @author Etienne Gandrille
+ */
 public class RouteUtil {
 
 	public static final String ENCODING = "UTF-8";

@@ -186,7 +186,4 @@ class OneFont {
     public String toString() {
         return "Font: " + _name + " " + _height + " " + _style;
     }
-    
-    
-
 }

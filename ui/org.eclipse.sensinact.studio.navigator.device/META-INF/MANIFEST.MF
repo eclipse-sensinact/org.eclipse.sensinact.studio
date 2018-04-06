@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.sensinact.studio.navigator.device;singleton:=tr
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.sensinact.studio.navigator.device.Activator
 Bundle-Vendor: CEA LETI
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui.navigator,
  org.eclipse.ui,

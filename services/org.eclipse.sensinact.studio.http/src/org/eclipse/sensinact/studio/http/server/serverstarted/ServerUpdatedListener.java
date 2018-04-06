@@ -10,6 +10,9 @@
  */
 package org.eclipse.sensinact.studio.http.server.serverstarted;
 
+/**
+ * @author Etienne Gandrille
+ */
 public interface ServerUpdatedListener {
 
 	public void serverUpdated(UpdateDescriptor descriptor);

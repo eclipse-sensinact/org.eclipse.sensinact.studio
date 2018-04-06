@@ -11,7 +11,6 @@
 package org.eclipse.sensinact.studio.model.manager.http;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalTime;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.server.SensinactServerResource;

@@ -27,6 +27,9 @@ import org.restlet.data.Protocol;
 import org.restlet.engine.Engine;
 import org.restlet.resource.ServerResource;
 
+/**
+ * @author Etienne Gandrille
+ */
 public class GatewayHttpServer extends SensinactServerResource implements ConfigurationListerner {
 
 	private static final Logger logger = Logger.getLogger(GatewayHttpServer.class);

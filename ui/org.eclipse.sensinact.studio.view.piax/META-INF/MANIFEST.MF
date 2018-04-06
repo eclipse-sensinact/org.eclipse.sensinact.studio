@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sensinact.studio.http,
  org.eclipse.sensinact.studio.ui.common,
  org.eclipse.sensinact.studio.preferences
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

@@ -11,10 +11,9 @@ Require-Bundle: org.json,
  org.eclipse.sensinact.studio.http,
  org.apache.log4j,
  org.eclipse.sensinact.studio.preferences
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.sensinact.studio.model.manager.listener.devicelocation,
  org.eclipse.sensinact.studio.model.manager.listener.modelset,
- org.eclipse.sensinact.studio.model.manager.listener.subscription,
  org.eclipse.sensinact.studio.model.manager.modelupdater
 Import-Package: org.apache.log4j

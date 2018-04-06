@@ -10,7 +10,6 @@
  */
 package org.eclipse.sensinact.studio.preferences;
 
-import java.awt.datatransfer.StringSelection;
 import java.net.MalformedURLException;
 import java.net.URL;
 

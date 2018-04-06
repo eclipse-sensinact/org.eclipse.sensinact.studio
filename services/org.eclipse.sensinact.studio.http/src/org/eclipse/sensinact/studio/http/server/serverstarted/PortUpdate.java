@@ -10,6 +10,9 @@
  */
 package org.eclipse.sensinact.studio.http.server.serverstarted;
 
+/**
+ * @author Etienne Gandrille
+ */
 public class PortUpdate extends UpdateDescriptor {
 
 	private final int port;

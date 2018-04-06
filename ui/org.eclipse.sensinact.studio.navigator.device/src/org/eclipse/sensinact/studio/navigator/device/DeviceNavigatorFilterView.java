@@ -69,7 +69,7 @@ public class DeviceNavigatorFilterView extends ViewPart implements ResourceModel
 	@Override
 	public void createPartControl(Composite aParent) {
 
-	contentService = new NavigatorContentService(super.getViewSite().getId());
+		contentService = new NavigatorContentService(super.getViewSite().getId());
 		
 		PatternFilter filter = new SensinactPatternFilter();
 		filter.setIncludeLeadingWildcard(true);

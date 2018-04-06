@@ -15,27 +15,24 @@ import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+/**
+ * @author Jander Nascimento
+ */
 public class SensinactTreeViewer extends TreeViewer {
 
 	public SensinactTreeViewer(Composite parent) {
 		super(parent);
 	}
-
 	
 	public SensinactTreeViewer(Composite parent, int style) {
 		super(parent, style);
 	}
 
-
-
 	public SensinactTreeViewer(Tree tree) {
 		super(tree);
 	}
 
-
-
 	public void handleEvent(TreeEvent event){
 		super.handleTreeExpand(event);
 	}
-	
 }

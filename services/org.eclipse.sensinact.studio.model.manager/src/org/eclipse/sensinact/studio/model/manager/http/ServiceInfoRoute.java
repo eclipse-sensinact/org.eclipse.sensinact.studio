@@ -15,7 +15,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.StudioRequest;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.client.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
@@ -26,7 +27,8 @@ import org.eclipse.sensinact.studio.resource.ResourcePackage;
 
 /**
  * @author Etienne Gandrille
- */public class ServiceInfoRoute extends SensinactServerResource {
+ */
+public class ServiceInfoRoute extends SensinactServerResource {
 
 	private static final Logger logger = Logger.getLogger(ServiceInfoRoute.class);
 	
@@ -82,8 +84,15 @@ import org.eclipse.sensinact.studio.resource.ResourcePackage;
 						// OTHER
 						else {
 							StudioRequest request = new StudioRequest(descriptor, AccessMethodType.GET);
-							SnaMessage response  = request.sendRequest();
-							String resourceValue = response.getPrettyPrintedValue().replaceAll("\n", "<br/>");
+							MsgSensinact response = request.sendRequest();
+							
+							String resourceValue = "<unknown>";
+							if (response instanceof MsgGetResponse) {
+								resourceValue = ((MsgGetResponse) response).getResponse().getValueAsString();
+							}
+							resourceValue = ((resourceValue == null) ? "null" : resourceValue);
+							
+							resourceValue = resourceValue.replaceAll("\n", "<br/>");
 														
 							// IMAGE
 							if (isImageUrl(resourceValue)) {

@@ -32,33 +32,26 @@ import org.restlet.representation.Representation;
  */
 public class BundleResourceClientHelper extends LocalClientHelper {
 
-	public static final Protocol BUNDLERESOURCE = new Protocol("bundleresource","BUNDLERESOURCE",
-            "OSGI Bundle Resource", Protocol.UNKNOWN_PORT);
+	public static final Protocol BUNDLERESOURCE = new Protocol("bundleresource","BUNDLERESOURCE", "OSGI Bundle Resource", Protocol.UNKNOWN_PORT);
 	
-	public BundleResourceClientHelper(Client client)
-	{
+	public BundleResourceClientHelper(Client client) {
 		super(client);
-		
 		getProtocols().add(BUNDLERESOURCE);
 	}
 	
 	@Override
 	protected void handleLocal(Request request, Response response, String decodedPath) {
 		String scheme = request.getResourceRef().getScheme();
-		if(BUNDLERESOURCE.getSchemeName().equalsIgnoreCase(scheme))
-		{
+		if(BUNDLERESOURCE.getSchemeName().equalsIgnoreCase(scheme)) {
 			handleFile(request,response);
-		}
-		else
-		{
+		} else {
 			throw new IllegalArgumentException("Protocol " + scheme + " not supported, only BUNDLERESOURCE is supported");
 		}
 	}
 	
 	private void handleFile(Request request, Response response)
 	{
-		if(Method.GET.equals(request.getMethod()) || Method.HEAD.equals(request.getMethod()))
-		{
+		if(Method.GET.equals(request.getMethod()) || Method.HEAD.equals(request.getMethod())) {
 			handleGet(request,response);
 		}
 		else {
@@ -70,13 +63,10 @@ public class BundleResourceClientHelper extends LocalClientHelper {
 	
 	private void handleGet(Request request, Response response)
 	{
-		try
-		{
+		try {
 			String path = request.getResourceRef().getPath();
 			URL url = new URL(request.getResourceRef().toString());
-            Representation output = new InputRepresentation(url
-                    .openStream(), getMetadataService()
-                    .getDefaultMediaType());
+            Representation output = new InputRepresentation(url.openStream(), getMetadataService().getDefaultMediaType());
             output.setLocationRef(request.getResourceRef());
             output.setModificationDate(new Date());
 
@@ -93,15 +83,12 @@ public class BundleResourceClientHelper extends LocalClientHelper {
 
             // Update the metadata based on file extensions
             String name = path.substring(path.lastIndexOf('/') + 1);
-            Entity.updateMetadata(name, output, true,
-                    getMetadataService());
+            Entity.updateMetadata(name, output, true, getMetadataService());
 
             // Update the response
             response.setEntity(output);
             response.setStatus(Status.SUCCESS_OK);						
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			response.setStatus(Status.CLIENT_ERROR_NOT_FOUND);			
 		}
 	}

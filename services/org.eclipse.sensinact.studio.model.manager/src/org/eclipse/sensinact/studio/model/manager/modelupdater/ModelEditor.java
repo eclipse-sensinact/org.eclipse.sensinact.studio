@@ -25,10 +25,10 @@ import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
-import org.eclipse.sensinact.studio.http.client.snamessage.ResponseDescribeResource;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
-import org.eclipse.sensinact.studio.http.client.snamessage.ResponseDescribeResource.RestAM;
-import org.eclipse.sensinact.studio.http.client.snamessage.ResponseDescribeResource.RestParam;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.client.snamessage.describeresource.MsgDescribeRessource;
+import org.eclipse.sensinact.studio.http.client.snamessage.describeresource.ObjectAccessMethods;
+import org.eclipse.sensinact.studio.http.client.snamessage.describeresource.ObjectParameter;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
@@ -36,7 +36,6 @@ import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.eclipse.sensinact.studio.preferences.ConfigurationListerner;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
-
 import org.eclipse.sensinact.studio.resource.AccessMethod;
 import org.eclipse.sensinact.studio.resource.AccessMethodType;
 import org.eclipse.sensinact.studio.resource.Device;
@@ -228,7 +227,6 @@ public class ModelEditor implements ConfigurationListerner {
 			USE_IN_RUNEXLUSIVE_getDevice(gatewayName, deviceId).getService().add(addedService);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			System.out.println();
 		}
 	}
 
@@ -479,13 +477,19 @@ public class ModelEditor implements ConfigurationListerner {
 		try {
 			if (!existsResource(descriptor)) {
 				Segments segment = new Segments.Builder().resource(descriptor).build();
-				SnaMessage response = GatewayHttpClient.sendGetRequest(segment);
-
-				if (!response.isValid()) {
-					throw new RuntimeException("Can't get remote resources info for " + descriptor);
+				
+				
+				MsgSensinact response = null;
+				try {
+					response = GatewayHttpClient.sendGetRequest(segment);
+				} catch (IOException e) {
+					throw new RuntimeException("Get request on " + segment + " failed", e);
 				}
-
-				final ResponseDescribeResource responseMessage = (ResponseDescribeResource) response;
+				
+				if (! (response instanceof MsgDescribeRessource))
+					throw new RuntimeException("Can't get remote resources info for " + descriptor);
+				
+				final MsgDescribeRessource responseMessage = (MsgDescribeRessource) response;
 
 				RecordingCommand command = new RecordingCommand(getEditingDomain()) {
 					@Override
@@ -495,28 +499,31 @@ public class ModelEditor implements ConfigurationListerner {
 							return;
 
 						// create resource
-						EClass type = literalToType(responseMessage.getType());
+						String resourceType = responseMessage.getResponse().getType();
+						EClass type = literalToType(resourceType);
 						Resource createdResource = (Resource) ResourceFactory.eINSTANCE.create(type);
 						createdResource.setName(descriptor.getResource());
 
 						// create access methods
-						for (RestAM am : responseMessage.getAccessMethods()) {
-							AccessMethod accessMethod = ResourceFactory.eINSTANCE.createAccessMethod();
-							accessMethod.setType(AccessMethodType.get(am.name));
-
-							Parameter[] parameters = new Parameter[am.parameters.size()];
-							for (int i = 0; i < am.parameters.size(); i++) {
-								RestParam param = am.parameters.get(i);
-								Parameter parameter = ResourceFactory.eINSTANCE.createParameter();
-								parameter.setName(param.name);
-								parameter.setType(param.type);
-								parameters[i] = parameter;
+						for (ObjectAccessMethods am : responseMessage.getResponse().getAccessMethods()) {
+							if (am != null) { // test to be removed after gateway bug fix 
+								AccessMethod accessMethod = ResourceFactory.eINSTANCE.createAccessMethod();
+								accessMethod.setType(AccessMethodType.get(am.getName()));
+	
+								Parameter[] parameters = new Parameter[am.getParameters().size()];
+								for (int i = 0; i < am.getParameters().size(); i++) {
+									ObjectParameter param = am.getParameters().get(i);
+									Parameter parameter = ResourceFactory.eINSTANCE.createParameter();
+									parameter.setName(param.getName());
+									parameter.setType(param.getType());
+									parameters[i] = parameter;
+								}
+	
+								for (Parameter parameter : parameters) {
+									accessMethod.getParameter().add(parameter);
+								}
+								createdResource.getAccessMethod().add(accessMethod);
 							}
-
-							for (Parameter parameter : parameters) {
-								accessMethod.getParameter().add(parameter);
-							}
-							createdResource.getAccessMethod().add(accessMethod);
 						}
 
 						USE_IN_RUNEXLUSIVE_getService(descriptor.getGateway(), descriptor.getDevice(), descriptor.getService()).getResource().add(
@@ -532,7 +539,7 @@ public class ModelEditor implements ConfigurationListerner {
 					//Caused by multiple events received.
 				}
 			}
-		} catch (NullPointerException | InterruptedException | IOException e) {
+		} catch (NullPointerException | InterruptedException e) {
 			getEditingDomain().getCommandStack().flush();
 			throw new RuntimeException("Unexpected exception... " + descriptor);
 		}

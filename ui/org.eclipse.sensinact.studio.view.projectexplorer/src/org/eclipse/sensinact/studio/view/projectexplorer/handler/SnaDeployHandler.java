@@ -19,7 +19,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.model.resource.utils.Constants;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
@@ -51,9 +51,14 @@ public class SnaDeployHandler extends SnaAppHandler {
 			JSONObject app = generateJsonApplication(sna, fileName);
 			String gatewayID = getGatewayID(sna);
 			
+			// TODO uupdate with new API
+			
+			/*
 			SnaMessage response = install(Constants.createInstallAppRD(gatewayID), app);
 			String title = response.isValid() ? "Application deployed" : "Application deploy failed"; 
-			displayResult(shell, title, fileName, response);		
+			displayResult(shell, title, fileName, response);
+			*/
+			
 		} catch (Exception e) {
 			displayResult(shell, "Application deploy failed", fileName, e);
 			logger.error("Application deploy failed", e);
@@ -63,9 +68,9 @@ public class SnaDeployHandler extends SnaAppHandler {
 		return null;
 	}
 
-	private SnaMessage install(ResourceDescriptor resource, JSONObject json) throws IOException {
+	private MsgSensinact install(ResourceDescriptor resource, JSONObject json) throws IOException {
 		Segments path = new Segments.Builder().resource(resource).method(AccessMethodType.ACT).build();
-		return GatewayHttpClient.sendPostRequest(path, json);		
+		return null; // (SnaMessage) GatewayHttpClient.sendPostRequest(path, json);		
 	}
 	
 	private JSONObject generateJsonApplication(DSL_SENSINACT sna, String fileName) throws JSONException {

@@ -82,7 +82,6 @@ public class StudioHttpConfig {
 				logger.info("    - Verify IPv4: " + address.getHostAddress());
 				if (address instanceof Inet4Address) {
 					logger.debug("    - Checking IPv4 address: " + address);
-					Inet4Address ipv4 = (Inet4Address) address;
 					String retval = address.getHostAddress();
 					if (retval != null && ! retval.isEmpty() && gatewayAddress.isReachable(localInterface, 64, timeout)) {
 						logger.info("--> Selected for Studio IP --->"+retval);

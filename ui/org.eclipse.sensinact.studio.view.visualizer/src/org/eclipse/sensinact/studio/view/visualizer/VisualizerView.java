@@ -18,10 +18,6 @@ import javax.annotation.PreDestroy;
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
-import org.eclipse.sensinact.studio.http.client.snamessage.SnaMessage;
-import org.eclipse.sensinact.studio.http.client.snamessage.UpdateAttribute;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionListener;
-import org.eclipse.sensinact.studio.model.manager.listener.subscription.SubscriptionManager;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.view.visualizer.graphmanager.GraphManager;
 import org.eclipse.swt.SWT;
@@ -36,13 +32,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Etienne Gandrille
  */
-public class VisualizerView implements SubscriptionListener {
+public class VisualizerView { // TODO update this... implements SubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(VisualizerView.class);
 	
@@ -131,6 +126,10 @@ public class VisualizerView implements SubscriptionListener {
 	private void subscribe(VisualizerSettings newSettings, boolean updateUI) throws IOException {
 		ResourceDescriptor resource = newSettings.getDescriptor();
 		
+		btn.setText("UPDATE this with new subscribe");
+		// TODO update this with new subscribe !!!
+		
+		/*
 		//Tries to subscribe via call back, if does not work does not matter, the websocket should take place.
 		try {
 			SubscriptionManager.getInstance().subscribeResource(resource, this);
@@ -146,9 +145,12 @@ public class VisualizerView implements SubscriptionListener {
 			btn.setText("Stop listener");
 			btn.setEnabled(true);
 		}
+		*/
 	}
 	
 	private void unsubscribe(boolean updateUI) throws IOException {
+		// TODO update this with new subscribe !!!
+		/*
 		SubscriptionManager.getInstance().unsubscribeResource(visuSettings.getDescriptor(), this);
 		visuSettings = null;
 		
@@ -156,11 +158,13 @@ public class VisualizerView implements SubscriptionListener {
 			graphUpdater.stop();
 			resetUI();
 		}
+		*/
 	}
 	
-	@Override
-	public void onEvent(final SnaMessage response, final ResourceDescriptor resource) 
+	// listener... @Override
+	public void onEvent(/*final SnaMessage response, */final ResourceDescriptor resource) 
 	{
+		/*
 		final String msg = response.getFullDescription();
 		logger.debug("VisualizerView::resourceUpdated" + msg);
 		Display.getDefault().asyncExec(new Runnable() {
@@ -186,13 +190,16 @@ public class VisualizerView implements SubscriptionListener {
 					}
 				}
 			}
-		});	
+		});
+		*/	
 	}
-		
+	
+	/*
 	private void updateGraph(ResourceDescriptor resource, double value) {
 		graphUpdater.start(resource);
 		graphUpdater.setValue(value);
 	}
+	*/
 	
 	private void resetUI() {
 		titleLabel.setText(DEFAULT_TITLE);

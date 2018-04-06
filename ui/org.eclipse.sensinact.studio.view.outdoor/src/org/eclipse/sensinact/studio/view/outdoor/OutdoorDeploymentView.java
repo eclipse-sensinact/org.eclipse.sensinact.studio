@@ -138,22 +138,15 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 	/* ============== */
 
 	@Override
-	public void deviceLocationUpdated(final GPScoordinates coordinate, final DeviceDescriptor descriptor) {
-		
-		System.out.println("before!!");
+	public void deviceLocationUpdated(final GPScoordinates coordinate, final DeviceDescriptor descriptor) {	
 		Display.getDefault().asyncExec(new Runnable() {
-
 			@Override
 			public void run() {
 				String dev = "'" + descriptor.toString() + "'";
 				String cmd = "updateDeviceLocation(" + coordinate.getLat() + "," + coordinate.getLng() + "," + dev + ");";
-				System.out.println(cmd);
 				browser.execute(cmd);
 			}
-		});
-		System.out.println("after!!");
-		
-		
+		});	
 	}
 
 	@Override
@@ -301,11 +294,8 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 					if (locationUpdated) {
 						String dev = "'" + gateway + "/" + device + "'";
 						String cmd = "return updateDeviceLocation(" + lat + "," + lng + "," + dev + ");";
-						System.out.println(cmd);
 						browser.evaluate(cmd);
 					} else {
-						// DropTarget target = (DropTarget) event.getSource();
-						// Shell shell = target.getControl().getShell();
 						Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();						
 						MessageDialog.openWarning(shell, "Error", "The location of " + device + " device is NOT updatable");
 					}
