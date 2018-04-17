@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
 import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.language.sensinact.Sensinact;
 
@@ -65,16 +67,14 @@ public abstract class SnaAppHandler extends SnaHandler {
 		return fileName;
 	}
 	
-	protected void displayResult(Shell shell, String title, String fileName /*, SnaMessage response*/) {
-		// Update with new API
+	protected void displayResult(Shell shell, String title, String fileName, MsgSensinact response) {
+		// TODO Needs to be improved. Displayed information are a bit weak...
 		
-		/*
-		String description = response.getFullDescription() + "\n" + "filename: " + fileName;
-		if (response.isValid())
-			MessageDialog.openInformation(shell, title, description);
-		else 
+		String description = response.toString();	
+		if (response instanceof MsgHttpError)
 			MessageDialog.openError(shell, title, description);
-			*/
+		else
+			MessageDialog.openInformation(shell, title, description);
 	}
 	
 	protected void displayResult(Shell shell, String title, String fileName, Exception e) {

@@ -107,7 +107,7 @@ public abstract class SnaToJsonUtil {
 
 		// If ... do ... else if ... do ... else do ... endif
 		DSL_ECA_STATEMENT eca = fileModel.getEca();
-		parseEcaStatement(resMgr, eca, components, triggers);
+		parseEcaStatement(fileName, resMgr, eca, components, triggers);
 
 		return new SnaParsingResult(root);
 	}
@@ -120,15 +120,15 @@ public abstract class SnaToJsonUtil {
 	 * @param triggers
 	 * @throws JSONException
 	 */
-	private static void parseEcaStatement(ResourcesDeclarationManager resMgr, DSL_ECA_STATEMENT eca, JSONArray components, List<DSL_REF> triggers) throws JSONException {
+	private static void parseEcaStatement(String fileName, ResourcesDeclarationManager resMgr, DSL_ECA_STATEMENT eca, JSONArray components, List<DSL_REF> triggers) throws JSONException {
 		
-		VariableGenerator var = VariableGenerator.get("condition");
+		VariableGenerator var = VariableGenerator.get(fileName, "condition");
 		
 		// if ...
 		try {
 			DSL_Expression expre = eca.getIfdo().getCondition();
 			EventManager eventManager = new IfEventManager(resMgr, triggers);
-			parseExpression(components, expre, triggers, eventManager, resMgr, var.newVariable());
+			parseExpression(fileName, components, expre, triggers, eventManager, resMgr, var.newVariable());
 		} catch (JSONException e) {
 			logger.error("condition parsing error", e);
 		}
@@ -137,7 +137,7 @@ public abstract class SnaToJsonUtil {
 		DSL_IfDo ifDo = eca.getIfdo();
 		if (ifDo != null && ifDo.getActions() != null && ifDo.getActions().getActionList() != null) {
 			EList<DSL_ResourceAction> actionsTrue = ifDo.getActions().getActionList();
-			parseConditionalActions(resMgr, components, var.curVariable(), true, actionsTrue);
+			parseConditionalActions(fileName, resMgr, components, var.curVariable(), true, actionsTrue);
 		}
 
 		// else if ... do ...
@@ -150,7 +150,7 @@ public abstract class SnaToJsonUtil {
 				try {
 					DSL_Expression expre = elseIfDo.getCondition();
 					EventManager eventManager = new BooleanVariableEventManager(var.curVariable(), false);
-					parseExpression(components, expre, null, eventManager, resMgr, var.newVariable());
+					parseExpression(fileName, components, expre, null, eventManager, resMgr, var.newVariable());
 				} catch (JSONException e) {
 					logger.error("condition parsing error", e);
 				}
@@ -158,7 +158,7 @@ public abstract class SnaToJsonUtil {
 				// do ...
 				if (elseIfDo.getActions() != null && elseIfDo.getActions().getActionList() != null) {
 					EList<DSL_ResourceAction> actionsTrue = elseIfDo.getActions().getActionList();
-					parseConditionalActions(resMgr, components, var.curVariable(), true, actionsTrue);
+					parseConditionalActions(fileName, resMgr, components, var.curVariable(), true, actionsTrue);
 				}
 			}
 		}
@@ -167,7 +167,7 @@ public abstract class SnaToJsonUtil {
 		DSL_ElseDo elseDo = eca.getElsedo();
 		if (elseDo != null && elseDo.getActions() != null && elseDo.getActions().getActionList() != null) {
 			EList<DSL_ResourceAction> actionsFalse = elseDo.getActions().getActionList();
-			parseConditionalActions(resMgr, components, var.curVariable(), false, actionsFalse);
+			parseConditionalActions(fileName, resMgr, components, var.curVariable(), false, actionsFalse);
 		}
 	}
 
@@ -351,9 +351,9 @@ public abstract class SnaToJsonUtil {
 	 *            the conditional statement part
 	 * @throws JSONException
 	 */
-	private static void parseConditionalActions(ResourcesDeclarationManager resMgr, JSONArray components, String triggerVariable, boolean triggerTrueFalse, EList<DSL_ResourceAction> actions) throws JSONException {
+	private static void parseConditionalActions(String fileName, ResourcesDeclarationManager resMgr, JSONArray components, Variable triggerVariable, boolean triggerTrueFalse, EList<DSL_ResourceAction> actions) throws JSONException {
 		for (DSL_ResourceAction action : actions) {
-			parseConditionalAction(resMgr, components, triggerVariable, triggerTrueFalse, action);
+			parseConditionalAction(fileName, resMgr, components, triggerVariable, triggerTrueFalse, action);
 		}
 	}
 
@@ -369,7 +369,7 @@ public abstract class SnaToJsonUtil {
 	 *            the conditional statement part
 	 * @throws JSONException
 	 */
-	private static void parseConditionalAction(ResourcesDeclarationManager resMgr, JSONArray components, String triggerVariable, boolean triggerTrueFalse, DSL_ResourceAction action) throws JSONException {
+	private static void parseConditionalAction(String fileName, ResourcesDeclarationManager resMgr, JSONArray components, Variable triggerVariable, boolean triggerTrueFalse, DSL_ResourceAction action) throws JSONException {
 
 		BooleanVariableEventManager eventManager = new BooleanVariableEventManager(triggerVariable, triggerTrueFalse);
 		String identifier = action.getVariable();
@@ -381,7 +381,7 @@ public abstract class SnaToJsonUtil {
 		if (action.getListParam() != null && action.getListParam().getParam() != null)
 		{
 			for (DSL_Expression param : action.getListParam().getParam()) {
-				addParameter(param, cb, components, null, eventManager, resMgr);
+				addParameter(fileName, param, cb, components, null, eventManager, resMgr);
 			}
 		}
 		components.put(cb.build());
@@ -400,7 +400,7 @@ public abstract class SnaToJsonUtil {
 	 * @param eventManager
 	 * @throws JSONException
 	 */
-	private static void parseExpression(JSONArray components, DSL_Expression expr, List<DSL_REF> triggers, EventManager eventManager, ResourcesDeclarationManager resMgr, String output)
+	private static void parseExpression(String fileName, JSONArray components, DSL_Expression expr, List<DSL_REF> triggers, EventManager eventManager, ResourcesDeclarationManager resMgr, Variable output)
 			throws JSONException {
 
 		// Or: left associative, priority 1
@@ -408,7 +408,7 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_Or or = (DSL_Expression_Or) expr;
 			DSL_Expression left = or.getLeft();
 			DSL_Expression right = or.getRight();
-			parseExpressionInternal(resMgr, components, "or", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "or", triggers, eventManager, output, left, right);
 		}
 
 		// And: left associative, priority 2
@@ -416,7 +416,7 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_And and = (DSL_Expression_And) expr;
 			DSL_Expression left = and.getLeft();
 			DSL_Expression right = and.getRight();
-			parseExpressionInternal(resMgr, components, "and", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "and", triggers, eventManager, output, left, right);
 		}
 
 		// different/equal: left associative, priority 3
@@ -424,13 +424,13 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_Diff diff = (DSL_Expression_Diff) expr;
 			DSL_Expression left = diff.getLeft();
 			DSL_Expression right = diff.getRight();
-			parseExpressionInternal(resMgr, components, "diff", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "diff", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Equal) {
 			DSL_Expression_Equal equal = (DSL_Expression_Equal) expr;
 			DSL_Expression left = equal.getLeft();
 			DSL_Expression right = equal.getRight();
-			parseExpressionInternal(resMgr, components, "equal", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "equal", triggers, eventManager, output, left, right);
 		}
 
 		// Comparisons: left associative, priority 4
@@ -438,25 +438,25 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_Larger largerThan = (DSL_Expression_Larger) expr;
 			DSL_Expression left = largerThan.getLeft();
 			DSL_Expression right = largerThan.getRight();
-			parseExpressionInternal(resMgr, components, "greaterThan", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "greaterThan", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Larger_Equal) {
 			DSL_Expression_Larger_Equal largerEqual = (DSL_Expression_Larger_Equal) expr;
 			DSL_Expression left = largerEqual.getLeft();
 			DSL_Expression right = largerEqual.getRight();
-			parseExpressionInternal(resMgr, components, "greaterEqual", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "greaterEqual", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Smaller) {
 			DSL_Expression_Smaller smallerThan = (DSL_Expression_Smaller) expr;
 			DSL_Expression left = smallerThan.getLeft();
 			DSL_Expression right = smallerThan.getRight();
-			parseExpressionInternal(resMgr, components, "lesserThan", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "lesserThan", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Smaller_Equal) {
 			DSL_Expression_Smaller_Equal smallerEqual = (DSL_Expression_Smaller_Equal) expr;
 			DSL_Expression left = smallerEqual.getLeft();
 			DSL_Expression right = smallerEqual.getRight();
-			parseExpressionInternal(resMgr, components, "lesserEqual", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "lesserEqual", triggers, eventManager, output, left, right);
 		}
 
 		// addition/subtraction: left associative, priority 5
@@ -464,13 +464,13 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_Plus plus = (DSL_Expression_Plus) expr;
 			DSL_Expression left = plus.getLeft();
 			DSL_Expression right = plus.getRight();
-			parseExpressionInternal(resMgr, components, "add", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "add", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Minus) {
 			DSL_Expression_Minus minus = (DSL_Expression_Minus) expr;
 			DSL_Expression left = minus.getLeft();
 			DSL_Expression right = minus.getRight();
-			parseExpressionInternal(resMgr, components, "sub", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "sub", triggers, eventManager, output, left, right);
 		}
 
 		// multiplication/division/modulo, left associative, priority 6
@@ -478,42 +478,42 @@ public abstract class SnaToJsonUtil {
 			DSL_Expression_Multiplication multiply = (DSL_Expression_Multiplication) expr;
 			DSL_Expression left = multiply.getLeft();
 			DSL_Expression right = multiply.getRight();
-			parseExpressionInternal(resMgr, components, "times", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "times", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Division) {
 			DSL_Expression_Division divide = (DSL_Expression_Division) expr;
 			DSL_Expression left = divide.getLeft();
 			DSL_Expression right = divide.getRight();
-			parseExpressionInternal(resMgr, components, "div", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "div", triggers, eventManager, output, left, right);
 
 		} else if (expr instanceof DSL_Expression_Modulo) {
 			DSL_Expression_Modulo modulo = (DSL_Expression_Modulo) expr;
 			DSL_Expression left = modulo.getLeft();
 			DSL_Expression right = modulo.getRight();
-			parseExpressionInternal(resMgr, components, "mod", triggers, eventManager, output, left, right);
+			parseExpressionInternal(fileName, resMgr, components, "mod", triggers, eventManager, output, left, right);
 		}
 
 		// Unary operators: right associative, priority 7
 		else if (expr instanceof DSL_Expression_Negate) {
 			DSL_Expression_Negate negate = (DSL_Expression_Negate) expr;
 			DSL_Expression exp = negate.getExp();
-			parseExpressionInternal(resMgr, components, "not", triggers, eventManager, output, exp);
+			parseExpressionInternal(fileName, resMgr, components, "not", triggers, eventManager, output, exp);
 		}
 
 		else
 			throw new RuntimeException("Should never happend");
 	}
 
-	private static void parseExpressionInternal(ResourcesDeclarationManager resMgr, JSONArray components, String function, List<DSL_REF> triggers, EventManager eventManager,
-			String identifier, DSL_Expression... params) throws JSONException {
-		ComponentBuilder cb = new ComponentBuilder(function, identifier, false, eventManager, resMgr);
+	private static void parseExpressionInternal(String fileName, ResourcesDeclarationManager resMgr, JSONArray components, String function, List<DSL_REF> triggers, EventManager eventManager,
+			Variable identifier, DSL_Expression... params) throws JSONException {
+		ComponentBuilder cb = new ComponentBuilder(function, identifier.getShortName(), false, eventManager, resMgr);
 		for (DSL_Expression param : params)
-			addParameter(param, cb, components, triggers, eventManager, resMgr);
+			addParameter(fileName, param, cb, components, triggers, eventManager, resMgr);
 
 		components.put(cb.build());
 	}
 
-	private static void addParameter(DSL_Expression expr, ComponentBuilder cb, JSONArray components, List<DSL_REF> triggers, EventManager eventManager, ResourcesDeclarationManager resMgr)
+	private static void addParameter(String fileName, DSL_Expression expr, ComponentBuilder cb, JSONArray components, List<DSL_REF> triggers, EventManager eventManager, ResourcesDeclarationManager resMgr)
 			throws JSONException {
 
 		if (expr instanceof DSL_Object_Number) {
@@ -546,10 +546,10 @@ public abstract class SnaToJsonUtil {
 				cb.parameter(ref);
 			}
 		} else {
-			String outputName = VariableGenerator.get("var").newVariable();
-			cb.parameterEvent(outputName);
-			cb.eventVariable(outputName);
-			parseExpression(components, expr, triggers, eventManager, resMgr, outputName);
+			Variable outputVariable = VariableGenerator.get(fileName, "var").newVariable();
+			cb.parameterEvent(outputVariable.getShortName());
+			cb.eventVariable(outputVariable.getShortName());
+			parseExpression(fileName, components, expr, triggers, eventManager, resMgr, outputVariable);
 		}
 	}
 
@@ -598,182 +598,4 @@ public abstract class SnaToJsonUtil {
 
 		return sb.toString().trim();
 	}
-
-	/* ============================================= */
-	/* Deprecated functions used by previous version */
-	/* Kept for a future refactoring */
-	/* ============================================= */
-	//
-	// private static JSONArray parseIfBlock(DSL_ECA_STATEMENT cond, String
-	// scriptName) {
-	//
-	// List<JSONObject> condList = new ArrayList<>();
-	// List<JSONObject> condListInv = new ArrayList<>();
-	// List<JSONArray> actionList = new ArrayList<>();
-	//
-	// // if ... do ... else if ... do ...
-	// for (EObject ifStatement : cond.getIfdo()) {
-	// try {
-	// DSL_ExpressionalStatement element = (DSL_ExpressionalStatement)
-	// ifStatement;
-	// JSONObject jsonConditions =
-	// buildLogicalExpression(element.getConditions().eContents().get(0),
-	// scriptName);
-	// JSONObject jsonConditionsInv = invertCondition(jsonConditions);
-	// JSONArray jsonActions = buildActions(element.getActions(), scriptName);
-	//
-	// condList.add(jsonConditions);
-	// condListInv.add(jsonConditionsInv);
-	// actionList.add(jsonActions);
-	// } catch (JSONException e) {
-	// logger.error("json parsing failed", e);
-	// }
-	// }
-	//
-	// // else
-	// JSONArray elseActions = null;
-	// DSL_ElseDo elseStatement = cond.getElsedo();
-	// if (elseStatement != null && elseStatement.getActions() != null) {
-	// try {
-	// elseActions = buildActions(elseStatement.getActions(), scriptName);
-	// } catch (JSONException e) {
-	// logger.error("json parsing failed", e);
-	// }
-	// }
-	//
-	// // BuildJson
-	// // =========
-	//
-	// JSONArray ifdoList = new JSONArray();
-	//
-	// // if ... do... else if ... do ....
-	// for (int i = 0; i < condList.size(); i++) {
-	// try {
-	// JSONObject curCondition = null;
-	// for (int j = 0; j <= i; j++) {
-	// JSONObject cur = (i == j) ? condList.get(j) : condListInv.get(j);
-	// if (curCondition == null)
-	// curCondition = cur;
-	// else
-	// curCondition = buildCondition(curCondition, "and", cur);
-	// }
-	//
-	// JSONObject newIfDo = new JSONObject();
-	// newIfDo.put("condition", curCondition);
-	// newIfDo.put("actions", actionList.get(i));
-	// ifdoList.put(newIfDo);
-	// } catch (JSONException e) {
-	// logger.error("json parsing failed", e);
-	// }
-	// }
-	//
-	// // else
-	// if (elseActions != null) {
-	// try {
-	// JSONObject condition = null;
-	// for (int i = 0; i < condList.size(); i++) {
-	// if (condition == null)
-	// condition = condListInv.get(i);
-	// else
-	// condition = buildCondition(condition, "and", condListInv.get(i));
-	// }
-	//
-	// JSONObject newIfDo = new JSONObject();
-	// newIfDo.put("condition", condition);
-	// newIfDo.put("actions", elseActions);
-	// ifdoList.put(newIfDo);
-	// } catch (JSONException e) {
-	// logger.error("json parsing failed", e);
-	// }
-	// }
-	//
-	// return ifdoList;
-	// }
-	//
-	// private static JSONArray buildParams(DSL_Resource ref, DSL_ListParam
-	// params, String actionType) throws JSONException {
-	// JSONArray jsonParameters = new JSONArray();
-	// int nbParams = (params == null || params.getParam() == null) ? 0 :
-	// params.getParam().size();
-	// ResourceDescriptor rDescriptor = new
-	// ResourceDescriptor(ref.getDeviceID(), ref.getServiceID(),
-	// ref.getResourceID());
-	//
-	// // access method
-	// AccessMethod modelAccessMethod = getAccessMethod(rDescriptor,
-	// AccessMethodType.getByName(actionType), nbParams);
-	// if (modelAccessMethod == null) {
-	// throw new RuntimeException("Can't find access method " + rDescriptor +
-	// "(" + actionType + ")" + " with " + nbParams + " parameters.");
-	// }
-	//
-	// // parameters...
-	// for (int paramNumber = 0; paramNumber < params.getParam().size();
-	// paramNumber++) {
-	// try {
-	// Parameter accessMethodParameter =
-	// modelAccessMethod.getParameter().get(paramNumber);
-	// String paramName = accessMethodParameter.getName();
-	// String paramType = accessMethodParameter.getType();
-	// DSL_Expression curParam = params.getParam().get(paramNumber);
-	// jsonParameters.put(createParameter(paramName, paramType, curParam));
-	// } catch (NullPointerException e) {
-	// logger.error("json parsing failed", e);
-	// }
-	// }
-	//
-	// return jsonParameters;
-	// }
-	//
-	// private static JSONObject createParameter(String paramName, String
-	// paramType, DSL_Expression paramValue) throws JSONException {
-	// if (paramValue instanceof DSL_Object_Number) {
-	// return JsonUtil.createNameTypeValue(paramName, paramType,
-	// ((DSL_Object_Number) paramValue).getValue());
-	// } else if (paramValue instanceof DSL_Object_String) {
-	// return JsonUtil.createNameTypeValue(paramName, paramType,
-	// ((DSL_Object_String) paramValue).getValue());
-	// } else if (paramValue instanceof DSL_Object_Boolean) {
-	// return JsonUtil.createNameTypeValue(paramName, paramType,
-	// ((DSL_Object_Boolean) paramValue).isValue());
-	// } else if (paramValue instanceof DSL_Object_Ref) {
-	// JSONObject retval = new JSONObject();
-	// retval.put("name", paramName);
-	// retval.put("variable", ((DSL_Object_Ref)
-	// paramValue).getValue().getName());
-	// return retval;
-	// }
-	// throw new IllegalArgumentException("Unknown class: " +
-	// paramValue.getClass());
-	// }
-	//
-	// private static AccessMethod getAccessMethod(ResourceDescriptor
-	// rDescriptor, AccessMethodType actionType, int nbOfParams) {
-	// // to be sure root has been initialized...
-	// ModelEditor.getRoot();
-	//
-	// Device device = ModelEditor.getDevice(rDescriptor.getDevice());
-	// if (device == null)
-	// return null;
-	// Service service = ModelEditor.getService(device,
-	// rDescriptor.getService());
-	// if (service == null)
-	// return null;
-	// Resource resource = ModelEditor.getResource(service,
-	// rDescriptor.getResource());
-	// if (resource == null)
-	// return null;
-	//
-	// if (resource.getAccessMethod().isEmpty()) {
-	// try {
-	// ModelUpdater.getInstance().updateResourceInformation(resource);
-	// } catch (IOException e) {
-	// logger.error("Update resource info failed", e);
-	// return null;
-	// }
-	// }
-	//
-	// return ModelEditor.getAccessMethodWithTypeNbParams(resource, actionType,
-	// nbOfParams);
-	// }
 }

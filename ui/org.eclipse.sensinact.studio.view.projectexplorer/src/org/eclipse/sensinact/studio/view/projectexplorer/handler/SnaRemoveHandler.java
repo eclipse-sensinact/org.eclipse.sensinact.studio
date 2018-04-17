@@ -42,9 +42,8 @@ public class SnaRemoveHandler extends SnaAppHandler {
 		try {
 			// TODO remove this when gateway management will be implemented
 			String gatewayID = null;
-
 			MsgSensinact response = uninstall(Constants.createUninstallAppRD(gatewayID), fileName);
-			displayResult(getShell(event), "Application removed", fileName /*, response*/);
+			displayResult(getShell(event), "Application removed", fileName, response);
 		} catch (Exception e) {
 			displayResult(getShell(event), "Application removed", fileName, e);
 			logger.error("Application removal failed", e);

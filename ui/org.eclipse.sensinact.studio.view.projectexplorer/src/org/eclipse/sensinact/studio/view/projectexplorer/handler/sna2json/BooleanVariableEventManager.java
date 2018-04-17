@@ -23,9 +23,9 @@ import org.json.JSONObject;
 public class BooleanVariableEventManager implements EventManager {
 	
 	private final boolean trueFalse;
-	private final String variable;
+	private final Variable variable;
 	
-	public BooleanVariableEventManager(String variable, boolean trueFalse) {
+	public BooleanVariableEventManager(Variable variable, boolean trueFalse) {
 		this.trueFalse = trueFalse;
 		this.variable = variable;
 	}
@@ -34,7 +34,7 @@ public class BooleanVariableEventManager implements EventManager {
 	public List<JSONObject> getDefaultEvents() throws JSONException {
 		List<JSONObject> list = new ArrayList<>();
 		
-		JSONObject vt = ComponentBuilder.valueType(variable, "variable");
+		JSONObject vt = ComponentBuilder.valueType(variable.getFullName(), "variable");
 		JSONObject cond = new JSONObject();
 		cond.put("operator", "=");
 		cond.put("value", trueFalse);
