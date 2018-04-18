@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.http.client.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.swt.widgets.Display;

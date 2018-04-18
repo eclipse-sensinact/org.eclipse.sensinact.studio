@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.client.agent;
+package org.eclipse.sensinact.studio.http.client.subscribe.agent;
 
 import java.util.HashMap;
 import java.util.Map;

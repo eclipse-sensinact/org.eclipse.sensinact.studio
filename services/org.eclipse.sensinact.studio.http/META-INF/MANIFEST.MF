@@ -16,8 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.sensinact.studio.http.client,
- org.eclipse.sensinact.studio.http.client.agent,
  org.eclipse.sensinact.studio.http.client.snamessage,
+ org.eclipse.sensinact.studio.http.client.snamessage.attributevalueupdated,
  org.eclipse.sensinact.studio.http.client.snamessage.completelist,
  org.eclipse.sensinact.studio.http.client.snamessage.describeresource,
  org.eclipse.sensinact.studio.http.client.snamessage.error,
@@ -26,6 +26,8 @@ Export-Package: org.eclipse.sensinact.studio.http.client,
  org.eclipse.sensinact.studio.http.client.snamessage.resourceslist,
  org.eclipse.sensinact.studio.http.client.snamessage.setresponse,
  org.eclipse.sensinact.studio.http.client.snamessage.subscriberesponse,
+ org.eclipse.sensinact.studio.http.client.subscribe.agent,
+ org.eclipse.sensinact.studio.http.client.subscribe.standard,
  org.eclipse.sensinact.studio.http.server,
  org.eclipse.sensinact.studio.http.server.serverstarted
 Import-Package: org.apache.log4j

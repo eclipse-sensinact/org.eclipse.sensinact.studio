@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.client.agent;
+package org.eclipse.sensinact.studio.http.client.subscribe.agent;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +31,8 @@ import org.restlet.data.Status;
 public class Agent {
 
 	private static Agent INSTANCE = null;
+	
+	public static final String PATH = "/callback/new";
 
 	private SubscriptionStorage storage = new SubscriptionStorage();
 	
@@ -83,8 +85,7 @@ public class Agent {
 		String url = studioConfig.getUrl().toString();
 		if (url == null || url.isEmpty())
 			throw new IOException("URL is not valid - subscribtion fail");
-		// TODO update this with a constant --> see also InitRoutes.java
-		url += "/callback";
+		url += PATH;
 		return url;
 	}
 	

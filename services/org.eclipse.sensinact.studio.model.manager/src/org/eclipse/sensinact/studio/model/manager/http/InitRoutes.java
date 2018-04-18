@@ -10,6 +10,8 @@
  */
 package org.eclipse.sensinact.studio.model.manager.http;
 
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.subscribe.standard.SubscriptionManager;
 import org.eclipse.sensinact.studio.http.server.RouteUtil;
 
 /**
@@ -22,6 +24,7 @@ public abstract class InitRoutes {
 		RouteUtil.attachRoute("/webapp/deviceinfo/{gateway}/{device}/{service}", ServiceInfoRoute.class);
 		RouteUtil.attachRoute("/webapp/performAction/{gateway}/{device}/{service}/{ressource}", PerformActionRoute.class);
 		RouteUtil.attachRoute("/webapp/updatelocation/{gateway}/{device}", UpdateLocationRoute.class);
-		RouteUtil.attachRoute("/callback", GatewayHttpServerRoute.class);
+		RouteUtil.attachRoute(Agent.PATH, GatewayHttpServerRouteNew.class);
+		RouteUtil.attachRoute(SubscriptionManager.PATH, GatewayHttpServerRouteOld.class);
 	}
 }

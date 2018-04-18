@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.sensinact.studio.http.client.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;

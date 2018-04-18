@@ -180,7 +180,7 @@ public class GatewayHttpClient {
 			return MsgFactory.build(new JSONObject(jsonResponse));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new IllegalArgumentException(jsonResponse);
+			throw new IllegalArgumentException(jsonResponse, e);
 		}
 	}
 	

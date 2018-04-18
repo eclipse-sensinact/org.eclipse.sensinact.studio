@@ -16,6 +16,7 @@ import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.*;
 import org.eclipse.sensinact.studio.http.client.snamessage.resourceslist.MsgResourcesList;
 import org.eclipse.sensinact.studio.http.client.snamessage.setresponse.MsgSetResponse;
 import org.eclipse.sensinact.studio.http.client.snamessage.actresponse.MsgActResponse;
+import org.eclipse.sensinact.studio.http.client.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
 import org.eclipse.sensinact.studio.http.client.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.http.client.snamessage.subscriberesponse.MsgSubscribeResponse;
 import org.eclipse.sensinact.studio.http.client.snamessage.tokencreation.MsgTokenCreation;
@@ -27,28 +28,32 @@ import org.eclipse.sensinact.studio.http.client.snamessage.unsubscriberesponse.M
 public enum MsgTypes {
 
 	// Token management
-	TOKEN_CREATION        (MsgTokenCreation.KEY,        MsgTokenCreation.class),
+	TOKEN_CREATION          (MsgTokenCreation.KEY,        MsgTokenCreation.class),
 	/* TOKEN_RENEW */
 	
 	// List and describe (there will be much more than this two...)
-	COMPLETE_LIST         (MsgCompleteList.KEY,         MsgCompleteList.class),
-	RESOURCES_LIST        (MsgResourcesList.KEY,        MsgResourcesList.class), 
-	DESCRIBE_RESOURCE     (MsgDescribeRessource.KEY,    MsgDescribeRessource.class),
+	COMPLETE_LIST           (MsgCompleteList.KEY,         MsgCompleteList.class),
+	RESOURCES_LIST          (MsgResourcesList.KEY,        MsgResourcesList.class), 
+	DESCRIBE_RESOURCE       (MsgDescribeRessource.KEY,    MsgDescribeRessource.class),
 	
 	// Access methods
-	GET_RESPONSE          (MsgGetResponse.KEY,          MsgGetResponse.class),
-	SET_RESPONSE          (MsgSetResponse.KEY,          MsgSetResponse.class),
-	ACT_RESPONSE          (MsgActResponse.KEY,          MsgActResponse.class),
-	SUBSCRIBE_RESPONSE    (MsgSubscribeResponse.KEY,    MsgSubscribeResponse.class),
-	UNSUBSCRIBE_RESPONSE  (MsgUnsubscribeResponse.KEY,  MsgUnsubscribeResponse.class),
+	GET_RESPONSE            (MsgGetResponse.KEY,          MsgGetResponse.class),
+	SET_RESPONSE            (MsgSetResponse.KEY,          MsgSetResponse.class),
+	ACT_RESPONSE            (MsgActResponse.KEY,          MsgActResponse.class),
+	SUBSCRIBE_RESPONSE      (MsgSubscribeResponse.KEY,    MsgSubscribeResponse.class),
+	UNSUBSCRIBE_RESPONSE    (MsgUnsubscribeResponse.KEY,  MsgUnsubscribeResponse.class),
 	
 	// CALLBACK 
-	PROVIDER_APPEARING    (MsgProviderAppearing.KEY,    MsgProviderAppearing.class),
-	PROVIDER_DISAPPEARING (MsgProviderDisappearing.KEY, MsgProviderDisappearing.class),
-	SERVICE_APPEARING     (MsgServiceAppearing.KEY,     MsgServiceAppearing.class),
-	SERVICE_DISAPPEARING  (MsgServiceDisappearing.KEY,  MsgServiceDisappearing.class),
-	RESOURCE_APPEARING    (MsgResourceAppearing.KEY,    MsgResourceAppearing.class),
-	RESOURCE_DISAPPEARING (MsgResourceDisappearing.KEY, MsgResourceDisappearing.class);
+	PROVIDER_APPEARING      (MsgProviderAppearing.KEY,    MsgProviderAppearing.class),
+	PROVIDER_DISAPPEARING   (MsgProviderDisappearing.KEY, MsgProviderDisappearing.class),
+	SERVICE_APPEARING       (MsgServiceAppearing.KEY,     MsgServiceAppearing.class),
+	SERVICE_DISAPPEARING    (MsgServiceDisappearing.KEY,  MsgServiceDisappearing.class),
+	RESOURCE_APPEARING      (MsgResourceAppearing.KEY,    MsgResourceAppearing.class),
+	RESOURCE_DISAPPEARING   (MsgResourceDisappearing.KEY, MsgResourceDisappearing.class),
+	
+	// Other
+	ATTRIBUTE_VALUE_UPDATED (MsgAttributeValueUpdated.KEY, MsgAttributeValueUpdated.class);
+	
 	
 	private final String type;
 	private final Class<?> clazz;

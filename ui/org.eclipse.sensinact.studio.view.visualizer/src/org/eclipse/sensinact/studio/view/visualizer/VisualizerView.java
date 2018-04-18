@@ -18,6 +18,11 @@ import javax.annotation.PreDestroy;
 import org.apache.log4j.Logger;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
+import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.client.snamessage.ValueType;
+import org.eclipse.sensinact.studio.http.client.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
+import org.eclipse.sensinact.studio.http.client.subscribe.standard.SubscriptionListener;
+import org.eclipse.sensinact.studio.http.client.subscribe.standard.SubscriptionManager;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.view.visualizer.graphmanager.GraphManager;
 import org.eclipse.swt.SWT;
@@ -32,12 +37,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Etienne Gandrille
  */
-public class VisualizerView { // TODO update this... implements SubscriptionListener {
+public class VisualizerView implements SubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(VisualizerView.class);
 	
@@ -126,14 +132,9 @@ public class VisualizerView { // TODO update this... implements SubscriptionList
 	private void subscribe(VisualizerSettings newSettings, boolean updateUI) throws IOException {
 		ResourceDescriptor resource = newSettings.getDescriptor();
 		
-		btn.setText("UPDATE this with new subscribe");
-		// TODO update this with new subscribe !!!
-		
-		/*
-		//Tries to subscribe via call back, if does not work does not matter, the websocket should take place.
 		try {
 			SubscriptionManager.getInstance().subscribeResource(resource, this);
-		}catch(IOException e){
+		} catch (Exception e) {
 			logger.error("Callback subscription failed", e);
 		}
 		this.visuSettings = newSettings;
@@ -145,12 +146,9 @@ public class VisualizerView { // TODO update this... implements SubscriptionList
 			btn.setText("Stop listener");
 			btn.setEnabled(true);
 		}
-		*/
 	}
 	
 	private void unsubscribe(boolean updateUI) throws IOException {
-		// TODO update this with new subscribe !!!
-		/*
 		SubscriptionManager.getInstance().unsubscribeResource(visuSettings.getDescriptor(), this);
 		visuSettings = null;
 		
@@ -158,48 +156,40 @@ public class VisualizerView { // TODO update this... implements SubscriptionList
 			graphUpdater.stop();
 			resetUI();
 		}
-		*/
 	}
 	
-	// listener... @Override
-	public void onEvent(/*final SnaMessage response, */final ResourceDescriptor resource) 
+	@Override
+	public void onEvent(final MsgSensinact message, final ResourceDescriptor resource) 
 	{
-		/*
-		final String msg = response.getFullDescription();
+		final String msg = message.toString();
 		logger.debug("VisualizerView::resourceUpdated" + msg);
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() 
 			{
-				msgLabel.setText(response.getFullDescription());
+				msgLabel.setText(msg);
 								
-				if (response instanceof UpdateAttribute) {
-					UpdateAttribute update = (UpdateAttribute) response;
-					String type = update.getType();
+				if (message instanceof MsgAttributeValueUpdated) {
+					MsgAttributeValueUpdated update = (MsgAttributeValueUpdated) message;
+					ValueType type = update.getNotification().getType();
 					
-					if (type.equals("int")) {
-						int value = Integer.parseInt(update.getValue());
+					if (type == ValueType.INT) {
+						int value = Integer.parseInt(update.getNotification().getValueAsString());
 						updateGraph(resource, value);
-					} else if (type.equals("float")) {
-						float value = Float.parseFloat(update.getValue());
+					} else if (type == ValueType.LONG) {
+						float value = Long.parseLong(update.getNotification().getValueAsString());
 						updateGraph(resource, value);
-					} else if (type.equals("double")) {
-						double value = Double.parseDouble(update.getValue());
-						updateGraph(resource, value);
-					}else {
-						System.out.println(this.getClass().getCanonicalName()+": Type "+type+" cannot produce chart");
+					} else {
+						System.out.println(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
 					}
 				}
 			}
 		});
-		*/	
 	}
 	
-	/*
 	private void updateGraph(ResourceDescriptor resource, double value) {
 		graphUpdater.start(resource);
 		graphUpdater.setValue(value);
 	}
-	*/
 	
 	private void resetUI() {
 		titleLabel.setText(DEFAULT_TITLE);

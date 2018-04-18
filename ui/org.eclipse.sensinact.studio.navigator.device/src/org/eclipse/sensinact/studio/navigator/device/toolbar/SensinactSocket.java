@@ -19,7 +19,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.eclipse.sensinact.studio.http.client.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;

@@ -20,8 +20,6 @@ import javax.naming.directory.InvalidAttributesException;
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
-import org.eclipse.sensinact.studio.http.client.agent.SubscriptionListener;
-import org.eclipse.sensinact.studio.http.client.agent.SubscriptionManager;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.MsgCompleteList;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectProvider;
@@ -35,6 +33,8 @@ import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgResource
 import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgServiceAppearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgServiceDisappearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.resourceslist.MsgResourcesList;
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.SubscriptionListener;
+import org.eclipse.sensinact.studio.http.client.subscribe.agent.SubscriptionManager;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
