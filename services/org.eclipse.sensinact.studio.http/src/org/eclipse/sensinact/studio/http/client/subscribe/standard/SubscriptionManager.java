@@ -219,13 +219,7 @@ public class SubscriptionManager implements ConfigurationListerner {
 		url += PATH;
 		
 		// Json Object
-		JSONArray jsonArray = new JSONArray();
-		try {
-			JSONObject jsonObject = JsonUtil.createNameTypeValue("callback", "string", url);
-			jsonArray.put(jsonObject);
-		} catch (JSONException e) {
-			logger.error("Should never happend");
-		}
+		JSONArray jsonArray = createMessageAsJsonArray("callback", "string", url);
 		
 		Segments segment = new Segments.Builder().resource(resource).method(AccessMethodType.SUBSCRIBE).build();
 		logger.debug("Sending subscribe for resource " + segment + " with callback " + url);
@@ -245,19 +239,20 @@ public class SubscriptionManager implements ConfigurationListerner {
 	}
 
 	private static void unsubscribeResourceInternal(ResourceDescriptor resource, String subsId) throws IOException {
+		JSONArray jsonArray = createMessageAsJsonArray("subscriptionId", "string", subsId);
+		Segments segments = new Segments.Builder().resource(resource).method(AccessMethodType.UNSUBSCRIBE).build();
+		logger.debug("Sending unsubscribe for resource " + segments);
+		GatewayHttpClient.sendPostRequest(segments, jsonArray);
+	}
+	
+	private static JSONArray createMessageAsJsonArray(String name, String type, Object value) {
+		JSONArray jsonArray = new JSONArray();
 		try {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("usid", subsId);
-
-			Segments segments = new Segments.Builder().resource(resource).method(AccessMethodType.UNSUBSCRIBE).build();
-
-			logger.debug("Sending unsubscribe for resource " + segments);
-			GatewayHttpClient.sendPostRequest(segments, jsonObject);
-
+			JSONObject jsonObject = JsonUtil.createNameTypeValue(name, type, value);
+			jsonArray.put(jsonObject);
 		} catch (JSONException e) {
-			String msg = "Unsubscribe fails for resource " + resource;
-			logger.error(msg, e);
-			throw new IOException(msg, e);
+			logger.error("Should never happend");
 		}
+		return jsonArray;
 	}
 }
