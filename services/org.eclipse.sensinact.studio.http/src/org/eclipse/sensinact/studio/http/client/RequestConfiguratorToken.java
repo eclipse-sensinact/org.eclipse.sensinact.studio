@@ -10,8 +10,6 @@
  */
 package org.eclipse.sensinact.studio.http.client;
 
-import java.util.Map;
-
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.restlet.engine.header.Header;
 import org.restlet.resource.ClientResource;
@@ -22,6 +20,7 @@ import org.restlet.util.Series;
  */
 public class RequestConfiguratorToken implements RequestConfigurator {
 
+
 	private final String HEADER = "X-AUTH-TOKEN"; 
 	private final AccessToken token;
 	
@@ -31,14 +30,9 @@ public class RequestConfiguratorToken implements RequestConfigurator {
 
 	@Override
 	public void configure(GatewayHttpConfig gwInfo, ClientResource clientResource) {
-		String key = "org.restlet.http.headers";
-		
-		
-		Map<String, Object> attr = clientResource.getRequestAttributes();
-		if (! attr.containsKey("org.restlet.http.headers"))
-			attr.put(key, new Series<>(Header.class));
-				
-		Series<Header> headers = (Series<Header>) attr.get("org.restlet.http.headers");
+		Series<Header> headers = getHeaders(clientResource);			
 		headers.set(HEADER, token.getToken());
+		// think twice before removing...
+		headers.set("Connection", "close");
 	}
 }

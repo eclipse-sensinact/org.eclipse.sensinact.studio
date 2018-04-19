@@ -55,6 +55,10 @@ public class Segments {
 		return gateway;
 	}
 	
+	public List<String> getSegments() {
+		return segments;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

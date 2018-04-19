@@ -12,9 +12,11 @@ package org.eclipse.sensinact.studio.http.client;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgFactory;
@@ -36,6 +38,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
+import org.restlet.util.Series;
 
 /**
  * Central point for SYNCHRONUS communication with the sensinact gateway.
@@ -69,8 +72,9 @@ public class GatewayHttpClient {
 		return new RequestConfiguratorToken(token);
 	}
 	
-	private static AccessToken getToken(GatewayHttpConfig gwInfo) throws IOException {
-		AccessToken token = tokens.get(gwInfo.getName());
+	private static synchronized AccessToken getToken(GatewayHttpConfig gwInfo) throws IOException {
+		String gwName = gwInfo.getName();
+		AccessToken token = tokens.get(gwName);
 		if (token != null && token.isValid())
 			return token;
 		
@@ -78,7 +82,9 @@ public class GatewayHttpClient {
 		MsgSensinact reponse = sendGetRequest(segments, gwInfo, null, new RequestConfiguratorCred());
 		
 		if (reponse instanceof MsgTokenCreation) {
-			return new AccessToken((MsgTokenCreation) reponse);
+			token = new AccessToken((MsgTokenCreation) reponse);
+			tokens.put(gwName, token);
+			return token;
 		}
 		
 		return null;
@@ -139,22 +145,32 @@ public class GatewayHttpClient {
 		}
 		
 		String json = null;
+		MsgSensinact retval;
 		try {
+			//httpURLConnection.setRequestProperty("Connection","close");
+
+			
+			
+			
+			
 			Representation cmd = clientResource.get();
 			json = cmd.getText();
-			return MsgFactory.build(new JSONObject(json));
+			cmd.exhaust();
+			cmd.release();
+			retval = MsgFactory.build(new JSONObject(json));
 		} catch (Exception e) {
-			return MsgFactory.build(json, e, segments);
+			retval = MsgFactory.build(json, e, segments);
 		} 
+		
+		return retval;
 	}
 	
-	private static MsgSensinact sendPostRequest(Segments segments, String jsonRequest,Collection<Parameter> queryParameter, RequestConfigurator configurator) throws IOException {
-		
-		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
+	private static MsgSensinact sendPostRequest(Segments segments, String jsonRequest, Collection<Parameter> queryParameter, RequestConfigurator configurator) throws IOException {
+		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());		
 		ClientResource clientResource = new ClientResource(getContext(gwInfo.getTimeout()), Method.POST, gwInfo.getURL().toString()) {
 			@Override
 			public Representation handleInbound(Response response) {
-				return (response == null) ? null : response.getEntity();
+				return (response == null) ? null : response.getEntity();				
 			}
 		};
 		
@@ -170,11 +186,15 @@ public class GatewayHttpClient {
 		Representation postResponse = clientResource.post(stringRep);
 		Status status = clientResource.getResponse().getStatus();
 		
+		
 		int code = status.getCode();
 		
 		StringWriter sw = new StringWriter();
 		postResponse.write(sw);
 		String jsonResponse = sw.toString();
+
+		postResponse.exhaust();
+		postResponse.release();
 		
 		try {
 			return MsgFactory.build(new JSONObject(jsonResponse));
@@ -188,6 +208,7 @@ public class GatewayHttpClient {
 		Context context = new Context();
 		context.getParameters().add("socketTimeout", Integer.toString(timeout));
 		context.getParameters().add("idleTimeout", Integer.toString(timeout));
+		
 		return context;
 	}
 

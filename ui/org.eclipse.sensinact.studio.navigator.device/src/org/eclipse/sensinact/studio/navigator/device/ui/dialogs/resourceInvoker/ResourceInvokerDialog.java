@@ -175,10 +175,14 @@ public class ResourceInvokerDialog extends TitleAreaDialog {
 			AccessMethodType type = method.getType();
 			Segments segments = new Segments.Builder().resource(descriptor).method(type).build();
 			if (type.equals(AccessMethodType.GET)) {
+				System.out.println("Before GET");
 				MsgSensinact msg = GatewayHttpClient.sendGetRequest(segments);
+				System.out.println("After GET");
+				System.out.println("");
 				return msg.getType() + "\n" + msg.toString();
 			} else {
 				RequestParameter[] params = parameterComposite.getParametersValues(method);
+				GatewayHttpClient.sendPostRequest(segments,null, params);
 				MsgSensinact msg = GatewayHttpClient.sendPostRequest(segments,null, params);
 				return msg.getType() + "\n" + msg.toString();
 			}
