@@ -166,7 +166,7 @@ public class VisualizerView implements SubscriptionListener {
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() 
 			{
-				msgLabel.setText(msg);
+				msgLabel.setText(getTextForLabel(message));
 								
 				if (message instanceof MsgAttributeValueUpdated) {
 					MsgAttributeValueUpdated update = (MsgAttributeValueUpdated) message;
@@ -185,6 +185,18 @@ public class VisualizerView implements SubscriptionListener {
 			}
 		});
 	}
+	
+	private static String getTextForLabel(MsgSensinact message) {
+		if (message == null)
+			return "";
+		if (message instanceof MsgAttributeValueUpdated) {
+			MsgAttributeValueUpdated valUpdated = (MsgAttributeValueUpdated) message;
+			return "New value: " + valUpdated.getNotification().getValueAsString();
+		}
+		
+		return message.toString();
+	}
+	
 	
 	private void updateGraph(ResourceDescriptor resource, double value) {
 		graphUpdater.start(resource);
