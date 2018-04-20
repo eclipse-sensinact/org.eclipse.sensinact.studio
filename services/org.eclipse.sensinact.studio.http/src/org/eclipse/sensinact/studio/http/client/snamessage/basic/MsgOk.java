@@ -8,19 +8,20 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.client.snamessage.error;
+package org.eclipse.sensinact.studio.http.client.snamessage.basic;
 
 import org.json.JSONObject;
 
 /**
  * @author Etienne Gandrille
  */
-public class MsgHttpError extends MsgError {
+public class MsgOk extends MsgBasic {
 
 	private final int code;
 	private final JSONObject jsonObject;
 	
-	public MsgHttpError(int code, JSONObject jsonObject) {
+	public MsgOk(int code, JSONObject jsonObject) {
+		super("OK");
 		this.code = code;
 		this.jsonObject = jsonObject;
 	}
@@ -50,7 +51,7 @@ public class MsgHttpError extends MsgError {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MsgHttpError other = (MsgHttpError) obj;
+		MsgOk other = (MsgOk) obj;
 		if (code != other.code)
 			return false;
 		if (jsonObject == null) {
@@ -63,6 +64,6 @@ public class MsgHttpError extends MsgError {
 
 	@Override
 	public String toString() {
-		return "MsgHttpError [code=" + code + ", jsonObject=" + jsonObject + "]";
+		return "MsgOk [code=" + code + ", jsonObject=" + jsonObject + "]";
 	}
 }

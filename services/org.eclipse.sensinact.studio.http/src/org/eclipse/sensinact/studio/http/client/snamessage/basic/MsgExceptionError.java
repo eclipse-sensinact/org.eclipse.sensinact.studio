@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.client.snamessage.error;
+package org.eclipse.sensinact.studio.http.client.snamessage.basic;
 
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 

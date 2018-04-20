@@ -8,15 +8,17 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.client.snamessage.error;
-
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+package org.eclipse.sensinact.studio.http.client.snamessage.basic;
 
 /**
  * @author Etienne Gandrille
  */
-public abstract class MsgError extends MsgSensinact {
+public abstract class MsgError extends MsgBasic {
 	public MsgError() {
 		super("ERROR");
+	}
+	
+	public boolean isValid() {
+		return false;
 	}
 }

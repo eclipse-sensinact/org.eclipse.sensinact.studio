@@ -29,4 +29,8 @@ public abstract class MsgSensinact {
 		if (! this.type.equals(type))
 			throw new IllegalArgumentException();
 	}
+	
+	public boolean isValid() {
+		return true;
+	}
 }

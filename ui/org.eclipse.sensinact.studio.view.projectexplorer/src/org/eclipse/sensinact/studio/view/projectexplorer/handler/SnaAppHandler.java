@@ -23,7 +23,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.language.sensinact.Sensinact;
 
@@ -71,10 +71,10 @@ public abstract class SnaAppHandler extends SnaHandler {
 		// TODO Needs to be improved. Displayed information are a bit weak...
 		
 		String description = response.toString();	
-		if (response instanceof MsgHttpError)
-			MessageDialog.openError(shell, title, description);
-		else
+		if (response.isValid())
 			MessageDialog.openInformation(shell, title, description);
+		else
+			MessageDialog.openError(shell, title, description);
 	}
 	
 	protected void displayResult(Shell shell, String title, String fileName, Exception e) {

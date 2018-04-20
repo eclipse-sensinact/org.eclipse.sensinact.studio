@@ -13,8 +13,9 @@ package org.eclipse.sensinact.studio.http.client.snamessage;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgExceptionError;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgExceptionError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgOk;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.json.JSONObject;
 
@@ -34,40 +35,61 @@ public class MsgFactory {
 	}
 
 	public static MsgSensinact build(JSONObject jsonObject) {
-
-		// assert HTTP code exists
-		String code = jsonObject.optString("statusCode", null);
-		if (code != null) {
-			int codeVal = Integer.parseInt(code); 
-			if (codeVal < 200 || codeVal >= 300) {
-				logger.info("Building message with type MsgHttpError");
-				return new MsgHttpError(codeVal, jsonObject);
-			}
+		
+		int httpCode = getStatusCode(jsonObject);
+		String msgType = jsonObject.optString("type", null);
+		
+		// HTTP error code
+		if (httpCode != -1 && (httpCode < 200 || httpCode >= 300)) {
+			logger.info("Building message with type MsgHttpError");
+			return new MsgHttpError(httpCode, jsonObject);
 		}
 		
-		// assert type exists
-		String type = jsonObject.optString("type", null);
-		if (type == null)
-			throw new RuntimeException("type not found in json message");
+		// assert type exists	
+		if (msgType == null) {
+			if (httpCode != -1)
+				return new MsgOk(httpCode, jsonObject);
+			else
+				throw new RuntimeException("type not found in json message");
+		}
 		
-		logger.info("Building message with type " + type);
+		logger.info("Building message with type " + msgType);
 			
 		// assert builder exists
-		MsgTypes registeredType = MsgTypes.get(type);
-		if (registeredType == null)
-			throw new RuntimeException("unknown type " + type + " in json message");
-		
+		MsgTypes registeredType = MsgTypes.get(msgType);
+		if (registeredType == null) {
+			if (httpCode != -1)
+				return new MsgOk(httpCode, jsonObject);
+			else
+				throw new RuntimeException("unknown type " + msgType + " in json message");	
+		}
+			
 		// build!
 		ObjectMapper mapper = getMapper();
 		try {
 			Object object = mapper.readValue(jsonObject.toString(), registeredType.getTargetClass());
 			return (MsgSensinact) object;
 		} catch (IOException e) {
+			String msg = "Error while unmarshalling json " + jsonObject.toString();
+			
+			logger.error(msg);
 			logger.error(e.getMessage(), e);
-			throw new RuntimeException("Error while unmarshalling json " + jsonObject.toString(), e);
+			
+			if (httpCode != -1)
+				return new MsgOk(httpCode, jsonObject);
+			else
+				throw new RuntimeException("Error while unmarshalling json " + jsonObject.toString(), e);
 		}
 	}
-
+	
+	private static final int getStatusCode(JSONObject jsonObject) {
+		String code = jsonObject.optString("statusCode", null);
+		if (code == null)
+			return -1;
+		else
+			return Integer.parseInt(code);	
+	}
+	
 	private static ObjectMapper getMapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();

@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.UIResult.DialogStatus;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.client.snamessage.actresponse.MsgActResponse;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.http.client.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
@@ -75,12 +75,9 @@ public class StudioRequest {
 				MsgGetResponse getResponse = (MsgGetResponse) response;
 				message = getResponse.getResponse().getValueAsString();
 				dialogType = DialogStatus.SUCCESS;
-			} else if (response instanceof MsgHttpError) {
-				message = "HTTP error " + ((MsgHttpError) response).getCode();
-				dialogType = DialogStatus.ERROR;
 			} else {
-				message = "Unexpected message type : " + response.getType();
-				dialogType = DialogStatus.ERROR;
+				message = "Message type : " + response.getType();
+				dialogType = response.isValid() ? DialogStatus.SUCCESS : DialogStatus.ERROR;
 			}
 		} catch (Exception e) {
 			title = "Error";

@@ -20,7 +20,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.model.resource.utils.Constants;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
@@ -52,7 +52,7 @@ public class SnaDeployHandler extends SnaAppHandler {
 			JSONObject app = generateJsonApplication(sna, fileName);
 			String gatewayID = getGatewayID(sna);
 			MsgSensinact response = install(Constants.createInstallAppRD(gatewayID), app);
-			String title = response instanceof MsgHttpError ? "Application deployed" : "Application deploy failed"; 
+			String title = response.isValid() ? "Application deployed" : "Application deploy failed"; 
 			displayResult(shell, title, fileName, response);
 		} catch (Exception e) {
 			displayResult(shell, "Application deploy failed", fileName, e);

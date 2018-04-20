@@ -21,11 +21,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.MsgCompleteList;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectProvider;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectResource;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectService;
-import org.eclipse.sensinact.studio.http.client.snamessage.error.MsgHttpError;
 import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgProviderAppearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgProviderDisappearing;
 import org.eclipse.sensinact.studio.http.client.snamessage.lifecycle.MsgResourceAppearing;
@@ -215,11 +215,7 @@ public class ModelUpdater implements SubscriptionListener {
 		
 		try {
 			MsgSensinact msg = GatewayHttpClient.sendPostRequest(segments, null,param);
-			if (msg instanceof MsgHttpError) {
-				return false;
-			} else {
-				return true;
-			}
+			return msg.isValid();
 		} catch (IOException e) {
 			logger.error("Update location on server failed", e);
 			return false;
