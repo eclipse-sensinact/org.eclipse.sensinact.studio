@@ -7,6 +7,8 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DSL_SENSINACT">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="autostart" eType="#//DSL_FLAG_AUTOSTART"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
         eType="#//DSL_Resource" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cep" upperBound="-1" eType="#//DSL_CEP_STATEMENT"
@@ -14,6 +16,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="on" eType="#//DSL_On" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eca" eType="#//DSL_ECA_STATEMENT"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSL_FLAG_AUTOSTART">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DSL_Resource" eSuperTypes="#//DSL_REF">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="gatewayID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

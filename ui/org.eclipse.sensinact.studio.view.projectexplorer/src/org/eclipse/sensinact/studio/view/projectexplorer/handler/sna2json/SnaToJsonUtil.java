@@ -88,11 +88,16 @@ public abstract class SnaToJsonUtil {
 	public static SnaParsingResult parseSnaFile(DSL_SENSINACT fileModel, String fileName) throws JSONException {
 
 		JSONArray components = new JSONArray();
+		JSONObject initialize = new JSONObject();
 		JSONObject finalize = new JSONObject();
+		
 		ResourcesDeclarationManager resMgr = new ResourcesDeclarationManager(fileModel.getResources());
 		
+		// initialize : autostart
+		setupInitializeOptions(fileModel, initialize);
+		
 		// set up file structure
-		JSONObject root = initFileStructure(fileName, components, finalize);
+		JSONObject root = initFileStructure(fileName, components, initialize, finalize);
 
 		// CEP
 		for (DSL_CEP_STATEMENT cep : fileModel.getCep()) {
@@ -110,6 +115,17 @@ public abstract class SnaToJsonUtil {
 		parseEcaStatement(fileName, resMgr, eca, components, triggers);
 
 		return new SnaParsingResult(root);
+	}
+
+	private static void setupInitializeOptions(DSL_SENSINACT fileModel, JSONObject initialize) throws JSONException {
+		
+		boolean autostart = true; // default value
+		if (fileModel.getAutostart() != null)
+			autostart = fileModel.getAutostart().isActivated();
+		
+		JSONObject object = new JSONObject();
+		object.put("autostart", autostart);
+		initialize.put("options", object);
 	}
 
 	/**
@@ -182,7 +198,7 @@ public abstract class SnaToJsonUtil {
 	 *            a finalize statement array
 	 * @return the JSON skeleton
 	 */
-	private static JSONObject initFileStructure(String fileName, JSONArray components, JSONObject finalize) {
+	private static JSONObject initFileStructure(String fileName, JSONArray components, JSONObject initialize, JSONObject finalize) {
 		try {
 			JSONObject root = new JSONObject();
 
@@ -197,8 +213,7 @@ public abstract class SnaToJsonUtil {
 			parameters.put(content);
 
 			// initialize
-			JSONObject initializeResources = new JSONObject();
-			contentValue.put("initialize", initializeResources);
+			contentValue.put("initialize", initialize);
 
 			// application
 			contentValue.put("application", components);

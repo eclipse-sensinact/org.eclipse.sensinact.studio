@@ -10,10 +10,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//Sensinact/eca"/>
     </genClasses>
     <genClasses ecoreClass="Sensinact.ecore#//DSL_SENSINACT">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//DSL_SENSINACT/autostart"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//DSL_SENSINACT/resources"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//DSL_SENSINACT/cep"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//DSL_SENSINACT/on"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Sensinact.ecore#//DSL_SENSINACT/eca"/>
+    </genClasses>
+    <genClasses ecoreClass="Sensinact.ecore#//DSL_FLAG_AUTOSTART">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sensinact.ecore#//DSL_FLAG_AUTOSTART/activated"/>
     </genClasses>
     <genClasses ecoreClass="Sensinact.ecore#//DSL_Resource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Sensinact.ecore#//DSL_Resource/gatewayID"/>
