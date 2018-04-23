@@ -19,6 +19,7 @@ import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgOk;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
@@ -92,6 +93,7 @@ public class MsgFactory {
 	
 	private static ObjectMapper getMapper() {
 		ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		SimpleModule module = new SimpleModule();
 		module.addDeserializer(ObjectNameTypeValue.class, new NameTypeValueDeserializer());
 		mapper.registerModule(module);

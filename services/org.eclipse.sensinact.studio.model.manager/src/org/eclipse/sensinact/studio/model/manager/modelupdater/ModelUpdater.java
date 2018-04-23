@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.MsgCompleteList;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectProvider;
 import org.eclipse.sensinact.studio.http.client.snamessage.completelist.ObjectResource;

@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.navigator.device.toolbar.dialog;
+package org.eclipse.sensinact.studio.ui.common.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
 
 /**
+ * Dialog to pick a SINGLE element from a list.
+ * 
+ * getFirstResult method added for convinience. 
+ * 
  * @author Etienne Gandrille
  */
 public class BasicListDialog extends ListDialog {
@@ -58,4 +62,11 @@ public class BasicListDialog extends ListDialog {
 		
 		return list.toArray(new String[0]);
 	}
+	
+	public String getFirstResult() {
+		String[] results = getResult();
+		if (results == null || results.length == 0)
+			return null;
+		return results[0];
+	}	
 }

@@ -12,11 +12,9 @@ package org.eclipse.sensinact.studio.http.client;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgFactory;
@@ -38,7 +36,6 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
-import org.restlet.util.Series;
 
 /**
  * Central point for SYNCHRONUS communication with the sensinact gateway.

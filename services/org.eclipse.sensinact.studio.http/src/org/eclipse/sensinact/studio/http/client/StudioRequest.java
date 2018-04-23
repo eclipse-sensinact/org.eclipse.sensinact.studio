@@ -17,13 +17,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.client.UIResult.DialogStatus;
 import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.client.snamessage.actresponse.MsgActResponse;
-import org.eclipse.sensinact.studio.http.client.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.http.client.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
-import org.restlet.data.Parameter;
-
 import org.eclipse.sensinact.studio.resource.AccessMethodType;
+import org.restlet.data.Parameter;
 
 /**
  * @author Etienne Gandrille

@@ -33,6 +33,7 @@ import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.Device
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
+import org.eclipse.sensinact.studio.model.resource.utils.ServiceDescriptor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationListerner;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
@@ -319,6 +320,55 @@ public class ModelEditor implements ConfigurationListerner {
 		});
 	}
 
+	/* ================= */
+	/* Find Applications */
+	/* ================= */
+	
+	@SuppressWarnings("unchecked")
+	public List<ServiceDescriptor> findApplications() throws InterruptedException {
+
+		setupStudio();
+
+		return (List<ServiceDescriptor>) getEditingDomain().runExclusive(new RunnableWithResult.Impl<List<ServiceDescriptor>>() {
+			@Override
+			public void run() {
+				List<ServiceDescriptor> retval = new ArrayList<>();
+				EList<Gateway> gateways = USE_IN_RUNEXLUSIVE_getStudio().getGateways();
+				for (Gateway gateway : gateways) {
+					Device appManager = findAppManager(gateway.getDevice());
+					if (appManager != null) {
+						retval.addAll(findApplications(appManager));
+					}
+				}
+				setResult(retval);
+				return;
+			}
+			
+			private Device findAppManager(EList<Device> devices) {
+				for (Device device : devices) {
+					if (device.getName().equals("AppManager"))
+						return device;
+				}
+				return null;
+			}
+			
+			private List<ServiceDescriptor> findApplications(Device appManager) {
+				List<ServiceDescriptor> retval = new ArrayList<>();
+				
+				String gateway = ((Gateway) appManager.eContainer()).getName();
+				String device = appManager.getName();
+				
+				for (Service service : appManager.getService()) {
+					String srvName = service.getName();
+					if (srvName != null && (! srvName.equalsIgnoreCase("admin"))) {
+						retval.add(new ServiceDescriptor(gateway, device, srvName));
+					}
+				}
+				return retval;
+			} 
+		});
+	}
+		
 	/* ============= */
 	/* Checks exists */
 	/* ============= */

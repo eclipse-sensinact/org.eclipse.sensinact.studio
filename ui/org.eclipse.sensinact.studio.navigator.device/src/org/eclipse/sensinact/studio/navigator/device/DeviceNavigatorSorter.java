@@ -14,7 +14,6 @@ import java.text.Collator;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-
 import org.eclipse.sensinact.studio.resource.impl.NamedElementImpl;
 
 /**
