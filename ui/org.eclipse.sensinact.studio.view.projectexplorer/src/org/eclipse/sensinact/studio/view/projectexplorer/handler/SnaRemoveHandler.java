@@ -52,7 +52,7 @@ public class SnaRemoveHandler extends SnaAppHandler {
 			if (gatewayIds.size() == 0) {
 				MessageDialog.openError(getShell(event), "Application removal failed", "Application not found.\nIs the gateway connected?");
 			} else {
-				BasicListDialog listDialog = new BasicListDialog(getShell(event), "Gateway selection", "Please choose a Gateway", gatewayIds.toArray(new String[0]));
+				BasicListDialog listDialog = new BasicListDialog(getShell(event), "Connected gateways", "Please choose a Gateway", gatewayIds.toArray(new String[0]));
 				if (listDialog.open() == Window.OK) {
 					String gatewayID = listDialog.getFirstResult();
 					MsgSensinact response = uninstall(Constants.createUninstallAppRD(gatewayID), fileName);

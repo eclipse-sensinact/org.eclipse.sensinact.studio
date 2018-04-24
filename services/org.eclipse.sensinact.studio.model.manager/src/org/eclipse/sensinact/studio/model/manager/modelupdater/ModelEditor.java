@@ -237,7 +237,6 @@ public class ModelEditor implements ConfigurationListerner {
 
 	@SuppressWarnings("unchecked")
 	public List<String> getGatewaysId() throws InterruptedException {
-
 		setupStudio();
 
 		return (List<String>) getEditingDomain().runExclusive(new RunnableWithResult.Impl<List<String>>() {
@@ -254,6 +253,25 @@ public class ModelEditor implements ConfigurationListerner {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<String> getConnectedGatewaysId() throws InterruptedException {
+		setupStudio();
+
+		return (List<String>) getEditingDomain().runExclusive(new RunnableWithResult.Impl<List<String>>() {
+			@Override
+			public void run() {
+				List<String> retval = new ArrayList<String>();
+				EList<Gateway> gateways = USE_IN_RUNEXLUSIVE_getStudio().getGateways();
+				for (Gateway gateway : gateways) {
+					if (gateway.getDevice().size() != 0)
+						retval.add(gateway.getName());
+				}
+				setResult(retval);
+				return;
+			}
+		});
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<String> getDevicesId(final String gatewayName) throws InterruptedException {
 
