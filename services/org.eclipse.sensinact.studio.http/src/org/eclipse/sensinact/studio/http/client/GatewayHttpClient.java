@@ -57,16 +57,22 @@ public class GatewayHttpClient {
 		
 	public static MsgSensinact sendGetRequest(Segments segments, Map<String, String> params) throws IOException {		
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
-		RequestConfiguratorToken configurator = getRequestConfiguratorToken(gwInfo);
+		
+		RequestConfigurator configurator;
+		if (gwInfo.hasAuthentication())
+			configurator = getRequestConfiguratorToken(gwInfo);
+		else
+			configurator = new BasicConfigurator();
 		return sendGetRequest(segments, gwInfo, params, configurator);
 	}
 		
 	private static RequestConfiguratorToken getRequestConfiguratorToken(GatewayHttpConfig gwInfo) throws IOException {
-		AccessToken token = null;
 		if (gwInfo.hasAuthentication()) {
-			token = getToken(gwInfo);
+			AccessToken token = getToken(gwInfo);
+			return new RequestConfiguratorToken(token);
+		} else {
+			throw new RuntimeException("No credentials found for retrieving token");
 		}
-		return new RequestConfiguratorToken(token);
 	}
 	
 	private static synchronized AccessToken getToken(GatewayHttpConfig gwInfo) throws IOException {

@@ -69,7 +69,7 @@ public class ConnectHandler extends SnaHandler {
 			dialog.run(false, false, new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					ModelUpdater mu = ModelUpdater.getInstance();
-					monitor.subTask("Fetching devices from:"+gateway.getURL());
+					monitor.subTask("Fetching devices from:" + gateway.getURL());
 					try {
 						mu.updateDevices(gateway.getName());
 						if (monitor.isCanceled()) {
