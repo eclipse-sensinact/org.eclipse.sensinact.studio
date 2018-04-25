@@ -12,10 +12,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.sensinact.studio.preferences,
  com.fasterxml.jackson.core.jackson-databind;bundle-version="2.6.2",
  org.restlet.ext.jackson;bundle-version="2.2.3",
- com.fasterxml.jackson.core.jackson-core;bundle-version="2.6.2"
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.6.2",
+ org.eclipse.jetty.websocket.common;bundle-version="9.2.15"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.sensinact.studio.http.client,
+ org.eclipse.sensinact.studio.http.client.connectionmanager,
  org.eclipse.sensinact.studio.http.client.snamessage,
  org.eclipse.sensinact.studio.http.client.snamessage.attributevalueupdated,
  org.eclipse.sensinact.studio.http.client.snamessage.basic,
@@ -28,6 +30,8 @@ Export-Package: org.eclipse.sensinact.studio.http.client,
  org.eclipse.sensinact.studio.http.client.snamessage.subscriberesponse,
  org.eclipse.sensinact.studio.http.client.subscribe.agent,
  org.eclipse.sensinact.studio.http.client.subscribe.standard,
+ org.eclipse.sensinact.studio.http.client.websockets,
  org.eclipse.sensinact.studio.http.server,
  org.eclipse.sensinact.studio.http.server.serverstarted
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,org.eclipse.jetty.websocket.client,org.eclipse.jetty.websocket.api.annotations,org.eclipse.jetty.websocket.api,org.eclipse.jetty.util.component
+

@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.navigator.device.toolbar;
+package org.eclipse.sensinact.studio.http.client.websockets;
 
 import java.net.ConnectException;
 import java.net.URI;

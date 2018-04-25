@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.client.websockets.SensinactWebSocketConnectionManager;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;

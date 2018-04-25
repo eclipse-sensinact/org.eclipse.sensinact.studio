@@ -20,7 +20,5 @@ Require-Bundle: org.eclipse.ui.navigator,
  org.eclipse.sensinact.studio.ui.common,
  org.eclipse.emf.transaction,
  org.eclipse.jface,
- org.eclipse.sensinact.studio.preferences,
- org.eclipse.jetty.websocket.common;bundle-version="9.2.15"
+ org.eclipse.sensinact.studio.preferences
 Export-Package: org.eclipse.sensinact.studio.navigator.device
-Import-Package: org.apache.log4j,org.eclipse.jetty.websocket.client,org.eclipse.jetty.websocket.api.annotations,org.eclipse.jetty.websocket.api,org.eclipse.jetty.util.component

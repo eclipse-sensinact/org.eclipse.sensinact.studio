@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.navigator.device.toolbar;
+package org.eclipse.sensinact.studio.http.client.websockets;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +20,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.json.JSONException;
@@ -50,27 +49,27 @@ public class SensinactSocket {
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         session=null;
-        System.out.println("WebSocket connection closed from the gateway "+gatewayID);
+        System.out.println("WebSocket connection closed from the gateway " + gatewayID);
         this.closeLatch.countDown();
         try {
         	GatewayHttpConfig gwConfig = ConfigurationManager.getGateway(gatewayID);
             Agent.getInstance().unsubscribe(gwConfig);
     		SensinactWebSocketConnectionManager.getInstance().disconnect(gwConfig.getName());
-    		ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());	
+    		//ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());	
         }catch(Exception e){
-        	logger.debug("Websocket clients was disconnected from the server "+gatewayID);
+        	logger.debug("Websocket clients was disconnected from the server " + gatewayID);
         }
     }
 
     @OnWebSocketConnect
     public void onConnect(Session session) {
-    	System.out.println("WebSocket connected to the gateway "+gatewayID);
+    	logger.info("WebSocket connected to the gateway " + gatewayID);
         this.session = session;
     }
 
     @OnWebSocketMessage
     public void onMessage(String msg) {
-    	logger.info("Websocket message received from "+gatewayID);
+    	logger.info("Websocket message received from " + gatewayID);
     	String uri;
 		try {
 			JSONObject jsonMessage=new JSONObject(msg);
@@ -94,11 +93,11 @@ public class SensinactSocket {
 			}
 			*/
 		} catch (JSONException e) {
-			logger.debug("Error receiving message:"+e.getMessage());
+			logger.debug("Error receiving message:" + e.getMessage());
 		}    	
     }
     
-    public Session getSession(){
+    public Session getSession() {
     	return session;
     }
 }
