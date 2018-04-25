@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.language.sensinact.Sensinact;
 

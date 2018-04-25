@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgFactory;
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgFactory;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

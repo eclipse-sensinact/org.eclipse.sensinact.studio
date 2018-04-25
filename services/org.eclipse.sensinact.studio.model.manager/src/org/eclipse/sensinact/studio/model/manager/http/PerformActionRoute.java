@@ -13,9 +13,9 @@ package org.eclipse.sensinact.studio.model.manager.http;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.client.StudioRequest;
-import org.eclipse.sensinact.studio.http.client.UIResult;
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.services.client.StudioRequest;
+import org.eclipse.sensinact.studio.http.services.client.UIResult;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.restlet.resource.Get;
 

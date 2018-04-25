@@ -14,11 +14,12 @@ Require-Bundle: org.eclipse.ui.navigator,
  org.eclipse.sensinact.studio.model.resource,
  org.json,
  org.eclipse.sensinact.studio.view.outdoor,
- org.eclipse.sensinact.studio.http,
  org.eclipse.sensinact.studio.model.manager,
  org.apache.log4j,
  org.eclipse.sensinact.studio.ui.common,
  org.eclipse.emf.transaction,
  org.eclipse.jface,
- org.eclipse.sensinact.studio.preferences
+ org.eclipse.sensinact.studio.preferences,
+ org.eclipse.sensinact.studio.http.services,
+ org.eclipse.sensinact.studio.http.messages
 Export-Package: org.eclipse.sensinact.studio.navigator.device

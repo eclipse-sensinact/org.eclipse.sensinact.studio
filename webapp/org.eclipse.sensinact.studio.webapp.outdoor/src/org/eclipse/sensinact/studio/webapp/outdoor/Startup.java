@@ -10,7 +10,7 @@
  */
 package org.eclipse.sensinact.studio.webapp.outdoor;
 
-import org.eclipse.sensinact.studio.http.server.RouteUtil;
+import org.eclipse.sensinact.studio.http.services.server.RouteUtil;
 import org.eclipse.sensinact.studio.webapp.outdoor.content.OutdoorInit;
 import org.eclipse.sensinact.studio.webapp.outdoor.content.OutdoorResources;
 import org.eclipse.ui.IStartup;

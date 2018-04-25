@@ -10,9 +10,9 @@
  */
 package org.eclipse.sensinact.studio.model.manager.http;
 
-import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.http.client.subscribe.standard.SubscriptionManager;
-import org.eclipse.sensinact.studio.http.server.RouteUtil;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.services.server.RouteUtil;
 
 /**
  * @author Etienne Gandrille

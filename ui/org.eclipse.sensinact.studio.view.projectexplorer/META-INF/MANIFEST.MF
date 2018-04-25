@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.sensinact.studio.language.sensinact,
  org.eclipse.sensinact.studio.model.manager,
- org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.http.messages,
+ org.eclipse.sensinact.studio.http.services,
  org.apache.log4j,
  org.eclipse.sensinact.studio.ui.common
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

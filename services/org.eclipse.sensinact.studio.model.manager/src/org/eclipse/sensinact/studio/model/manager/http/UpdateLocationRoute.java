@@ -13,7 +13,7 @@ package org.eclipse.sensinact.studio.model.manager.http;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;

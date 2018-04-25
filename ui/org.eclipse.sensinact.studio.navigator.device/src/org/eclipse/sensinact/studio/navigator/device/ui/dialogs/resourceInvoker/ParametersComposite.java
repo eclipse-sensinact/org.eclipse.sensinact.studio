@@ -13,7 +13,7 @@ package org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
+import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient.RequestParameter;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.parameterfield.ParameterField;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

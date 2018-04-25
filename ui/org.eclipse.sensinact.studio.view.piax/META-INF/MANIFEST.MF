@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sensinact.studio.model.resource,
  org.json,
  org.eclipse.sensinact.studio.model.manager,
- org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.http.messages,
+ org.eclipse.sensinact.studio.http.services,
  org.eclipse.sensinact.studio.ui.common,
  org.eclipse.sensinact.studio.preferences
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

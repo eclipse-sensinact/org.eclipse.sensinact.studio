@@ -10,7 +10,7 @@
  */
 package org.eclipse.sensinact.studio.webapp.indoor;
 
-import org.eclipse.sensinact.studio.http.server.RouteUtil;
+import org.eclipse.sensinact.studio.http.services.server.RouteUtil;
 import org.eclipse.sensinact.studio.webapp.indoor.content.IndoorApplication;
 import org.eclipse.ui.IStartup;
 

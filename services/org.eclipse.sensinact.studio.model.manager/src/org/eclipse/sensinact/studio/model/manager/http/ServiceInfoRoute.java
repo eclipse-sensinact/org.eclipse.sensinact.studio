@@ -14,10 +14,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.client.StudioRequest;
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.client.snamessage.getresponse.MsgGetResponse;
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.messages.snamessage.getresponse.MsgGetResponse;
+import org.eclipse.sensinact.studio.http.services.client.StudioRequest;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.restlet.resource.Get;

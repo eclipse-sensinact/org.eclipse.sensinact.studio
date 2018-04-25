@@ -7,7 +7,8 @@ Bundle-Activator: org.eclipse.sensinact.studio.webapp.indoor.Activator
 Bundle-Vendor: CEA-LETI
 Require-Bundle: org.eclipse.core.runtime,
  org.restlet,
- org.eclipse.sensinact.studio.http,
+ org.eclipse.sensinact.studio.http.messages,
+ org.eclipse.sensinact.studio.http.services,
  org.eclipse.ui.workbench,
  org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

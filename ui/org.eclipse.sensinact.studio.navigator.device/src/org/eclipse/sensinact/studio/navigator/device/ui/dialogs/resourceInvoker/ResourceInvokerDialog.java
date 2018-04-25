@@ -13,9 +13,9 @@ package org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.sensinact.studio.http.client.GatewayHttpClient;
-import org.eclipse.sensinact.studio.http.client.GatewayHttpClient.RequestParameter;
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient;
+import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient.RequestParameter;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.methodprovider.MethodProvider;

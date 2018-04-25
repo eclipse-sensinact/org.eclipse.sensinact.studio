@@ -18,12 +18,12 @@ import javax.annotation.PreDestroy;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.http.server.GatewayHttpServer;
-import org.eclipse.sensinact.studio.http.server.serverstarted.PortUpdate;
-import org.eclipse.sensinact.studio.http.server.serverstarted.ResourceAddedUpdate;
-import org.eclipse.sensinact.studio.http.server.serverstarted.ServerUpdatedListener;
-import org.eclipse.sensinact.studio.http.server.serverstarted.ServerUpdatedManager;
-import org.eclipse.sensinact.studio.http.server.serverstarted.UpdateDescriptor;
+import org.eclipse.sensinact.studio.http.services.server.GatewayHttpServer;
+import org.eclipse.sensinact.studio.http.services.server.serverstarted.PortUpdate;
+import org.eclipse.sensinact.studio.http.services.server.serverstarted.ResourceAddedUpdate;
+import org.eclipse.sensinact.studio.http.services.server.serverstarted.ServerUpdatedListener;
+import org.eclipse.sensinact.studio.http.services.server.serverstarted.ServerUpdatedManager;
+import org.eclipse.sensinact.studio.http.services.server.serverstarted.UpdateDescriptor;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationListener;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;

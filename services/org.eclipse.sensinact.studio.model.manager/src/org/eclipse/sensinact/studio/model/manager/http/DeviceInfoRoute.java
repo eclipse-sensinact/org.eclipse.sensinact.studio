@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
 import org.restlet.resource.Get;

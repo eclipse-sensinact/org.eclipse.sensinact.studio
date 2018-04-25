@@ -10,7 +10,7 @@
  */
 package org.eclipse.sensinact.studio.webapp.outdoor.content;
 
-import org.eclipse.sensinact.studio.http.server.SensinactServerResource;
+import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
 import org.restlet.resource.Get;
 
 /**

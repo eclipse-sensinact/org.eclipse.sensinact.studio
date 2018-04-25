@@ -8,9 +8,10 @@ Require-Bundle: org.json,
  org.eclipse.emf.transaction,
  org.restlet,
  org.eclipse.sensinact.studio.model.resource,
- org.eclipse.sensinact.studio.http,
  org.apache.log4j,
- org.eclipse.sensinact.studio.preferences
+ org.eclipse.sensinact.studio.preferences,
+ org.eclipse.sensinact.studio.http.services,
+ org.eclipse.sensinact.studio.http.messages
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.sensinact.studio.model.manager.listener.devicelocation,

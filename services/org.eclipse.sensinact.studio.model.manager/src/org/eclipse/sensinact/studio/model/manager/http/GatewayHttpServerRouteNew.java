@@ -12,8 +12,8 @@ package org.eclipse.sensinact.studio.model.manager.http;
 
 import java.util.List;
 
-import org.eclipse.sensinact.studio.http.client.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
 import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Post;

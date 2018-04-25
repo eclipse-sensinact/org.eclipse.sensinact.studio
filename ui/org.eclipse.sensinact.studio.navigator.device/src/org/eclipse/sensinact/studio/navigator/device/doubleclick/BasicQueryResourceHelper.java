@@ -11,8 +11,8 @@
 package org.eclipse.sensinact.studio.navigator.device.doubleclick;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.http.client.StudioRequest;
-import org.eclipse.sensinact.studio.http.client.UIResult;
+import org.eclipse.sensinact.studio.http.services.client.StudioRequest;
+import org.eclipse.sensinact.studio.http.services.client.UIResult;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.navigator.device.ui.dialogs.resourceInvoker.ResourceInvokerDialog;
