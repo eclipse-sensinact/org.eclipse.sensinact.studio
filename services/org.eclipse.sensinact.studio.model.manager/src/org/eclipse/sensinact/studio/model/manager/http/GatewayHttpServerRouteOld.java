@@ -13,7 +13,7 @@ package org.eclipse.sensinact.studio.model.manager.http;
 import java.util.List;
 
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.OldSubscriptionManager;
 import org.restlet.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Post;
@@ -30,6 +30,6 @@ public class GatewayHttpServerRouteOld extends GatewayHttpServerRoute {
 
 	@Override
 	protected Status notify(String id, List<MsgSensinact> messages) {
-		return SubscriptionManager.getInstance().callbackRecieved(id, messages);
+		return OldSubscriptionManager.getInstance().callbackRecieved(id, messages);
 	}
 }

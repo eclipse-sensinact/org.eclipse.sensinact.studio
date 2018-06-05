@@ -21,8 +21,8 @@ import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.messages.snamessage.ValueType;
 import org.eclipse.sensinact.studio.http.messages.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.SubscriptionListener;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.OldSubscriptionListener;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.OldSubscriptionManager;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.view.visualizer.graphmanager.GraphManager;
 import org.eclipse.swt.SWT;
@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Label;
 /**
  * @author Etienne Gandrille
  */
-public class VisualizerView implements SubscriptionListener {
+public class VisualizerView implements OldSubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(VisualizerView.class);
 	
@@ -133,7 +133,7 @@ public class VisualizerView implements SubscriptionListener {
 		ResourceDescriptor resource = newSettings.getDescriptor();
 		
 		try {
-			SubscriptionManager.getInstance().subscribeResource(resource, this);
+			OldSubscriptionManager.getInstance().subscribeResource(resource, this);
 		} catch (Exception e) {
 			logger.error("Callback subscription failed", e);
 		}
@@ -149,7 +149,7 @@ public class VisualizerView implements SubscriptionListener {
 	}
 	
 	private void unsubscribe(boolean updateUI) throws IOException {
-		SubscriptionManager.getInstance().unsubscribeResource(visuSettings.getDescriptor(), this);
+		OldSubscriptionManager.getInstance().unsubscribeResource(visuSettings.getDescriptor(), this);
 		visuSettings = null;
 		
 		if (updateUI) {

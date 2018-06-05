@@ -10,9 +10,6 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
-import java.net.ConnectException;
-import java.net.URI;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -20,8 +17,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionManager;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;

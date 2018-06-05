@@ -32,8 +32,8 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.lifecycle.MsgServic
 import org.eclipse.sensinact.studio.http.messages.snamessage.resourceslist.MsgResourcesList;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient.RequestParameter;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.SubscriptionListener;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.SubscriptionManager;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.AgentSubscriptionListener;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
@@ -44,7 +44,7 @@ import org.eclipse.sensinact.studio.resource.AccessMethodType;
 /**
  * @author Nicolas Hili, Etienne Gandrille, Jander and others
  */
-public class ModelUpdater implements SubscriptionListener {
+public class ModelUpdater implements AgentSubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(ModelUpdater.class);
 	
@@ -57,7 +57,7 @@ public class ModelUpdater implements SubscriptionListener {
 	}
 
 	private ModelUpdater() {
-		SubscriptionManager.getInstance().subscribe(this);
+		Agent.getInstance().subscribe(this);
 	}
 
 	/**

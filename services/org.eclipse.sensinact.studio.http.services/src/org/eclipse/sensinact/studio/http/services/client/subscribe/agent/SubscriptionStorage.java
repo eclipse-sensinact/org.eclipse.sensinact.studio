@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author Etienne Gandrille
  */
-public class SubscriptionStorage {
+class SubscriptionStorage {
 		
 	private final Map<String, Subscription> byGatway = new HashMap<String, Subscription>();
 	private final Map<String, Subscription> byLocation = new HashMap<String, Subscription>();

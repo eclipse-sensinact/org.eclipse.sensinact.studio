@@ -11,6 +11,7 @@
 package org.eclipse.sensinact.studio.http.services.client.subscribe.agent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
@@ -35,6 +36,8 @@ public class Agent {
 	public static final String PATH = "/callback/new";
 
 	private SubscriptionStorage storage = new SubscriptionStorage();
+	
+	private List<AgentSubscriptionListener> listeners = new ArrayList<AgentSubscriptionListener>();
 	
 	private Agent() {
 	}
@@ -132,16 +135,38 @@ public class Agent {
 		
 		if (lifeSub != null) {
 			String gateway = lifeSub.getGatewayName();
-			SubscriptionManager.getInstance().notifyLifecycle(gateway, messages);			
+			notifyLifecycle(gateway, messages);			
 			return Status.SUCCESS_OK;	
 		}
 		
 		if (locSub != null) {
 			String gateway = locSub.getGatewayName();
-			SubscriptionManager.getInstance().notifyLocation(gateway, messages);
+			notifyLocation(gateway, messages);
 			return Status.SUCCESS_OK;	
 		}
 
 		return  Status.CLIENT_ERROR_NOT_FOUND;				
+	}
+	
+	/* ======================= */
+	/* SUBSCRIPTION MANAGEMENT */
+	/* ======================= */
+	
+	public void subscribe(AgentSubscriptionListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void unsubscribe(AgentSubscriptionListener listener) {
+		listeners.remove(listener);
+	}
+	
+	void notifyLocation(String gateway, List<MsgSensinact> message) {
+		for (AgentSubscriptionListener listener : listeners)
+			listener.onLocationEvent(gateway, message);
+	}
+	
+	void notifyLifecycle(String gateway, List<MsgSensinact> message) {
+		for (AgentSubscriptionListener listener : listeners)
+			listener.onLifecycleEvent(gateway, message);
 	}
 }

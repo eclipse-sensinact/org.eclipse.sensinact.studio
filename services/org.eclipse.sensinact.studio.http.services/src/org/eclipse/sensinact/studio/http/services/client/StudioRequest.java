@@ -52,6 +52,7 @@ public class StudioRequest {
 			throw new IllegalArgumentException("BasicRequest not implemented with " + type.getName() + " method");
 		}
 	}
+	
 	public MsgSensinact sendRequest() throws IOException {
 		return sendRequest(null);
 	}

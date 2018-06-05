@@ -12,7 +12,6 @@ package org.eclipse.sensinact.studio.http.services.client.connectionmanager;
 
 import java.net.ConnectException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -74,8 +73,5 @@ public class ConnectionManager {
 	
 	public void disconnect() {
 		// TODO Auto-generated method stub
-	}
-	
-	
-	
+	}	
 }

@@ -39,24 +39,24 @@ import org.eclipse.sensinact.studio.resource.AccessMethodType;
 /**
  * @author Etienne Gandrille
  */
-public class SubscriptionManager implements ConfigurationListerner {
+public class OldSubscriptionManager implements ConfigurationListerner {
 
 	public static final String PATH = "/callback/old";
 	
-	private static final Logger logger = Logger.getLogger(SubscriptionManager.class);
+	private static final Logger logger = Logger.getLogger(OldSubscriptionManager.class);
 
-	private static SubscriptionManager INSTANCE = null;
+	private static OldSubscriptionManager INSTANCE = null;
 
 	private final Map<String, ResourceDescriptor> id2resource = new HashMap<String, ResourceDescriptor>();
-	private final Map<ResourceDescriptor, Set<SubscriptionListener>> resource2listeners = new HashMap<ResourceDescriptor, Set<SubscriptionListener>>();
+	private final Map<ResourceDescriptor, Set<OldSubscriptionListener>> resource2listeners = new HashMap<ResourceDescriptor, Set<OldSubscriptionListener>>();
 
-	private SubscriptionManager() {
+	private OldSubscriptionManager() {
 		ConfigurationManager.addListener(this);
 	}
 
-	public static SubscriptionManager getInstance() {
+	public static OldSubscriptionManager getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new SubscriptionManager();
+			INSTANCE = new OldSubscriptionManager();
 		return INSTANCE;
 	}
 
@@ -64,10 +64,10 @@ public class SubscriptionManager implements ConfigurationListerner {
 		return resource.toString()+"-"+System.currentTimeMillis();
 	}
 	
-	public String subscribeResource(ResourceDescriptor resource, SubscriptionListener listener) throws IOException {
+	public String subscribeResource(ResourceDescriptor resource, OldSubscriptionListener listener) throws IOException {
 
 		if (resource2listeners.get(resource) == null)
-			resource2listeners.put(resource, new HashSet<SubscriptionListener>());
+			resource2listeners.put(resource, new HashSet<OldSubscriptionListener>());
 		resource2listeners.get(resource).add(listener);
 
 		String subsId = getSubscriptionId(resource);
@@ -85,8 +85,8 @@ public class SubscriptionManager implements ConfigurationListerner {
 		return subsId;
 	}
 
-	public void unsubscribeResource(ResourceDescriptor resource, SubscriptionListener listener) throws IOException {
-		Set<SubscriptionListener> listeners = resource2listeners.get(resource);
+	public void unsubscribeResource(ResourceDescriptor resource, OldSubscriptionListener listener) throws IOException {
+		Set<OldSubscriptionListener> listeners = resource2listeners.get(resource);
 
 		if (listeners != null) {
 			listeners.remove(listener);
@@ -101,8 +101,8 @@ public class SubscriptionManager implements ConfigurationListerner {
 		}
 	}
 
-	public boolean hasSubscribeResource(ResourceDescriptor resource, SubscriptionListener listener) {
-		Set<SubscriptionListener> listeners = resource2listeners.get(resource);
+	public boolean hasSubscribeResource(ResourceDescriptor resource, OldSubscriptionListener listener) {
+		Set<OldSubscriptionListener> listeners = resource2listeners.get(resource);
 		if (listeners != null) {
 			if (listeners.contains(listener)) {
 				return true;
@@ -133,7 +133,7 @@ public class SubscriptionManager implements ConfigurationListerner {
 		// Subscription found
 		if (resource != null) {
 			for (MsgSensinact message : messages) {
-				for (SubscriptionListener listener : resource2listeners.get(resource)) {
+				for (OldSubscriptionListener listener : resource2listeners.get(resource)) {
 					listener.onEvent(message, resource);
 				}
 			}
@@ -151,7 +151,7 @@ public class SubscriptionManager implements ConfigurationListerner {
 		for (String id : id2resource.keySet()) {
 			ResourceDescriptor resource = id2resource.get(id);
 			sb.append(id + " - " + resource + "\n");
-			for (SubscriptionListener listener : resource2listeners.get(resource)) {
+			for (OldSubscriptionListener listener : resource2listeners.get(resource)) {
 				sb.append(" * " + listener + "\n");
 			}
 		}

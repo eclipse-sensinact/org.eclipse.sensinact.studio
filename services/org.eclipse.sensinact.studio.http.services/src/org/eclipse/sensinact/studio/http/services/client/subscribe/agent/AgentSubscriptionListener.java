@@ -8,14 +8,18 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.services.client.subscribe.standard;
+package org.eclipse.sensinact.studio.http.services.client.subscribe.agent;
+
+import java.util.List;
 
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
-import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 
 /**
  * @author Etienne Gandrille
  */
-public interface SubscriptionListener {
-	public void onEvent(final MsgSensinact message, final ResourceDescriptor resource); 
+public interface AgentSubscriptionListener {
+	
+	void onLifecycleEvent(String gateway, List<MsgSensinact> message);
+	
+	void onLocationEvent(String gateway, List<MsgSensinact> message);
 }

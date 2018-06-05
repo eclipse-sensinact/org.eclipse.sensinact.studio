@@ -42,9 +42,7 @@ import org.restlet.resource.ClientResource;
  * @author Etienne Gandrille
  */
 public class GatewayHttpClient {
-	
-	private static final Map<String, AccessToken> tokens = new HashMap<>(); 
-	
+		
 	private static final Logger logger = Logger.getLogger(GatewayHttpClient.class);
 	
 	private GatewayHttpClient() {
@@ -77,7 +75,7 @@ public class GatewayHttpClient {
 	
 	private static synchronized AccessToken getToken(GatewayHttpConfig gwInfo) throws IOException {
 		String gwName = gwInfo.getName();
-		AccessToken token = tokens.get(gwName);
+		AccessToken token = TokenStore.getInstance().getToken(gwName);
 		if (token != null && token.isValid())
 			return token;
 		
@@ -86,7 +84,7 @@ public class GatewayHttpClient {
 		
 		if (reponse instanceof MsgTokenCreation) {
 			token = new AccessToken((MsgTokenCreation) reponse);
-			tokens.put(gwName, token);
+			TokenStore.getInstance().save(gwName, token);
 			return token;
 		}
 		

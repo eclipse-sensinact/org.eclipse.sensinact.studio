@@ -21,7 +21,7 @@ import org.restlet.resource.Post;
 /**
  * @author Etienne Gandrille
  */
-public class GatewayHttpServerRouteNew extends GatewayHttpServerRoute {
+public class GatewayHttpServerRouteAgent extends GatewayHttpServerRoute {
 
 	@Post("json")
 	public Response getValue(String params) {

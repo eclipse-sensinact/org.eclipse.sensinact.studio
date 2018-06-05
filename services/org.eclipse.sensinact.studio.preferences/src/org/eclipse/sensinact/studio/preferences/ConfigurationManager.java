@@ -102,8 +102,6 @@ public class ConfigurationManager {
 		return null;
 	}	
 	
-	
-	
 	public static int getStudioPort() {
 		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
 		Preferences studioNode = root.node(STUDIO_NODE);
