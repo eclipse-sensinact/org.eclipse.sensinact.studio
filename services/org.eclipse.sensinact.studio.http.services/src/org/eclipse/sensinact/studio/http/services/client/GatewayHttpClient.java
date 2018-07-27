@@ -13,7 +13,6 @@ package org.eclipse.sensinact.studio.http.services.client;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -56,20 +55,17 @@ public class GatewayHttpClient {
 	public static MsgSensinact sendGetRequest(Segments segments, Map<String, String> params) throws IOException {		
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
 		
-		RequestConfigurator configurator;
-		if (gwInfo.hasAuthentication())
-			configurator = getRequestConfiguratorToken(gwInfo);
-		else
-			configurator = new BasicConfigurator();
+		RequestConfigurator configurator = getRequestConfiguratorToken(gwInfo);
+		
 		return sendGetRequest(segments, gwInfo, params, configurator);
 	}
 		
-	private static RequestConfiguratorToken getRequestConfiguratorToken(GatewayHttpConfig gwInfo) throws IOException {
+	private static RequestConfigurator getRequestConfiguratorToken(GatewayHttpConfig gwInfo) throws IOException {
 		if (gwInfo.hasAuthentication()) {
 			AccessToken token = getToken(gwInfo);
 			return new RequestConfiguratorToken(token);
 		} else {
-			throw new RuntimeException("No credentials found for retrieving token");
+			return new BasicConfigurator();
 		}
 	}
 	
@@ -105,7 +101,7 @@ public class GatewayHttpClient {
 	
 	public static MsgSensinact sendPostRequest(Segments segments, JSONArray parameters,Collection<Parameter> queryParameter) throws IOException {
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
-		RequestConfiguratorToken configurator = getRequestConfiguratorToken(gwInfo);
+		RequestConfigurator configurator = getRequestConfiguratorToken(gwInfo);
 		
 		if (parameters==null || parameters.length() == 0)
 			return sendPostRequest(segments, "{}",queryParameter, configurator);
@@ -115,7 +111,7 @@ public class GatewayHttpClient {
 	
 	public static MsgSensinact sendPostRequest(Segments segments, JSONArray parameters) throws IOException {
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
-		RequestConfiguratorToken configurator = getRequestConfiguratorToken(gwInfo);
+		RequestConfigurator configurator = getRequestConfiguratorToken(gwInfo);
 		
 		if (parameters.length() == 0)
 			return sendPostRequest(segments, "{}", null, configurator);
@@ -125,7 +121,7 @@ public class GatewayHttpClient {
 
 	public static MsgSensinact sendPostRequest(Segments segments, JSONObject parameters) throws IOException {
 		GatewayHttpConfig gwInfo = ConfigurationManager.getGateway(segments.getGateway());
-		RequestConfiguratorToken configurator = getRequestConfiguratorToken(gwInfo);
+		RequestConfigurator configurator = getRequestConfiguratorToken(gwInfo);
 		return sendPostRequest(segments, parameters.toString(), null, configurator);
 	}
 
