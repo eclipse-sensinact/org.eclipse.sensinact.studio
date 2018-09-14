@@ -9,6 +9,7 @@
  *     CEA - initial API and implementation and/or initial documentation
  */
 
+
 // For debug purpose, for the eclipse webview...
 function toStr(obj) {
   var output="";
@@ -25,6 +26,32 @@ var map = L.map('map',{maxZoom:23}).setView([init.lat, init.lng], init.zoom);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	maxZoom: 23,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors - <a href="#" onclick="window.location.reload()">reload</a>'
 }).addTo(map);
+
+
+var icons = {};
+
+var defaultIcon = L.icon({
+    iconUrl: 'css/images/marker-icon.png',
+    iconSize: [25, 41],
+    iconAnchor: [13, 41],
+    popupAnchor: [0, -40],
+    shadowUrl: 'css/images/marker-shadow.png',
+    shadowSize: [41, 41],
+    shadowAnchor: [13, 41]
+});
+icons['default']=defaultIcon;
+
+var busStopIcon = L.icon({
+    iconUrl: 'css/images/bus-icon.png',
+    iconSize: [39, 39],
+    iconAnchor: [20, 41],
+    popupAnchor: [0, -40],
+    shadowUrl: 'css/images/marker-shadow.png',
+    shadowSize: [41, 41],
+    shadowAnchor: [20, 41]
+});
+icons['busStop']=busStopIcon;
+
 
 imageBounds4022 = [[45.19317,5.70630],[45.19350,5.70675]];
 imageBoundsPTL = [[45.19591,5.70564],[45.19555,5.70617]];
@@ -68,13 +95,14 @@ function computeCoordinates(x, y) {
     return latlngArray;
 }
 
-function updateDeviceLocation(lat, lng, deviceName) {
+function updateDeviceLocation(lat, lng, deviceName, iconName) {
 
 	var markerCache = markers[deviceName]; 
 
-    if (markerCache === undefined){
+    if (markerCache === undefined) {
+        var iconObject = getIcon(deviceName, iconName)
 		var content = "<p><b>" + deviceName + "</b></p><p> please wait during information refresh...</p>";
-		var marker = L.marker([lat, lng], {draggable:true,title:deviceName}).bindPopup(content,{maxWidth:600}).addTo(map);
+		var marker = L.marker([lat, lng], {draggable:true, title:deviceName, icon:iconObject}).bindPopup(content,{maxWidth:600}).addTo(map);
 		marker.on('dragend', markerDrag);
 		marker.on('click',function(e) {updatePopupAtInit(e,deviceName);} );
 		markers[deviceName] = marker;
@@ -83,6 +111,14 @@ function updateDeviceLocation(lat, lng, deviceName) {
     	markerCache.update();
     }
     return Boolean("true");
+}
+
+function getIcon(deviceName, iconName) {
+   // if (icons[iconName] !== undefined) iconObject=icons['iconName'];
+   if (deviceName.startsWith('SEM_'))
+     return icons['busStop'];
+   else
+     return icons['default'];         
 }
 
 function deleteMarker(deviceName) {
