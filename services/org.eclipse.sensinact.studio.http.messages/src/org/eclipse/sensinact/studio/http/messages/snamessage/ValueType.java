@@ -29,8 +29,9 @@ public enum ValueType {
 	TMP_MODIFIABLE("org.eclipse.sensinact.gateway.common.primitive.Modifiable", n -> n.asText()), 
 	TMP_CONSTRAINT("Array of org.eclipse.sensinact.gateway.common.constraint.Constraint", n -> n.asText()),
 	
-	STRING("string", n -> n.asText()), 
+	STRING("string", n -> n.asText()),
 	LONG("long", n -> n.asLong()),
+	DOUBLE("double", n -> n.asDouble()),
 	INT("int", n -> n.asInt()),
 	BOOLEAN("boolean", n -> n.asBoolean()),
 	ARRAY("array", n -> computeArray(n));

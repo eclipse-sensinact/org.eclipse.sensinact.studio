@@ -40,7 +40,12 @@ public class NameTypeValueDeserializer extends StdDeserializer<ObjectNameTypeVal
 		JsonNode node = parser.getCodec().readTree(parser);
         
 		String name = node.get("name").textValue();
-		ValueType type = ValueType.fromName(node.get("type").textValue());
+		
+		String typeName = node.get("type").textValue();
+		ValueType type = ValueType.fromName(typeName);
+		if (type == null)
+			throw new RuntimeException("Type value with typeName " + typeName + " NOT FOUND");		
+		
 		Object value = type.getObject(node.get("value"));
 		
 		Optional<Long> timestamp;
