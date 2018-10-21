@@ -562,8 +562,8 @@ public abstract class SnaToJsonUtil {
 			}
 		} else {
 			Variable outputVariable = VariableGenerator.get(fileName, "var").newVariable();
-			cb.parameterEvent(outputVariable.getShortName());
-			cb.eventVariable(outputVariable.getShortName());
+			cb.parameterEvent(outputVariable.getFullName());
+			cb.eventVariable(outputVariable.getFullName());
 			parseExpression(fileName, components, expr, triggers, eventManager, resMgr, outputVariable);
 		}
 	}
