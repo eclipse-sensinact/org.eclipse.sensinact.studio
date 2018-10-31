@@ -115,9 +115,9 @@ function updateDeviceLocation(lat, lng, deviceName, iconName) {
 
 function getIcon(deviceName, iconName) {
    // if (icons[iconName] !== undefined) iconObject=icons['iconName'];
-   if (deviceName.startsWith('SEM_'))
-     return icons['busStop'];
-   else
+   //if (deviceName.startsWith('SEM_'))
+   //  return icons['busStop'];
+   //else
      return icons['default'];         
 }
 
