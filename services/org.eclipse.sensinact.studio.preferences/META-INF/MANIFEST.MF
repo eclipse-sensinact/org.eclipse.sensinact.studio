@@ -4,8 +4,8 @@ Bundle-Name: Preferences
 Bundle-SymbolicName: org.eclipse.sensinact.studio.preferences
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.sensinact.studio.preferences.Activator
-Require-Bundle: org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Import-Package: org.apache.log4j
 Export-Package: org.eclipse.sensinact.studio.preferences

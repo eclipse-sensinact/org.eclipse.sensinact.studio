@@ -15,6 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sensinact.studio.http.services,
  org.eclipse.sensinact.studio.model.manager,
  org.apache.log4j,
- org.eclipse.sensinact.studio.preferences
+ org.eclipse.sensinact.studio.preferences,
+ javax.annotation
 Export-Package: org.eclipse.sensinact.studio.view.outdoor
-Import-Package: org.apache.log4j

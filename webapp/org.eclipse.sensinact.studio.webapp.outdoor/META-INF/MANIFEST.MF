@@ -13,4 +13,3 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.sensinact.studio.webapp.outdoor
-Import-Package: org.apache.log4j
