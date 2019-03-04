@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.naming.directory.InvalidAttributesException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.messages.snamessage.completelist.MsgCompleteList;
@@ -37,6 +35,7 @@ import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.AgentSu
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
+import org.eclipse.sensinact.studio.model.resource.utils.GPSparsingException;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.eclipse.sensinact.studio.resource.AccessMethodType;
@@ -189,7 +188,7 @@ public class ModelUpdater implements AgentSubscriptionListener {
 			try {
 				GPScoordinates gps = new GPScoordinates(coordinates);
 				DeviceLocationManager.getInstance().updateLocationInStudio(descriptor, gps);
-			} catch (InvalidAttributesException e) {
+			} catch (GPSparsingException e) {
 				logger.error("coordinates parsing error for " + descriptor + " (" + coordinates + ")");
 			}
 		}

@@ -10,8 +10,6 @@
  */
 package org.eclipse.sensinact.studio.model.resource.utils;
 
-import javax.naming.directory.InvalidAttributesException;
-
 /**
  * @author Etienne Gandrille
  */
@@ -29,15 +27,16 @@ public class GPScoordinates {
 	 * 
 	 * @param coords expected format is two flots separated by a ','. ie "3.1245,4.365212"
 	 * @throws InvalidAttributesException 
+	 * @throws GPSparsingException 
 	 */
-	public GPScoordinates(String coords) throws InvalidAttributesException {
+	public GPScoordinates(String coords) throws GPSparsingException {
 		try {
 			coords = coords.replace(':', ',');
 			final String[] coordinates = coords.split(",");
 			lat = Double.valueOf(coordinates[0].trim());
 			lng = Double.valueOf(coordinates[1].trim());
 		} catch (Exception e) {
-			throw new InvalidAttributesException("Can't convert " + coords + " into gps coordinates");
+			throw new GPSparsingException();
 		}
 	}
 	
@@ -66,5 +65,7 @@ public class GPScoordinates {
 	public int hashCode() {
 		// basic hash, only with lat
 		return new Double(lat).hashCode();
-	}	
+	}
+	
+	
 }
