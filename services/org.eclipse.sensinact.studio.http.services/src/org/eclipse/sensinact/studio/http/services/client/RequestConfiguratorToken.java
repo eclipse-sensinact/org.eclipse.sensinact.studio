@@ -11,7 +11,7 @@
 package org.eclipse.sensinact.studio.http.services.client;
 
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
-import org.restlet.engine.header.Header;
+import org.restlet.data.Header;
 import org.restlet.resource.ClientResource;
 import org.restlet.util.Series;
 

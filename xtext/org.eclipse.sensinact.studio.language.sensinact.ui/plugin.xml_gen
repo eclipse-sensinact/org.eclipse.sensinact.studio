@@ -204,6 +204,15 @@
 			</activeWhen>
 		</handler>
 	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="sna"
+			id="org.eclipse.sensinact.studio.language.Sensinact.contenttype"
+			name="Sensinact File"
+			priority="normal">
+		</content-type>
+	</extension>
 	<!-- adding resource factories -->
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
@@ -388,12 +397,18 @@
 			class="org.eclipse.sensinact.studio.language.ui.SensinactExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="sna">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.eclipse.sensinact.studio.language.Sensinact.contenttype"
+			contentViewerId="org.eclipse.sensinact.studio.language.Sensinact.compare.contentViewers" />
 	</extension>
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.eclipse.sensinact.studio.language.Sensinact.compare.contentMergeViewers"
 			class="org.eclipse.sensinact.studio.language.ui.SensinactExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="sna" label="Sensinact Compare">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.eclipse.sensinact.studio.language.Sensinact.contenttype"
+			contentMergeViewerId="org.eclipse.sensinact.studio.language.Sensinact.compare.contentMergeViewers" />
 	</extension>
 	<extension point="org.eclipse.ui.editors.documentProviders">
 		<provider id="org.eclipse.sensinact.studio.language.Sensinact.editors.documentProviders"

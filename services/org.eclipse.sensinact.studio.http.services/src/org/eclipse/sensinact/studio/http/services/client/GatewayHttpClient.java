@@ -145,10 +145,6 @@ public class GatewayHttpClient {
 		MsgSensinact retval;
 		try {
 			//httpURLConnection.setRequestProperty("Connection","close");
-
-			
-			
-			
 			
 			Representation cmd = clientResource.get();
 			json = cmd.getText();
@@ -181,6 +177,10 @@ public class GatewayHttpClient {
 		}
 		
 		Representation postResponse = clientResource.post(stringRep);
+		if (postResponse == null) {
+			logger.error("postResponse is null for " + stringRep);
+		}
+		
 		Status status = clientResource.getResponse().getStatus();
 		
 		

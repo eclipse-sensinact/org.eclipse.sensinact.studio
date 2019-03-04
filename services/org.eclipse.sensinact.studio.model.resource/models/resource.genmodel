@@ -14,8 +14,8 @@
       <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/SUBSCRIBE"/>
       <genEnumLiterals ecoreEnumLiteral="resource.ecore#//AccessMethodType/UNSUBSCRIBE"/>
     </genEnums>
-    <genClasses ecoreClass="resource.ecore#//Devices">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Devices/device"/>
+    <genClasses ecoreClass="resource.ecore#//Studio">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Studio/gateways"/>
     </genClasses>
     <genClasses ecoreClass="resource.ecore#//Device">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//Device/friendlyName"/>
@@ -36,7 +36,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//Resource/friendlyName"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Resource/attribute"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Resource/accessMethod"/>
-      <genOperations ecoreOperation="resource.ecore#//Resource/getAccessMethod">
+      <genOperations ecoreOperation="resource.ecore#//Resource/getAccessMethod" body="EList&lt;AccessMethod> accessMethodByType = new EObjectContainmentEList&lt;AccessMethod>(AccessMethod.class, this, ResourcePackage.RESOURCE__ACCESS_METHOD);&#xA;&#x9;&#x9;for (AccessMethod accessMethod : getAccessMethod()) {&#xA;&#x9;&#x9;&#x9;if (accessMethod.getType().equals(type))&#xA;&#x9;&#x9;&#x9;&#x9;accessMethodByType.add(accessMethod);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return accessMethodByType;">
         <genParameters ecoreParameter="resource.ecore#//Resource/getAccessMethod/type"/>
       </genOperations>
     </genClasses>
@@ -57,5 +57,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute resource.ecore#//AccessMethod/type"/>
     </genClasses>
     <genClasses ecoreClass="resource.ecore#//Parameter"/>
+    <genClasses ecoreClass="resource.ecore#//Gateway">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference resource.ecore#//Gateway/device"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

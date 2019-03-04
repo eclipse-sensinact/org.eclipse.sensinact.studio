@@ -69,7 +69,7 @@ public class ModelUpdater implements AgentSubscriptionListener {
 		
 			logger.info("Full model update triggered");
 
-			Segments segments = new Segments.Builder().gateway(gatewayName).jsonPath("jsonpath=$.*['name','location']").build();
+			Segments segments = new Segments.Builder().gateway(gatewayName).root().build();
 			MsgSensinact snaMsg = GatewayHttpClient.sendGetRequest(segments);
 			
 			if (!(snaMsg instanceof MsgCompleteList))

@@ -106,6 +106,10 @@ public class Segments {
 			return new BuilderLocation(gateway);
 		}
 		
+		public BuilderReady root() {
+			return new BuilderReady(gateway, ROOT_SEGMENT);
+		}
+		
 		public BuilderReady devices() {
 			return new BuilderReady(gateway, ROOT_SEGMENT, PROVIDERS);
 		}
