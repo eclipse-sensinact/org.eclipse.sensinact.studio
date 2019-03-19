@@ -84,7 +84,7 @@ public class ConnectHandler extends SnaHandler {
 								 MessageDialog.openError(parent, "Connection Error", "Connection failed.");
 							 }
 							});
-						throw new InvocationTargetException(new Exception("Connection Failed"));
+						throw new InvocationTargetException(new Exception("Connection Failed", e));
 					}
 				}
 			});

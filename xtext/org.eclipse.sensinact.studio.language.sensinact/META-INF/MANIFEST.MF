@@ -29,3 +29,4 @@ Export-Package: org.eclipse.sensinact.studio.language.validation,
  org.eclipse.sensinact.studio.language.sensinact,
  org.eclipse.sensinact.studio.language.serializer,
  org.eclipse.sensinact.studio.language.generator
+Import-Package: org.apache.log4j

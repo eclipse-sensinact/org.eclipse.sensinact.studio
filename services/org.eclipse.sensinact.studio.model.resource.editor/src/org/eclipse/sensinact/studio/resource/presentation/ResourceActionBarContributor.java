@@ -173,7 +173,6 @@ public class ResourceActionBarContributor
 	 */
 	@Override
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
-		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("resource-settings"));
 		toolBarManager.add(new Separator("resource-additions"));
 	}
@@ -210,7 +209,6 @@ public class ResourceActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 @Override
 				 public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }

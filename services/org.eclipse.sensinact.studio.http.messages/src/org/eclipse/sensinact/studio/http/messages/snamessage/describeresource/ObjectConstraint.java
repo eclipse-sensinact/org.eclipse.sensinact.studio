@@ -18,7 +18,7 @@ public class ObjectConstraint {
 	private String type;
 	private boolean complement;
 	private String operator;
-	private int operand;
+	private String operand;
 	
 	public String getType() {
 		return type;
@@ -44,11 +44,11 @@ public class ObjectConstraint {
 		this.operator = operator;
 	}
 	
-	public int getOperand() {
+	public String getOperand() {
 		return operand;
 	}
 	
-	public void setOperand(int operand) {
+	public void setOperand(String operand) {
 		this.operand = operand;
 	}
 
@@ -57,7 +57,7 @@ public class ObjectConstraint {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (complement ? 1231 : 1237);
-		result = prime * result + operand;
+		result = prime * result + ((operand == null) ? 0 : operand.hashCode());
 		result = prime * result + ((operator == null) ? 0 : operator.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -74,7 +74,10 @@ public class ObjectConstraint {
 		ObjectConstraint other = (ObjectConstraint) obj;
 		if (complement != other.complement)
 			return false;
-		if (operand != other.operand)
+		if (operand == null) {
+			if (other.operand != null)
+				return false;
+		} else if (!operand.equals(other.operand))
 			return false;
 		if (operator == null) {
 			if (other.operator != null)

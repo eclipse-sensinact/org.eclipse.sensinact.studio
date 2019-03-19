@@ -13,7 +13,7 @@ package org.eclipse.sensinact.studio.http.services.client;
 import java.util.Map;
 
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
-import org.restlet.data.Header;
+import org.restlet.engine.header.Header; // import org.restlet.data.Header;
 import org.restlet.resource.ClientResource;
 import org.restlet.util.Series;
 
