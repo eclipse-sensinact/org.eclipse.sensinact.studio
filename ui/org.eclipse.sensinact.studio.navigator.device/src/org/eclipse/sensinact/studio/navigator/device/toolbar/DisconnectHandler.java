@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,21 +10,19 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
-import java.io.IOException;
+import java.net.ConnectException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.http.services.client.websockets.SensinactWebSocketConnectionManager;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionManager;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
+import org.eclipse.sensinact.studio.resource.Gateway;
 import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
 import org.eclipse.swt.widgets.Shell;
-import org.json.JSONException;
-import org.eclipse.sensinact.studio.resource.Gateway;
 
 /**
  * @author Etienne Gandrille
@@ -46,10 +44,14 @@ public class DisconnectHandler extends SnaHandler {
 			if (gwConfig == null) {
 				MessageDialog.openError(parent, "Error", "Can't find gateway info.");
 				logger.error("Error while getting gateway config for " + name);
-			} else if ( ! Agent.getInstance().isConnected(name)) {
+			} else if ( ! ConnectionManager.getInstance().isConnected(name)) {
 				MessageDialog.openError(parent, "Error", "Gateway is not connected.");
 			} else {
-				disconnect(parent, gwConfig);
+				try {
+					disconnect(parent, gwConfig);
+				}catch (Exception e) {
+					MessageDialog.openError(parent, "Error", e.getMessage());
+				}
 			}
 		} else {
 			MessageDialog.openError(parent, "Error", "Please select a gateway in the tree viewer.");
@@ -58,13 +60,8 @@ public class DisconnectHandler extends SnaHandler {
 		return null;
 	}
 
-	private void disconnect(Shell parent, GatewayHttpConfig gwConfig) {
-		try {
-			Agent.getInstance().unsubscribe(gwConfig);
-		} catch (IOException | JSONException e) {
-			logger.warn("Error while disconnecting gateway", e);
-		}
-		SensinactWebSocketConnectionManager.getInstance().disconnect(gwConfig.getName());
+	private void disconnect(Shell parent, GatewayHttpConfig gwConfig) throws ConnectException {
 		ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());
+		ConnectionManager.getInstance().disconnect(gwConfig.getName());
 	}
 }

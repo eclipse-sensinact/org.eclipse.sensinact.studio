@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.messages.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
 import org.eclipse.sensinact.studio.http.messages.snamessage.completelist.MsgCompleteList;
 import org.eclipse.sensinact.studio.http.messages.snamessage.completelist.ObjectProvider;
 import org.eclipse.sensinact.studio.http.messages.snamessage.completelist.ObjectResource;
@@ -30,8 +31,8 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.lifecycle.MsgServic
 import org.eclipse.sensinact.studio.http.messages.snamessage.resourceslist.MsgResourcesList;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient.RequestParameter;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.AgentSubscriptionListener;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifDispatcher;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifSubscriptionListener;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
@@ -43,7 +44,7 @@ import org.eclipse.sensinact.studio.resource.AccessMethodType;
 /**
  * @author Nicolas Hili, Etienne Gandrille, Jander and others
  */
-public class ModelUpdater implements AgentSubscriptionListener {
+public class ModelUpdater implements NotifSubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(ModelUpdater.class);
 	
@@ -56,7 +57,7 @@ public class ModelUpdater implements AgentSubscriptionListener {
 	}
 
 	private ModelUpdater() {
-		Agent.getInstance().subscribe(this);
+		NotifDispatcher.getInstance().subscribe(this);
 	}
 
 	/**
@@ -210,7 +211,6 @@ public class ModelUpdater implements AgentSubscriptionListener {
 		Segments segments = new Segments.Builder().device(deviceDescriptor).service("admin").resource("location").method(AccessMethodType.SET).build();
 		RequestParameter param = new RequestParameter("location", "java.lang.String", coordinates.getLat() + "," + coordinates.getLng());
 		
-		
 		try {
 			MsgSensinact msg = GatewayHttpClient.sendPostRequest(segments, null,param);
 			return msg.isValid();
@@ -285,7 +285,18 @@ public class ModelUpdater implements AgentSubscriptionListener {
 			onLocationEvent(gateway, message);
 	}
 	
-	public void onLocationEvent(String gateway, MsgSensinact message) {
+	public void onLocationEvent(String gatewayName, MsgSensinact message) {
+		if (message instanceof MsgAttributeValueUpdated) {
+			MsgAttributeValueUpdated msg = (MsgAttributeValueUpdated) message;
+			String deviceId = msg.getUri().split("/")[1];
+			String location = msg.getNotification().getValueAsString();
+			updateLocation(new DeviceDescriptor(gatewayName, deviceId), location);	
+		}
+	}
+	
+	@Override
+	public void onValueEvent(String gateway, List<MsgSensinact> messages) {
+		// do nothing
 	}
 	
 	private static void executeInThread(Runnable r){

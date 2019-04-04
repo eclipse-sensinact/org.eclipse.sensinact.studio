@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,8 @@
 package org.eclipse.sensinact.studio.preferences;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -74,6 +76,12 @@ public class GatewayHttpConfig {
 		return gatewayURL;
 	}
 	
+	public URI getWebsocketURI() throws URISyntaxException {
+		String host = getURL().getHost();
+		String url = String.format("ws://%s:8080/ws", host);
+		return new URI(url);
+	}
+		
 	public int getTimeout() {
 		return timeout;
 	}

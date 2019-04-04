@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
 package org.eclipse.sensinact.studio.view.visualizer;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -19,10 +20,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
+import org.eclipse.sensinact.studio.http.messages.snamessage.ObjectNameTypeValue;
 import org.eclipse.sensinact.studio.http.messages.snamessage.ValueType;
 import org.eclipse.sensinact.studio.http.messages.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.OldSubscriptionListener;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.standard.OldSubscriptionManager;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifDispatcher;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifSubscriptionListener;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.view.visualizer.graphmanager.GraphManager;
 import org.eclipse.swt.SWT;
@@ -43,7 +45,7 @@ import org.eclipse.swt.widgets.Label;
 /**
  * @author Etienne Gandrille
  */
-public class VisualizerView implements OldSubscriptionListener {
+public class VisualizerView implements NotifSubscriptionListener {
 
 	private static final Logger logger = Logger.getLogger(VisualizerView.class);
 	
@@ -131,12 +133,7 @@ public class VisualizerView implements OldSubscriptionListener {
 
 	private void subscribe(VisualizerSettings newSettings, boolean updateUI) throws IOException {
 		ResourceDescriptor resource = newSettings.getDescriptor();
-		
-		try {
-			OldSubscriptionManager.getInstance().subscribeResource(resource, this);
-		} catch (Exception e) {
-			logger.error("Callback subscription failed", e);
-		}
+		NotifDispatcher.getInstance().subscribe(this);
 		this.visuSettings = newSettings;
 		
 		if (updateUI) {
@@ -149,7 +146,7 @@ public class VisualizerView implements OldSubscriptionListener {
 	}
 	
 	private void unsubscribe(boolean updateUI) throws IOException {
-		OldSubscriptionManager.getInstance().unsubscribeResource(visuSettings.getDescriptor(), this);
+		NotifDispatcher.getInstance().unsubscribe(this);
 		visuSettings = null;
 		
 		if (updateUI) {
@@ -159,45 +156,58 @@ public class VisualizerView implements OldSubscriptionListener {
 	}
 	
 	@Override
-	public void onEvent(final MsgSensinact message, final ResourceDescriptor resource) 
+	public void onLifecycleEvent(String gateway, List<MsgSensinact> message) {
+		// do nothing
+	}
+
+	@Override
+	public void onLocationEvent(String gateway, List<MsgSensinact> message) {
+		// do nothing
+	}
+
+	@Override
+	public void onValueEvent(String gateway, List<MsgSensinact> messages) {
+		if (visuSettings != null) {
+			ResourceDescriptor desc = visuSettings.getDescriptor();
+			if (desc.getGateway().equals(gateway)) {
+				for (MsgSensinact m : messages) {
+					if (m instanceof MsgAttributeValueUpdated) {
+						MsgAttributeValueUpdated msg = (MsgAttributeValueUpdated) m;
+						if (msg.getUri().equals("/" + desc.getDevice() + "/" + desc.getService() + "/" + desc.getResource() + "/value")) {
+							ObjectNameTypeValue val = msg.getNotification();
+							onRelevantValue(val);
+						}						
+					}
+				}
+			}
+		}
+	}
+	
+	private void onRelevantValue(final ObjectNameTypeValue val) 
 	{
-		final String msg = message.toString();
-		logger.debug("VisualizerView::resourceUpdated" + msg);
+		final String label = "New value: " + val.getValueAsString();
+		final ValueType type = val.getType();
+		final String valAsStr = val.getValueAsString();
+		final ResourceDescriptor resource = visuSettings.getDescriptor();
+		
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() 
 			{
-				msgLabel.setText(getTextForLabel(message));
+				msgLabel.setText(label);
 								
-				if (message instanceof MsgAttributeValueUpdated) {
-					MsgAttributeValueUpdated update = (MsgAttributeValueUpdated) message;
-					ValueType type = update.getNotification().getType();
-					
-					if (type == ValueType.INT) {
-						int value = Integer.parseInt(update.getNotification().getValueAsString());
-						updateGraph(resource, value);
-					} else if (type == ValueType.LONG) {
-						float value = Long.parseLong(update.getNotification().getValueAsString());
-						updateGraph(resource, value);
-					} else {
-						System.out.println(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
-					}
+				if (type == ValueType.INT) {
+					int value = Integer.parseInt(valAsStr);
+					updateGraph(resource, value);
+				} else if (type == ValueType.LONG) {
+					float value = Long.parseLong(valAsStr);
+					updateGraph(resource, value);
+				} else {
+					System.out.println(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
 				}
 			}
 		});
 	}
-	
-	private static String getTextForLabel(MsgSensinact message) {
-		if (message == null)
-			return "";
-		if (message instanceof MsgAttributeValueUpdated) {
-			MsgAttributeValueUpdated valUpdated = (MsgAttributeValueUpdated) message;
-			return "New value: " + valUpdated.getNotification().getValueAsString();
-		}
 		
-		return message.toString();
-	}
-	
-	
 	private void updateGraph(ResourceDescriptor resource, double value) {
 		graphUpdater.start(resource);
 		graphUpdater.setValue(value);

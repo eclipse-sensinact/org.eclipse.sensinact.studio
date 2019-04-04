@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,8 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar;
 
+import java.net.URI;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -17,6 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionManager;
+import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -45,10 +48,12 @@ public class ConnectJob extends Job {
 			if (monitor.isCanceled()) {
 				throw new InterruptedException("Operation Canceled");
 			}
-			monitor.setTaskName("Subscribing to server events");
-
-			ConnectionManager.getInstance().connect(gateway, monitor);
-			
+			monitor.setTaskName("Connecting websocket");
+			GatewayHttpConfig gatewayConfig = ConfigurationManager.getGateway(gateway.getName());
+			URI uri = gatewayConfig.getWebsocketURI();
+			ConnectionManager.getInstance().connect(gateway.getName(), uri);
+			monitor.done();
+			monitor.setTaskName("Done.");
 		} catch (Exception e) {
 			monitor.setCanceled(true);
 			Display.getDefault().asyncExec(new Runnable() {

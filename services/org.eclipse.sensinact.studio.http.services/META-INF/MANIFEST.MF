@@ -19,8 +19,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.sensinact.studio.http.services.client,
  org.eclipse.sensinact.studio.http.services.client.connectionmanager,
- org.eclipse.sensinact.studio.http.services.client.subscribe.agent,
- org.eclipse.sensinact.studio.http.services.client.subscribe.standard,
- org.eclipse.sensinact.studio.http.services.client.websockets,
  org.eclipse.sensinact.studio.http.services.server,
  org.eclipse.sensinact.studio.http.services.server.serverstarted

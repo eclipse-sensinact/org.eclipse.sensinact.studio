@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,13 +12,10 @@ package org.eclipse.sensinact.studio.http.services.client.connectionmanager;
 
 import java.net.ConnectException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
-import org.eclipse.sensinact.studio.http.services.client.websockets.SensinactWebSocketConnectionManager;
-import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
-import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 
 /**
  * @author Etienne Gandrille
@@ -29,6 +26,8 @@ public class ConnectionManager {
 
 	private static ConnectionManager INSTANCE = null;
 
+	private final Map<String, Connection> conByGateway = new HashMap<>();
+	
 	private ConnectionManager() {
 	}
 
@@ -37,41 +36,35 @@ public class ConnectionManager {
 			INSTANCE = new ConnectionManager();
 		return INSTANCE;
 	}
-
 	
-	public void connect(GatewayHttpConfig gateway, IProgressMonitor monitor) throws Exception {
-		
-		boolean callbackRegistered;
-		try {
-			Agent.getInstance().subscribe(gateway);
-			callbackRegistered = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			callbackRegistered = false;
-		}
-		
-		Boolean websocketConnected=false;
-		monitor.worked(50);
-		monitor.setTaskName("Connecting websocket");
-		GatewayHttpConfig gatewayConfig = ConfigurationManager.getGateway(gateway.getName());
-		logger.info("Connecting ws:" + String.format("ws://%s:8080/ws/sensinact", gatewayConfig.getURL().getHost()));
-		URI echoUri = new URI(String.format("ws://%s:8080/ws/sensinact", gatewayConfig.getURL().getHost()));
-		try {
-			SensinactWebSocketConnectionManager.getInstance().connect(gateway.getName(), echoUri);
-			websocketConnected=true;
-		} catch(ConnectException e) {
-			websocketConnected=false;
-		}
-		monitor.worked(50);
-		monitor.setTaskName("Done.");
-		
-		if(!callbackRegistered && !websocketConnected) {
-			throw new Exception();
+	public void connect(String gatewayName, URI url) throws ConnectException {
+		logger.info("Connecting gateway " + gatewayName);
+		Connection existingCon = conByGateway.get(gatewayName);
+		if (existingCon != null) {
+			if (! existingCon.isConnected()) {
+				existingCon.connect(url);
+			}
+		} else {
+			Connection con = new Connection(gatewayName);
+			conByGateway.put(gatewayName, con);
+			con.connect(url);
 		}
 	}
 	
-	
-	public void disconnect() {
-		// TODO Auto-generated method stub
-	}	
+	public void disconnect(String gatewayName) throws ConnectException {
+		logger.info("Disconnecting gateway " + gatewayName);
+		Connection existingCon = conByGateway.get(gatewayName);
+		if (existingCon == null) {
+			throw new ConnectException("Gateway " + gatewayName + " is NOT connected");
+		}
+		existingCon.disconnect();
+	}
+
+	public boolean isConnected(String gatewayName) {
+		Connection existingCon = conByGateway.get(gatewayName);
+		if (existingCon != null) {
+			return existingCon.isConnected();
+		}
+		return false;
+	}
 }

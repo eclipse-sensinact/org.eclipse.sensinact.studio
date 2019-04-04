@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,8 +36,12 @@ public class MsgFactory {
 	}
 
 	public static MsgSensinact build(JSONObject jsonObject) {
+		return build(jsonObject, -1); // it gonna fail if httpCode is not available 
+	}
+	
+	public static MsgSensinact build(JSONObject jsonObject, int defaultCode) {
 		
-		int httpCode = getStatusCode(jsonObject);
+		int httpCode = getStatusCode(jsonObject, defaultCode);
 		String msgType = jsonObject.optString("type", null);
 		
 		// HTTP error code
@@ -83,10 +87,10 @@ public class MsgFactory {
 		}
 	}
 	
-	private static final int getStatusCode(JSONObject jsonObject) {
+	private static final int getStatusCode(JSONObject jsonObject, int defaultCode) {
 		String code = jsonObject.optString("statusCode", null);
 		if (code == null)
-			return -1;
+			return defaultCode;
 		else
 			return Integer.parseInt(code);	
 	}

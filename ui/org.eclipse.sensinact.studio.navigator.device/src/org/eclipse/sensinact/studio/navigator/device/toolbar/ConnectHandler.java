@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 CEA.
+ * Copyright (c) 2019 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.sensinact.studio.http.services.client.subscribe.agent.Agent;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionManager;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelUpdater;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
@@ -49,7 +49,7 @@ public class ConnectHandler extends SnaHandler {
 			if (gwConfig == null) {
 				MessageDialog.openError(parent, "Error", "Can't find gateway info.");
 				logger.error("Error while getting gateway config for " + name);
-			} else if (Agent.getInstance().isConnected(name)) {
+			} else if (ConnectionManager.getInstance().isConnected(name)) {
 				MessageDialog.openError(parent, "Error", "Gateway already connected.");
 			} else {
 				connect(parent, gwConfig);

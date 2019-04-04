@@ -8,8 +8,8 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.model.resource.utils;
+package org.eclipse.sensinact.studio.http.messages.snamessage;
 
-public class GPSparsingException extends Exception {
-
+public enum MsgCategory {
+	LIFECYCLE, VALUE, RESPONSE, OTHER;
 }

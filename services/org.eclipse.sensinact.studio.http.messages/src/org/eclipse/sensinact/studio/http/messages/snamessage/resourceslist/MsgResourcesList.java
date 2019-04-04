@@ -1,7 +1,18 @@
+/**
+ * Copyright (c) 2019 CEA.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *     CEA - initial API and implementation and/or initial documentation
+ */
 package org.eclipse.sensinact.studio.http.messages.snamessage.resourceslist;
 
 import java.util.List;
 
+import org.eclipse.sensinact.studio.http.messages.snamessage.MsgCategory;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 
 /**
@@ -19,6 +30,11 @@ public class MsgResourcesList extends MsgSensinact {
 		super(KEY);
 	}
 
+	@Override
+	public MsgCategory getCategory() {
+		return MsgCategory.OTHER;
+	}
+	
 	public String getUri() {
 		return uri;
 	}
