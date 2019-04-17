@@ -31,8 +31,8 @@ public class GPScoordinates {
 	 */
 	public GPScoordinates(String coords) throws GPSparsingException {
 		try {
-			coords = coords.replace(':', ',');
-			final String[] coordinates = coords.split(",");
+			coords = coords.replace(',', ':');
+			final String[] coordinates = coords.split(":");
 			lat = Double.valueOf(coordinates[0].trim());
 			lng = Double.valueOf(coordinates[1].trim());
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class GPScoordinates {
 	
 	@Override
 	public String toString() {
-		return "[" + lat + "," + lng + "]";
+		return "[" + lat + ":" + lng + "]";
 	}
 	
 	public boolean equals(Object other) {
@@ -66,6 +66,4 @@ public class GPScoordinates {
 		// basic hash, only with lat
 		return new Double(lat).hashCode();
 	}
-	
-	
 }

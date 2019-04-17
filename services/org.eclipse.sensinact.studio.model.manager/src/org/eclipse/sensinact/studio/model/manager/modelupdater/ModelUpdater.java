@@ -209,7 +209,7 @@ public class ModelUpdater implements NotifSubscriptionListener {
 
 	public boolean updateLocationOnServer(DeviceDescriptor deviceDescriptor, GPScoordinates coordinates) {
 		Segments segments = new Segments.Builder().device(deviceDescriptor).service("admin").resource("location").method(AccessMethodType.SET).build();
-		RequestParameter param = new RequestParameter("location", "java.lang.String", coordinates.getLat() + "," + coordinates.getLng());
+		RequestParameter param = new RequestParameter("location", "java.lang.String", coordinates.getLat() + ":" + coordinates.getLng());
 		
 		try {
 			MsgSensinact msg = GatewayHttpClient.sendPostRequest(segments, null,param);
