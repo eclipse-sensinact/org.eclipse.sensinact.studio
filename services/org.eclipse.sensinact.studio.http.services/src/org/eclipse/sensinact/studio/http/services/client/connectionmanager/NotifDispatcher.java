@@ -27,7 +27,9 @@ public class NotifDispatcher {
 
 	private static NotifDispatcher INSTANCE = null;
 
-	private Set<NotifSubscriptionListener> listeners = new HashSet<>();
+	private Set<NotifSubscriptionListener> notifSublisteners = new HashSet<>();
+	
+	private Set<ConnectionListener> conlisteners = new HashSet<>();
 
 	private static final Logger logger = Logger.getLogger(NotifDispatcher.class);
 
@@ -41,13 +43,21 @@ public class NotifDispatcher {
 	}
 
 	public void subscribe(NotifSubscriptionListener listener) {
-		listeners.add(listener);
+		notifSublisteners.add(listener);
 	}
 
 	public void unsubscribe(NotifSubscriptionListener listener) {
-		listeners.remove(listener);
+		notifSublisteners.remove(listener);
 	}
 
+	public void subscribe(ConnectionListener listener) {
+		conlisteners.add(listener);
+	}
+
+	public void unsubscribe(ConnectionListener listener) {
+		conlisteners.remove(listener);
+	}
+		
 	void notifyMessage(String gatewayName, String msg) {
 		System.out.println("Message " + msg);
 
@@ -93,25 +103,27 @@ public class NotifDispatcher {
 	}
 
 	void notifyGatewayConnected(String gatewayName) {
-		System.out.println("GATEWAY CONNECTED !!!! " + gatewayName);
+		for (ConnectionListener listener : conlisteners)
+			listener.onConnect(gatewayName);
 	}
 
 	void notifyGatewayDisconnected(String gatewayName) {
-		System.out.println("GATEWAY DISCONNECTED !!!! " + gatewayName);
+		for (ConnectionListener listener : conlisteners)
+			listener.onDisconnect(gatewayName);
 	}
 
 	private void notifyLocation(String gateway, List<MsgSensinact> message) {
-		for (NotifSubscriptionListener listener : listeners)
+		for (NotifSubscriptionListener listener : notifSublisteners)
 			listener.onLocationEvent(gateway, message);
 	}
 
 	private void notifyLifecycle(String gateway, List<MsgSensinact> message) {
-		for (NotifSubscriptionListener listener : listeners)
+		for (NotifSubscriptionListener listener : notifSublisteners)
 			listener.onLifecycleEvent(gateway, message);
 	}
 	
 	private void notifyValue(String gateway, List<MsgSensinact> message) {
-		for (NotifSubscriptionListener listener : listeners)
+		for (NotifSubscriptionListener listener : notifSublisteners)
 			listener.onValueEvent(gateway, message);
 	}
 }

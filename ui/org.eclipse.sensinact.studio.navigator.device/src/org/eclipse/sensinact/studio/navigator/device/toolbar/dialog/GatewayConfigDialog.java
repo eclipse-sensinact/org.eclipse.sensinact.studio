@@ -224,8 +224,8 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		}
 
 		boolean isLocalhost = address.equals("localhost") || address.equals("http://localhost");
-		boolean isIPv4 = address.matches("^(http://)?[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$");
-		boolean isDnsName = address.matches("^(http://)?[0-9A-Za-z\\.]+\\.[A-Za-z]{2,8}$");
+		boolean isIPv4 = address.matches("^(http://|https://)?[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$");
+		boolean isDnsName = address.matches("^(http://|https://)?[0-9A-Za-z\\.]+\\.[A-Za-z]{2,8}$");
 		if (!isLocalhost && !isIPv4 & !isDnsName) {
 			return "The gateway address is not well formed";
 		}

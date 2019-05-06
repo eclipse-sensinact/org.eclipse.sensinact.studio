@@ -17,7 +17,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionManager;
-import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
 import org.eclipse.sensinact.studio.resource.Gateway;
@@ -61,7 +60,6 @@ public class DisconnectHandler extends SnaHandler {
 	}
 
 	private void disconnect(Shell parent, GatewayHttpConfig gwConfig) throws ConnectException {
-		ModelEditor.getInstance().clearGatewayContent(gwConfig.getName());
 		ConnectionManager.getInstance().disconnect(gwConfig.getName());
 	}
 }

@@ -38,8 +38,5 @@ public class TokenStore {
 
 	public void save(String gwName, AccessToken token) {
 		tokens.put(gwName, token);
-	}
-	
-	
-	
+	}	
 }

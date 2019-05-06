@@ -14,8 +14,13 @@ import java.net.ConnectException;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.util.component.Container;
+import org.eclipse.jetty.util.component.LifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle.Listener;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.eclipse.jetty.websocket.common.WebSocketSession;
+import org.eclipse.jetty.websocket.common.WebSocketSessionListener;
 
 public class Connection {
 
@@ -42,8 +47,61 @@ public class Connection {
 		this.client = new WebSocketClient();
 		
 		try {
+			
+			org.eclipse.jetty.util.component.Container.Listener l = new org.eclipse.jetty.util.component.Container.Listener() {
+				
+				@Override
+				public void beanRemoved(Container parent, Object child) {
+					System.out.println("a");
+					
+				}
+				
+				@Override
+				public void beanAdded(Container parent, Object child) {
+					System.out.println("a");
+					
+				}
+			}; 
+			
+			client.addEventListener(l);
+			
+			
+			client.addLifeCycleListener(new Listener() {
+				
+				@Override
+				public void lifeCycleStopping(LifeCycle event) {
+					System.out.println("a");
+					
+				}
+				
+				@Override
+				public void lifeCycleStopped(LifeCycle event) {
+					System.out.println("a");
+					
+				}
+				
+				@Override
+				public void lifeCycleStarting(LifeCycle event) {
+					System.out.println("a");
+					
+				}
+				
+				@Override
+				public void lifeCycleStarted(LifeCycle event) {
+					System.out.println("a");
+					
+				}
+				
+				@Override
+				public void lifeCycleFailure(LifeCycle event, Throwable cause) {
+					System.out.println("a");
+				}
+			});
+			
 			client.start();
 			client.connect(socket, url, request);
+			
+			
 		} catch (Throwable t) {
 			throw new ConnectException("Cant (re)connect gateway " + gatewayName + ": " + t.getMessage());
 		}

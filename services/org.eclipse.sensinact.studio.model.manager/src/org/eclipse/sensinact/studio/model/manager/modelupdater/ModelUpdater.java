@@ -31,6 +31,7 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.lifecycle.MsgServic
 import org.eclipse.sensinact.studio.http.messages.snamessage.resourceslist.MsgResourcesList;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient.RequestParameter;
+import org.eclipse.sensinact.studio.http.services.client.connectionmanager.ConnectionListener;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifDispatcher;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifSubscriptionListener;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
@@ -44,7 +45,7 @@ import org.eclipse.sensinact.studio.resource.AccessMethodType;
 /**
  * @author Nicolas Hili, Etienne Gandrille, Jander and others
  */
-public class ModelUpdater implements NotifSubscriptionListener {
+public class ModelUpdater implements NotifSubscriptionListener, ConnectionListener {
 
 	private static final Logger logger = Logger.getLogger(ModelUpdater.class);
 	
@@ -57,7 +58,8 @@ public class ModelUpdater implements NotifSubscriptionListener {
 	}
 
 	private ModelUpdater() {
-		NotifDispatcher.getInstance().subscribe(this);
+		NotifDispatcher.getInstance().subscribe((NotifSubscriptionListener) this);
+		NotifDispatcher.getInstance().subscribe((ConnectionListener) this);
 	}
 
 	/**
@@ -324,6 +326,16 @@ public class ModelUpdater implements NotifSubscriptionListener {
 	private String getResourceName(String uri) {
 		String[] tokens = uri.split("/");
 		return tokens[3];
+	}
+	
+	@Override
+	public void onConnect(String gatewayname) {
+		System.out.println("CONNECT !!!!!!!!!!!!!");
+	}
+
+	@Override
+	public void onDisconnect(String gatewayname) {
+		ModelEditor.getInstance().clearGatewayContent(gatewayname);
 	}
 	
 	/* ========= */
