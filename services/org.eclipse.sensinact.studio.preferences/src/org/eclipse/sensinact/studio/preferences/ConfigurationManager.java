@@ -17,8 +17,8 @@ import java.util.List;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 /**
  * @author Etienne Gandrille
@@ -60,7 +60,7 @@ public class ConfigurationManager {
 	public static GatewayHttpConfig[] getGateways() {
 		List<GatewayHttpConfig> gateways = new ArrayList<GatewayHttpConfig>();
 		
-		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
+		IEclipsePreferences root = InstanceScope.INSTANCE.getNode(NODE);
 		Preferences gatewaysNode = root.node(GATEWAYS_NODE);
 		
 		try {
@@ -103,7 +103,7 @@ public class ConfigurationManager {
 	}	
 	
 	public static int getStudioPort() {
-		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
+		IEclipsePreferences root = InstanceScope.INSTANCE.getNode(NODE);
 		Preferences studioNode = root.node(STUDIO_NODE);
 		return studioNode.getInt(PORT_KEY, 8081);
 	}
@@ -113,8 +113,8 @@ public class ConfigurationManager {
 	/* ======= */
 	
 	public static boolean addGateway(GatewayHttpConfig gateway) {
-		
-		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
+
+		IEclipsePreferences root = InstanceScope.INSTANCE.getNode(NODE);
 		Preferences gatewaysNode = root.node(GATEWAYS_NODE);
 
 		Preferences curGatewayNode = gatewaysNode.node(gateway.getName());
@@ -143,7 +143,7 @@ public class ConfigurationManager {
 	}
 
 	public static boolean removeGateway(String name) {
-		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
+		IEclipsePreferences root = InstanceScope.INSTANCE.getNode(NODE);
 		Preferences gatewaysNode = root.node(GATEWAYS_NODE);
 		
 		try {
@@ -166,7 +166,7 @@ public class ConfigurationManager {
 	}
 	
 	public static boolean setStudioPort(int port) {
-		IEclipsePreferences root = ConfigurationScope.INSTANCE.getNode(NODE);
+		IEclipsePreferences root = InstanceScope.INSTANCE.getNode(NODE);
 		Preferences studioNode = root.node(STUDIO_NODE);
 		
 		studioNode.putInt(PORT_KEY, port);
