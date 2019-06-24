@@ -330,7 +330,7 @@ public class ModelUpdater implements NotifSubscriptionListener, ConnectionListen
 	
 	@Override
 	public void onConnect(String gatewayname) {
-		System.out.println("CONNECT !!!!!!!!!!!!!");
+		logger.info("Gateway " + gatewayname + " connected");
 	}
 
 	@Override

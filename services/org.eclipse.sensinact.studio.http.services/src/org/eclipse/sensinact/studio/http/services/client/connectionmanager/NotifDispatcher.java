@@ -59,7 +59,6 @@ public class NotifDispatcher {
 	}
 		
 	void notifyMessage(String gatewayName, String msg) {
-		System.out.println("Message " + msg);
 
 		List<MsgSensinact> lifecycleMsgs = new ArrayList<>();
 		List<MsgSensinact> valueMsgs = new ArrayList<>();

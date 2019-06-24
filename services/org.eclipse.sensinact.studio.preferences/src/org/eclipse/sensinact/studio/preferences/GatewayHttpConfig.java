@@ -77,9 +77,11 @@ public class GatewayHttpConfig {
 	}
 	
 	public URI getWebsocketURI() throws URISyntaxException {
-		String host = getURL().getHost();
-		String url = String.format("ws://%s:8080/ws", host);
-		return new URI(url);
+		URL url = getURL();
+		String host = url.getHost();
+		int port = url.getPort();
+		String wsuri = String.format("ws://%s:%d/ws", host, port);
+		return new URI(wsuri);
 	}
 		
 	public int getTimeout() {

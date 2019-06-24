@@ -202,7 +202,7 @@ public class VisualizerView implements NotifSubscriptionListener {
 					float value = Long.parseLong(valAsStr);
 					updateGraph(resource, value);
 				} else {
-					System.out.println(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
+					logger.info(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
 				}
 			}
 		});

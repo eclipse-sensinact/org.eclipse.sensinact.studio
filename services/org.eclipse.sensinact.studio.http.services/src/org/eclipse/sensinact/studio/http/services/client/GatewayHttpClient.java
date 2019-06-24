@@ -144,8 +144,6 @@ public class GatewayHttpClient {
 		String json = null;
 		MsgSensinact retval;
 		try {
-			//httpURLConnection.setRequestProperty("Connection","close");
-			
 			Representation cmd = clientResource.get();
 			json = cmd.getText();
 			cmd.exhaust();
@@ -205,6 +203,7 @@ public class GatewayHttpClient {
 		Context context = new Context();
 		context.getParameters().add("socketTimeout", Integer.toString(timeout));
 		context.getParameters().add("idleTimeout", Integer.toString(timeout));
+		context.getParameters().add("readTimeout", Integer.toString(timeout));
 		
 		return context;
 	}
