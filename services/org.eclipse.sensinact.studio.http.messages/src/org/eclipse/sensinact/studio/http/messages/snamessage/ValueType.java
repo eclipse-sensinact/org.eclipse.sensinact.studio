@@ -29,6 +29,7 @@ public enum ValueType {
 	TMP_MODIFIABLE("org.eclipse.sensinact.gateway.common.primitive.Modifiable", n -> n.asText()), 
 	TMP_CONSTRAINT("Array of org.eclipse.sensinact.gateway.common.constraint.Constraint", n -> n.asText()),
 	
+	OBJECT("object", n -> n.toString()), /* do NOT use asText with 'object' */
 	STRING("string", n -> n.asText()),
 	LONG("long", n -> n.asLong()),
 	DOUBLE("double", n -> n.asDouble()),

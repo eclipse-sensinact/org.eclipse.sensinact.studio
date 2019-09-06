@@ -201,6 +201,9 @@ public class VisualizerView implements NotifSubscriptionListener {
 				} else if (type == ValueType.LONG) {
 					float value = Long.parseLong(valAsStr);
 					updateGraph(resource, value);
+				} else if (type == ValueType.DOUBLE) {
+					double value = Double.parseDouble(valAsStr);
+					updateGraph(resource, value);
 				} else {
 					logger.info(this.getClass().getCanonicalName() + ": Type " + type + " cannot produce chart");
 				}
