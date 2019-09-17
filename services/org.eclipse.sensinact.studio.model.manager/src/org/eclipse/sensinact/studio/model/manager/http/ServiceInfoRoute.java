@@ -94,14 +94,18 @@ public class ServiceInfoRoute extends SensinactServerResource {
 							
 							resourceValue = resourceValue.replaceAll("\n", "<br/>");
 														
-							// IMAGE
 							if (isImageUrl(resourceValue)) {
+								// IMAGE URL
 								// <a onclick="showImage(...)">...</a>
 								String resourceValueWithLink = writeOnClickStatement("showImage", "'" + resourceValue + "'", resourceValue);
 								sb.append("&nbsp;&nbsp;&nbsp;" + resourceId + ": " + resourceValueWithLink + "<br/>");
+							} else if (isBase64Image(resourceValue)) {
+								// IMAGE DATA
+								String img="<object data=\"" + resourceValue + "\"></object>";
+								sb.append("&nbsp;&nbsp;&nbsp;" + resourceId + ": <br/>" + img);
 							}
-							// NOT AN IMAGE
 							else {
+								// NOT AN IMAGE
 								sb.append("&nbsp;&nbsp;&nbsp;" + resourceId + ": " + resourceValue + "<br/>");
 							}
 						}
@@ -136,5 +140,9 @@ public class ServiceInfoRoute extends SensinactServerResource {
 		}
 
 		return false;
+	}
+	
+	private boolean isBase64Image(String resourceValue) {
+		return resourceValue.startsWith("data:image/");
 	}
 }
