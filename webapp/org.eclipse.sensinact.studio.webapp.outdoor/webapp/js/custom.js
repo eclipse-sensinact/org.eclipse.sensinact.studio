@@ -52,6 +52,27 @@ var busStopIcon = L.icon({
 });
 icons['busStop']=busStopIcon;
 
+var userIcon = L.icon({
+    iconUrl: 'http://193.48.18.251/images/user.png',
+    iconSize: [39, 39],
+    iconAnchor: [20, 41],
+    popupAnchor: [0, -40],
+    shadowUrl: 'css/images/marker-shadow.png',
+    shadowSize: [41, 41],
+    shadowAnchor: [20, 41]
+});
+icons['user']=userIcon;
+
+var restaurantIcon = L.icon({
+    iconUrl: 'http://193.48.18.251/images/restaurant.png',
+    iconSize: [39, 39],
+    iconAnchor: [20, 41],
+    popupAnchor: [0, -40],
+    shadowUrl: 'css/images/marker-shadow.png',
+    shadowSize: [41, 41],
+    shadowAnchor: [20, 41]
+});
+icons['restaurant']=restaurantIcon;
 
 imageBounds4022 = [[45.19317,5.70630],[45.19350,5.70675]];
 imageBoundsPTL = [[45.19591,5.70564],[45.19555,5.70617]];
@@ -114,11 +135,13 @@ function updateDeviceLocation(lat, lng, deviceName, iconName) {
 }
 
 function getIcon(deviceName, iconName) {
-   // if (icons[iconName] !== undefined) iconObject=icons['iconName'];
-   //if (deviceName.startsWith('SEM_'))
-   //  return icons['busStop'];
-   //else
-     return icons['default'];         
+  if (deviceName.includes('/SEM_'))
+    return icons['busStop'];
+  if (deviceName.includes('/RIE_'))
+    return icons['restaurant'];
+  if (deviceName.includes('/user_'))
+    return icons['user'];
+  return icons['default'];         
 }
 
 function deleteMarker(deviceName) {
@@ -153,7 +176,6 @@ function markerDrag(e) {
           alert("The location of " + deviceName + " device is not updatable");
       }
   });
-  
 }
 
 function updatePopupAtInit(e, deviceName) {
