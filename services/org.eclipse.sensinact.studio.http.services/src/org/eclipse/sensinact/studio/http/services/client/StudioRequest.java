@@ -16,6 +16,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.messages.snamessage.actresponse.MsgActResponse;
+import org.eclipse.sensinact.studio.http.messages.snamessage.actresponse.ObjectResponse;
 import org.eclipse.sensinact.studio.http.messages.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.http.services.client.UIResult.DialogStatus;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
@@ -41,13 +42,12 @@ public class StudioRequest {
 	public MsgSensinact sendRequest(Collection<Parameter> queryParameter){
 		Segments segments = new Segments.Builder().resource(descriptor).method(type).build();
 		try {
-			if (type.equals(AccessMethodType.GET)) {					
+			if (type.equals(AccessMethodType.GET)) 				
 				return GatewayHttpClient.sendGetRequest(segments);
-			} else if (type.equals(AccessMethodType.ACT)) {
-					return GatewayHttpClient.sendPostRequest(segments,null,queryParameter);
-			} else {
+			else if (type.equals(AccessMethodType.ACT))
+				return GatewayHttpClient.sendPostRequest(segments,null,queryParameter);
+			else 
 				throw new IllegalArgumentException("BasicRequest not implemented with " + type.getName() + " method");
-			}
 		} catch (IOException e) {
 			throw new IllegalArgumentException("BasicRequest not implemented with " + type.getName() + " method");
 		}
@@ -64,11 +64,14 @@ public class StudioRequest {
 		MsgSensinact response=null;
 		try {
 			response = sendRequest();
-			
 			// errors 404,...
 			if (response instanceof MsgActResponse) {
 				MsgActResponse actResponse = (MsgActResponse) response;
-				message = actResponse.getResponse().getTask();
+				ObjectResponse res = actResponse.getResponse();
+				if(res == null)
+					message = "ACTION SUCCEEDED";
+				else
+					message = res.getTask();
 				dialogType = DialogStatus.SUCCESS;
 			} else if (response instanceof MsgGetResponse) {
 				MsgGetResponse getResponse = (MsgGetResponse) response;

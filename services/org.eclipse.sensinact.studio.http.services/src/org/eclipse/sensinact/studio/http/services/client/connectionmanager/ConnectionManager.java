@@ -52,7 +52,7 @@ public class ConnectionManager {
 	}
 	
 	public void disconnect(String gatewayName) throws ConnectException {
-		logger.info("Disconnecting gateway " + gatewayName);
+		logger.info("Disconnecting gateway " + gatewayName);	
 		Connection existingCon = conByGateway.get(gatewayName);
 		if (existingCon == null) {
 			throw new ConnectException("Gateway " + gatewayName + " is NOT connected");

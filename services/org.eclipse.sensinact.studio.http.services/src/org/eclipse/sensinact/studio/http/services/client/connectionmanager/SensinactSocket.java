@@ -13,18 +13,21 @@ package org.eclipse.sensinact.studio.http.services.client.connectionmanager;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.websocket.common.OpCode;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketFrame;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.extensions.Frame;
 
 /**
  * @author Jander Nascimento, Etienne Gandrille
  */
-@WebSocket
+@WebSocket(maxIdleTime = 0, maxTextMessageSize = 64*1024)
 public class SensinactSocket {
 
 	private static final Logger logger = Logger.getLogger(SensinactSocket.class);
@@ -45,8 +48,7 @@ public class SensinactSocket {
 	public void onConnect(Session session) throws IOException {
 		logger.info("WebSocket connected to the gateway " + gatewayName);
 		this.session = session;
-		//String msg = "{\"uri\":\"sensinact/SUBSCRIBE\",\"rid\":\"webapp\",\"parameters\":[{\"name\":\"sender\",\"type\":\"string\",\"value\":\"/.*\"},{\"name\":\"pattern\",\"type\":\"boolean\",\"value\":true},{\"name\":\"complement\",\"type\":\"boolean\",\"value\":false},{\"name\":\"types\",\"type\":\"array\",\"value\":[\"UPDATE\",\"LIFECYCLE\",\"REMOTE\",\"RESPONSE\",\"ERROR\"]}]}";
-		String msg = "{\"uri\":\"sensinact/SUBSCRIBE\",\"parameters\":[{\"name\":\"sender\",\"type\":\"string\",\"value\":\"/.*\"},{\"name\":\"pattern\",\"type\":\"boolean\",\"value\":true},{\"name\":\"complement\",\"type\":\"boolean\",\"value\":false},{\"name\":\"types\",\"type\":\"array\",\"value\":[\"UPDATE\",\"LIFECYCLE\",\"REMOTE\",\"RESPONSE\",\"ERROR\"]}]}";
+		String msg = "{\"uri\":\"sensinact/SUBSCRIBE\",\"parameters\":[{\"name\":\"sender\",\"type\":\"string\",\"value\":\"(/[^/]*)+\"},{\"name\":\"pattern\",\"type\":\"boolean\",\"value\":true},{\"name\":\"complement\",\"type\":\"boolean\",\"value\":false},{\"name\":\"types\",\"type\":\"array\",\"value\":[\"UPDATE\",\"LIFECYCLE\",\"REMOTE\",\"RESPONSE\",\"ERROR\"]}]}";
 		session.getRemote().sendString(msg);
 		dispatcher.notifyGatewayConnected(gatewayName);
 	}
@@ -69,13 +71,44 @@ public class SensinactSocket {
 		dispatcher.notifyGatewayDisconnected(gatewayName);
 	}
 
+    private boolean partial;
+	private byte[] payload; 
+	
+	@OnWebSocketFrame
+	public void onFrame(Frame frame) {
+		if(OpCode.CONTINUATION != frame.getOpCode() && frame.isFin()) {
+			partial = false;
+			return;
+		}
+		partial = true;
+		byte[] bytes = new byte[frame.getPayloadLength()];
+		frame.getPayload().get(bytes);
+		int length = payload==null?0:payload.length;
+		byte[] tmpArray = new byte[length+bytes.length] ;
+		if(bytes.length > 0)
+			System.arraycopy(bytes,0, tmpArray, length, bytes.length);
+		if(length > 0)
+			System.arraycopy(payload, 0, tmpArray, 0, length);
+		payload = tmpArray;	
+		tmpArray = null;
+		if(frame.isFin()) {
+			partial = false;
+			onMessage(new String(payload));
+			payload = null;
+			partial = true;
+		}
+	}	
+
 	@OnWebSocketMessage
 	public void onMessage(String msg) {
+		if(partial)
+			return;
 		dispatcher.notifyMessage(gatewayName, msg);
-	}
-
+	}	
+	
 	@OnWebSocketError
 	public void onError(Throwable t) {
+		t.printStackTrace();
 		logger.error("Error: " + t.getMessage());
 	}
 }

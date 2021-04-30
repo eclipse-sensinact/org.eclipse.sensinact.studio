@@ -20,6 +20,7 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.MsgCategory;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgFactory;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.messages.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
+import org.eclipse.sensinact.studio.http.services.client.listener.NotifSubscriptionListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -63,6 +64,7 @@ public class NotifDispatcher {
 		List<MsgSensinact> lifecycleMsgs = new ArrayList<>();
 		List<MsgSensinact> valueMsgs = new ArrayList<>();
 		List<MsgSensinact> locationMsgs = new ArrayList<>();
+		List<MsgSensinact> iconMsgs = new ArrayList<>();
 		List<MsgSensinact> otherMsgs = new ArrayList<>();
 
 		try {
@@ -77,9 +79,10 @@ public class NotifDispatcher {
 						lifecycleMsgs.add(message);
 					} else if (message.getCategory() == MsgCategory.VALUE) {
 						if (message instanceof MsgAttributeValueUpdated) {
-							if (((MsgAttributeValueUpdated) message).isLocationValue()) {
+							if (((MsgAttributeValueUpdated) message).isLocationValue()) 
 								locationMsgs.add(message);
-							}
+							else if (((MsgAttributeValueUpdated) message).isIconValue()) 
+								iconMsgs.add(message);							
 						}
 						valueMsgs.add(message);
 					} else {
@@ -96,6 +99,9 @@ public class NotifDispatcher {
 
 		if (locationMsgs.size() != 0)
 			notifyLocation(gatewayName, locationMsgs);
+
+		if (iconMsgs.size() != 0)
+			notifyIcon(gatewayName, iconMsgs);
 		
 		if (valueMsgs.size() != 0)
 			notifyValue(gatewayName, valueMsgs);
@@ -114,6 +120,11 @@ public class NotifDispatcher {
 	private void notifyLocation(String gateway, List<MsgSensinact> message) {
 		for (NotifSubscriptionListener listener : notifSublisteners)
 			listener.onLocationEvent(gateway, message);
+	}
+
+	private void notifyIcon(String gateway, List<MsgSensinact> message) {
+		for (NotifSubscriptionListener listener : notifSublisteners)
+			listener.onIconEvent(gateway, message);
 	}
 
 	private void notifyLifecycle(String gateway, List<MsgSensinact> message) {

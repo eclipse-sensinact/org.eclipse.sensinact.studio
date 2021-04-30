@@ -10,15 +10,10 @@
  */
 package org.eclipse.sensinact.studio.http.services.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgFactory;
@@ -33,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.Context;
 import org.restlet.Response;
-import org.restlet.data.ClientInfo;
 import org.restlet.data.Encoding;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -41,11 +35,9 @@ import org.restlet.data.Parameter;
 import org.restlet.data.Preference;
 import org.restlet.data.Status;
 import org.restlet.engine.application.DecodeRepresentation;
-import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
-import org.restlet.util.Series;
 
 /**
  * Central point for SYNCHRONUS communication with the sensinact gateway.
@@ -167,7 +159,7 @@ public class GatewayHttpClient {
 			representation.release();
 			retval = MsgFactory.build(new JSONObject(json));
 		} catch (Exception e) {
-			retval = MsgFactory.build(json, e, segments);
+			retval = MsgFactory.build(json, e);
 		} 
 		
 		return retval;

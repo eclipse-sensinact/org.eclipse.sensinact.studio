@@ -8,7 +8,7 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.services.client.connectionmanager;
+package org.eclipse.sensinact.studio.http.services.client.listener;
 
 import java.util.List;
 
@@ -20,8 +20,10 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 public interface NotifSubscriptionListener {
 	
 	void onLifecycleEvent(String gateway, List<MsgSensinact> messages);
-	
+
 	void onLocationEvent(String gateway, List<MsgSensinact> messages);
+	
+	void onIconEvent(String gateway, List<MsgSensinact> messages);
 
 	void onValueEvent(String gateway, List<MsgSensinact> messages);
 }
