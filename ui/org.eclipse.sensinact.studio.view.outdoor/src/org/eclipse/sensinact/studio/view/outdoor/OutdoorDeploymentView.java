@@ -24,8 +24,10 @@ import org.eclipse.sensinact.studio.http.services.server.serverstarted.ResourceA
 import org.eclipse.sensinact.studio.http.services.server.serverstarted.ServerUpdatedListener;
 import org.eclipse.sensinact.studio.http.services.server.serverstarted.ServerUpdatedManager;
 import org.eclipse.sensinact.studio.http.services.server.serverstarted.UpdateDescriptor;
+import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceIconListener;
 import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationListener;
-import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
+import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceUpdateManager;
+import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceSelectionListener;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
@@ -53,7 +55,7 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Nicolas Hili, Etienne Gandrille
  */
-public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocationListener {
+public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocationListener,  DeviceIconListener, DeviceSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(OutdoorDeploymentView.class);
 	
@@ -84,10 +86,12 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 		dndShell.setVisible(false);
 		dndComposite = new Composite(dndShell, SWT.NO_BACKGROUND);
 		dndComposite.setVisible(false);
-
+		DeviceUpdateManager manager = DeviceUpdateManager.getInstance();
 		// updates device position on the map
-		DeviceLocationManager.getInstance().addDeviceLocationListener(this);
-
+		manager.addDeviceLocationListener(this);
+		manager.addDeviceSelectionListener(this);
+		manager.addDeviceIconListener(this);
+		
 		// swap browserStarted flag to true when browser is ready
 		browser.addProgressListener(new BrowserProgressListener());
 
@@ -137,13 +141,15 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 	/* DeviceLocation */
 	/* ============== */
 
+	
 	@Override
 	public void deviceLocationUpdated(final GPScoordinates coordinate, final DeviceDescriptor descriptor) {	
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				String dev = "'" + descriptor.toString() + "'";
-				String cmd = "updateDeviceLocation(" + coordinate.getLat() + "," + coordinate.getLng() + "," + dev + ");";
+				String icon = "'" + descriptor.getIcon() + "'";
+				String cmd = "updateDeviceLocation(" + coordinate.getLat() + "," + coordinate.getLng() + "," + dev + "," + icon + ");";
 				browser.execute(cmd);
 			}
 		});	
@@ -289,11 +295,11 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 					String device = tab[1];
 					
 					// try to update on server
-					boolean locationUpdated = DeviceLocationManager.getInstance().updateLocationInServer(new DeviceDescriptor(gateway, device), new GPScoordinates(lat, lng));
+					boolean locationUpdated = DeviceUpdateManager.getInstance().updateLocationInServer(new DeviceDescriptor(gateway, device), new GPScoordinates(lat, lng));
 					
 					if (locationUpdated) {
 						String dev = "'" + gateway + "/" + device + "'";
-						String cmd = "return updateDeviceLocation(" + lat + "," + lng + "," + dev + ");";
+						String cmd = "return updateDeviceLocation(" + lat + "," + lng + "," + dev + ", 'default');";
 						browser.evaluate(cmd);
 					} else {
 						Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();						
@@ -306,5 +312,27 @@ public class OutdoorDeploymentView implements ServerUpdatedListener, DeviceLocat
 		@Override
 		public void dropAccept(DropTargetEvent event) {
 		}
+	}
+
+	@Override
+	public void deviceSelected(GPScoordinates coordinate) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				browser.execute("map.setView(["+coordinate.getLat()+","+coordinate.getLng()+"]);");
+			}
+		});
+		
+	}
+
+	@Override
+	public void deviceIconUpdated(DeviceDescriptor descriptor) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				String cmd = "updateDeviceIcon(\"" + descriptor.toString() + "\",\"" + descriptor.getIcon() + "\");";
+				browser.execute(cmd);
+			}
+		});
 	}
 }
