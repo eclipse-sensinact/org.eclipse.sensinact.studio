@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.sensinact.studio.language.sensinact.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.sensinact.studio.language.sensinact,
- org.eclipse.sensinact.studio.language.sensinact.ide,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
@@ -15,13 +14,15 @@ Require-Bundle: org.eclipse.sensinact.studio.language.sensinact,
  org.eclipse.ui,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
- org.eclipse.xtend.lib;resolution:=optional,
- org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib;bundle-version="2.14.0";resolution:=optional,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  org.apache.log4j,
- org.eclipse.sensinact.studio.model.manager
+ org.eclipse.sensinact.studio.model.manager,
+ org.eclipse.sensinact.studio.language.sensinact.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.sensinact.studio.language.ui.quickfix,
- org.eclipse.sensinact.studio.language.sensinact.ui.internal,
- org.eclipse.sensinact.studio.language.ui.contentassist
+ org.eclipse.sensinact.studio.language.ui.contentassist,
+ org.eclipse.sensinact.studio.language.sensinact.ui.internal
 Bundle-Activator: org.eclipse.sensinact.studio.language.sensinact.ui.internal.SensinactActivator
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.eclipse.sensinact.studio.language.parser.antlr.internal

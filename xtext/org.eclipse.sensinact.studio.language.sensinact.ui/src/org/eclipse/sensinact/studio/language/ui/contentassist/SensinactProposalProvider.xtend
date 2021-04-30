@@ -10,7 +10,7 @@
  */
 package org.eclipse.sensinact.studio.language.ui.contentassist
 
-import org.eclipse.sensinact.studio.language.sensinact.DSL_Resource
+import org.eclipse.sensinact.studio.language.sensinact.DSL_Resource;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.Assignment
@@ -52,7 +52,7 @@ class SensinactProposalProvider extends AbstractSensinactProposalProvider {
 		} // service completion
 		else if ("serviceID".equals(feature)) {
 			// Ensure to fetch the info during the code completion
-			ModelUpdater.getInstance().updateServices(gatewayID, deviceID, false);
+			ModelUpdater.getInstance().updateServices(gatewayID, deviceID);
 
 			var candidates = ModelEditor.getInstance().getServicesId(gatewayID, deviceID);
 			for (candidate : candidates) {
