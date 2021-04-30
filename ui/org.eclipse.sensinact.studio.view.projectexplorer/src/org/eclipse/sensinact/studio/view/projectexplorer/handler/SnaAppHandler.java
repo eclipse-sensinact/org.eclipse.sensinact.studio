@@ -20,11 +20,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.language.sensinact.Sensinact;
+import org.eclipse.sensinact.studio.ui.common.dialog.SnaHandler;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Etienne Gandrille
@@ -44,7 +44,8 @@ public abstract class SnaAppHandler extends SnaHandler {
 			IFile file = (IFile) firstElement;			
 			// IProject project = file.getProject();
 			// createFolder(project);
-			return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+			return URI.createURI(file.getFullPath().toString());
+			//return URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		}
 
 		return null;

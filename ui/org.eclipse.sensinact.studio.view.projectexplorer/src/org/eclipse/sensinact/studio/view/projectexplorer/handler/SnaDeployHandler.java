@@ -21,6 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 import org.eclipse.sensinact.studio.http.services.client.GatewayHttpClient;
+import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
 import org.eclipse.sensinact.studio.model.resource.utils.Constants;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
@@ -29,8 +30,6 @@ import org.eclipse.sensinact.studio.view.projectexplorer.handler.sna2json.SnaToJ
 import org.eclipse.swt.widgets.Shell;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import org.eclipse.sensinact.studio.language.sensinact.DSL_SENSINACT;
 import org.eclipse.sensinact.studio.resource.AccessMethodType;
 import org.eclipse.sensinact.studio.ui.common.dialog.BasicListDialog;
 
@@ -74,6 +73,7 @@ public class SnaDeployHandler extends SnaAppHandler {
 	}
 
 	private MsgSensinact install(ResourceDescriptor resource, JSONObject json) throws IOException {
+		Thread.dumpStack();
 		Segments path = new Segments.Builder().resource(resource).method(AccessMethodType.ACT).build();
 		return GatewayHttpClient.sendPostRequest(path, json);
 	}
