@@ -26,13 +26,12 @@ public enum ValueType {
 
 	// Should be temporary, since the gateway does not implements the enums yet.
 	// Remove this when gateway will be updated
-	TMP_MODIFIABLE("org.eclipse.sensinact.gateway.common.primitive.Modifiable", n -> n.asText()), 
-	TMP_CONSTRAINT("Array of org.eclipse.sensinact.gateway.common.constraint.Constraint", n -> n.asText()),
-	
+	OTHER("other", n -> n.asText()),
 	OBJECT("object", n -> n.toString()), /* do NOT use asText with 'object' */
 	STRING("string", n -> n.asText()),
 	LONG("long", n -> n.asLong()),
 	DOUBLE("double", n -> n.asDouble()),
+	FLOAT("float", n -> n.asDouble()),
 	INT("int", n -> n.asInt()),
 	BOOLEAN("boolean", n -> n.asBoolean()),
 	ARRAY("array", n -> computeArray(n));
@@ -52,8 +51,7 @@ public enum ValueType {
 			if (value.getName().equals(name))
 				return value;
 		}
-		logger.error("ValueName with type " + name + " NOT found");
-		return null;
+		return OTHER;
 	}
 
 	public String getName() {

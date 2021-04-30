@@ -8,10 +8,8 @@
  *  Contributors:
  *     CEA - initial API and implementation and/or initial documentation
  */
-package org.eclipse.sensinact.studio.http.messages.snamessage.completelist;
+package org.eclipse.sensinact.studio.http.messages.snamessage.serviceslist;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgCategory;
@@ -20,72 +18,58 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.MsgSensinact;
 /**
  * @author Etienne Gandrille
  */
-public class MsgCompleteList extends MsgSensinact {
-
-	public static final String KEY = "COMPLETE_LIST";
-
-	private List<ObjectProvider> providers;
+public class MsgServicesList extends MsgSensinact {
+	
+	public static final String KEY = "SERVICES_LIST";
+	
 	private String uri;
 	private int statusCode;
+	private List<String> services;
 	
-	public MsgCompleteList() {
+	public MsgServicesList() {
 		super(KEY);
 	}
-	
+
 	@Override
 	public MsgCategory getCategory() {
 		return MsgCategory.OTHER;
 	}
 	
-	public List<ObjectProvider> getProviders() {
-		return providers;
-	}
-
-	public List<String> getProvidersId() {
-		List<ObjectProvider>  providers = getProviders();
-		if(providers == null || providers.isEmpty())
-			return Collections.emptyList();
-		return providers.stream().collect(ArrayList::new,(l,o) -> l.add(o.getName()),List::addAll);
-	}
-	
-	public ObjectProvider getProvider(String providerName) {
-		for (ObjectProvider provider : providers)
-			if (provider.getName().equals(providerName))
-				return provider;
-		return null;
-	}
-	
-	
-	public void setProviders(List<ObjectProvider> providers) {
-		this.providers = providers;
-	}
-	
 	public String getUri() {
 		return uri;
 	}
-	
+
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
-	
+
 	public int getStatusCode() {
 		return statusCode;
 	}
-	
+
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
-	
+
+	public List<String> getServices() {
+		return services;
+	}
+
+	public void setServices(List<String> services) {
+		this.services = services;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((providers == null) ? 0 : providers.hashCode());
+		result = prime * result + ((services == null) ? 0 : services.hashCode());
 		result = prime * result + statusCode;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((uri == null) ? 0 : uri.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -94,13 +78,18 @@ public class MsgCompleteList extends MsgSensinact {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MsgCompleteList other = (MsgCompleteList) obj;
-		if (providers == null) {
-			if (other.providers != null)
+		MsgServicesList other = (MsgServicesList) obj;
+		if (services == null) {
+			if (other.services != null)
 				return false;
-		} else if (!providers.equals(other.providers))
+		} else if (!services.equals(other.services))
 			return false;
 		if (statusCode != other.statusCode)
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
 			return false;
 		if (uri == null) {
 			if (other.uri != null)
@@ -109,9 +98,10 @@ public class MsgCompleteList extends MsgSensinact {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "MsgCompleteList [providers=" + providers + ", uri=" + uri + ", statusCode=" + statusCode + "]";
-	}
+		return "MsgServicesList [type=" + type + ", uri=" + uri + ", statusCode=" + statusCode + ", services="
+				+ services + "]";
+	}	
 }

@@ -17,6 +17,7 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.describeresource.Ms
 import org.eclipse.sensinact.studio.http.messages.snamessage.getresponse.MsgGetResponse;
 import org.eclipse.sensinact.studio.http.messages.snamessage.lifecycle.*;
 import org.eclipse.sensinact.studio.http.messages.snamessage.resourceslist.MsgResourcesList;
+import org.eclipse.sensinact.studio.http.messages.snamessage.serviceslist.MsgServicesList;
 import org.eclipse.sensinact.studio.http.messages.snamessage.setresponse.MsgSetResponse;
 import org.eclipse.sensinact.studio.http.messages.snamessage.subscriberesponse.MsgSubscribeResponse;
 import org.eclipse.sensinact.studio.http.messages.snamessage.tokencreation.MsgTokenCreation;
@@ -33,6 +34,7 @@ public enum MsgTypes {
 	
 	// List and describe (there will be much more than this two...)
 	COMPLETE_LIST           (MsgCompleteList.KEY,         MsgCompleteList.class),
+	SERVICES_LIST           (MsgServicesList.KEY,         MsgServicesList.class), 
 	RESOURCES_LIST          (MsgResourcesList.KEY,        MsgResourcesList.class), 
 	DESCRIBE_RESOURCE       (MsgDescribeRessource.KEY,    MsgDescribeRessource.class),
 	

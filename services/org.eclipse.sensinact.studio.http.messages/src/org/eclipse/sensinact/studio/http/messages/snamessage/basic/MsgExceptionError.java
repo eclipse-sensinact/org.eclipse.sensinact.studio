@@ -11,7 +11,6 @@
 package org.eclipse.sensinact.studio.http.messages.snamessage.basic;
 
 import org.eclipse.sensinact.studio.http.messages.snamessage.MsgCategory;
-import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 
 /**
  * @author Etienne Gandrille
@@ -20,12 +19,10 @@ public class MsgExceptionError extends MsgError {
 
 	private final String jsonObject;
 	private final Exception exception;
-	private final Segments segments;
 	
-	public MsgExceptionError(String jsonObject, Exception exception, Segments segments) {
+	public MsgExceptionError(String jsonObject, Exception exception) {
 		this.jsonObject = jsonObject;
 		this.exception = exception;
-		this.segments = segments;
 	}
 
 	@Override
@@ -41,17 +38,12 @@ public class MsgExceptionError extends MsgError {
 		return exception;
 	}
 
-	public Segments getSegments() {
-		return segments;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((exception == null) ? 0 : exception.hashCode());
 		result = prime * result + ((jsonObject == null) ? 0 : jsonObject.hashCode());
-		result = prime * result + ((segments == null) ? 0 : segments.hashCode());
 		return result;
 	}
 
@@ -74,17 +66,11 @@ public class MsgExceptionError extends MsgError {
 				return false;
 		} else if (!jsonObject.equals(other.jsonObject))
 			return false;
-		if (segments == null) {
-			if (other.segments != null)
-				return false;
-		} else if (!segments.equals(other.segments))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "MsgExceptionError [jsonObject=" + jsonObject + ", exception=" + exception + ", segments=" + segments
-				+ "]";
+		return "MsgExceptionError [jsonObject=" + jsonObject + ", exception=" + exception + "]";
 	}
 }

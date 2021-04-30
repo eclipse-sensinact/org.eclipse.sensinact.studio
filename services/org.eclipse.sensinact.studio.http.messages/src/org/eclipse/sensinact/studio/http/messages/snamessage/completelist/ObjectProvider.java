@@ -20,6 +20,7 @@ public class ObjectProvider {
 	private String name;
 	private String location;
 	private List<ObjectService> services;
+	private String icon;
 	
 	public String getName() {
 		return name;
@@ -44,6 +45,15 @@ public class ObjectProvider {
 	public void setServices(List<ObjectService> services) {
 		this.services = services;
 	}
+
+	public String getIcon() {
+		return this.icon;
+	}
+	
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
 	
 	@Override
 	public int hashCode() {
@@ -52,6 +62,7 @@ public class ObjectProvider {
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((services == null) ? 0 : services.hashCode());
+		result = prime * result + ((icon == null) ? 0 : icon.hashCode());
 		return result;
 	}
 	
@@ -84,6 +95,6 @@ public class ObjectProvider {
 	
 	@Override
 	public String toString() {
-		return "ObjectProviders [name=" + name + ", location=" + location + ", services=" + services + "]";
+		return "ObjectProviders [name=" + name + ", location=" + location + ", services=" + services + (icon==null?"":", icon=" + icon)+"]";
 	}
 }

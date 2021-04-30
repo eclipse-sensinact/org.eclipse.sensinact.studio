@@ -10,18 +10,34 @@
  */
 package org.eclipse.sensinact.studio.http.messages.snamessage;
 
+import java.util.List;
+
 /**
  * @author Etienne Gandrille
  */
 public abstract class MsgSensinact {
+
+	public static final String KEY = "KEY";
+	public static final int PRIME = 31;
 	
 	protected final String type;
+	protected String uri;
 	
+	private List<ObjectFilter> filters;
+
 	public MsgSensinact(String type) {
 		this.type = type;
 	}
 	
-	public final String getType() {
+	public String getUri() {
+		return uri;
+	}
+	
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+	public String getType() {
 		return type;
 	}
 	
@@ -29,7 +45,22 @@ public abstract class MsgSensinact {
 		if (! this.type.equals(type))
 			throw new IllegalArgumentException();
 	}
+
+	public List<ObjectFilter> getFilters() {
+		return filters;
+	}
 	
+	public ObjectFilter getFilter(String filterType) {
+		for (ObjectFilter filter : filters)
+			if (filter.getType().equals(filterType))
+				return filter;
+		return null;
+	}
+
+	public void setFilters(List<ObjectFilter> filters) {
+		this.filters = filters;
+	}
+
 	public boolean isValid() {
 		return true;
 	}

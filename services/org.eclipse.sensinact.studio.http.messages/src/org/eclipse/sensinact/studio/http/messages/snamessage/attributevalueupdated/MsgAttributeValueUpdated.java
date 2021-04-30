@@ -47,8 +47,13 @@ public class MsgAttributeValueUpdated extends MsgSensinact {
 	}
 
 	public boolean isLocationValue() {
-		return uri != null && uri.contains("/admin/location/value");
+		return uri != null && uri.endsWith("/admin/location/value");
 	}
+
+
+	public boolean isIconValue() {
+		return uri != null && uri.endsWith("/admin/icon/value");
+	}	
 	
 	public void setUri(String uri) {
 		this.uri = uri;
@@ -88,5 +93,5 @@ public class MsgAttributeValueUpdated extends MsgSensinact {
 	@Override
 	public String toString() {
 		return "MsgAttributeValueUpdated [notification=" + notification + ", uri=" + uri + "]";
-	}	
+	}
 }

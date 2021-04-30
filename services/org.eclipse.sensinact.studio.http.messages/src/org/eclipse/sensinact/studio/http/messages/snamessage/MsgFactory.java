@@ -10,13 +10,10 @@
  */
 package org.eclipse.sensinact.studio.http.messages.snamessage;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.messages.snamessage.basic.MsgExceptionError;
 import org.eclipse.sensinact.studio.http.messages.snamessage.basic.MsgHttpError;
 import org.eclipse.sensinact.studio.http.messages.snamessage.basic.MsgOk;
-import org.eclipse.sensinact.studio.model.resource.utils.Segments;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -74,7 +71,7 @@ public class MsgFactory {
 		try {
 			Object object = mapper.readValue(jsonObject.toString(), registeredType.getTargetClass());
 			return (MsgSensinact) object;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			String msg = "Error while unmarshalling json " + jsonObject.toString();
 			
 			logger.error(msg);
@@ -104,7 +101,7 @@ public class MsgFactory {
 		return mapper;
 	}
 	
-	public static MsgSensinact build(String json, Exception e, Segments segments) {
-		return new MsgExceptionError(json, e, segments);
+	public static MsgSensinact build(String json, Exception e) {
+		return new MsgExceptionError(json, e);
 	}
 }

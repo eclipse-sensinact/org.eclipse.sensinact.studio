@@ -98,7 +98,6 @@ public class ObjectNameTypeValue {
 
 	@Override
 	public String toString() {
-		return "ObjectNameTypeValue [name=" + name + ", type=" + type + ", value=" + value + ", timestamp=" + timestamp
-				+ "]";
+		return "ObjectNameTypeValue [name=" + name + ", type=" + type + ", value=" + value + ", timestamp=" + timestamp	+ "]";
 	}	
 }
