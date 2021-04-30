@@ -10,6 +10,8 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar.dialog;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
@@ -18,8 +20,11 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -36,6 +41,7 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 	// also used for storing values while closing window
 	private String name = "NewConfiguration";
 	private String address = "";
+	private int version = -1;
 	private int port = 8080;
 	private int timeout = 10000;
 	private String username;
@@ -45,6 +51,7 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 	// Widgets
 	private Text nameText;
 	private Text addressText;
+	private Combo versionList;
 	private Spinner portSpinner;
 	private Spinner timeoutSpinner;
 	private Text usernameText;
@@ -60,10 +67,11 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		this.password = "";
 	}
 	
-	public GatewayConfigDialog(Shell parent, String name, String address, int port, int timeout, String username, String password) {
+	public GatewayConfigDialog(Shell parent, String name, String address, int port, int timeout, String username, String password,int version) {
 		super(parent);
 		this.name = name;
 		this.address = address;
+		this.version = version;
 		this.port = port;
 		this.timeout = timeout;
 		this.isEditable = false;
@@ -73,7 +81,7 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 	}
 
 	public GatewayHttpConfig getGateway() {
-		return new GatewayHttpConfig(name, address, port, timeout, username, password);
+		return new GatewayHttpConfig(name, address, port, timeout, username, password, version);
 	}
 	
 	@Override
@@ -96,6 +104,8 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		nameText = createTextField(container, "Configuration Name", gatewayNames, name, isEditable, false);
 		addressText = createTextField(container, "Address", gatewayNames, address, true, false); 
 		addressText.setToolTipText("The address of the gateway.\navailable addresses:\nhttp://localhost\nhttp://192.168.1.69\nlocalhost\n192.168.1.69");				
+		
+		versionList = createList(container, "Version", new String[] {"1","2"}, version);
 		
 		// Spinner fields
 		portSpinner = createSpinnerField(container, "Port", 10000, port);
@@ -157,6 +167,37 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		return portSpinner;
 	}
 	
+	
+	private Combo createList(Composite container, String label, String[] versions, int initValue) {
+		// label
+		new Label(container, SWT.NONE).setText(label);
+		// label
+		Combo list = new Combo(container, SWT.DROP_DOWN);
+		list.setLayoutData(new GridData(GridData.FILL, SWT.TOP, true, false));
+		
+		// field
+		int i=0; 
+		for(;i<versions.length;i++) {
+			if(Integer.parseInt(versions[i]) == initValue)
+				break;
+		}
+		final AtomicInteger index = new AtomicInteger(i);
+		list.setItems(versions);
+		list.select(i);
+		list.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {	
+				Combo c = ((Combo)e.getSource());
+				GatewayConfigDialog.this.version = Integer.parseInt(c.getItem(c.getSelectionIndex()));
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}			
+		});
+		return list;
+	}
+	
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 		createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
@@ -170,6 +211,7 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		this.timeout = timeoutSpinner.getSelection();
 		this.username = usernameText.getText();
 		this.password = passwordText.getText();
+		this.version = Integer.parseInt(versionList.getItem(versionList.getSelectionIndex()));
 		super.okPressed();
 	}
 	

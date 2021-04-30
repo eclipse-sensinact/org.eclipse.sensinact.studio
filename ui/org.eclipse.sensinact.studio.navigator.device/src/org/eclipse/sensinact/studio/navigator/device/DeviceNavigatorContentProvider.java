@@ -70,15 +70,14 @@ public class DeviceNavigatorContentProvider implements ITreeContentProvider {
 		} else if (parentElement instanceof Gateway) {
 			return ((Gateway) parentElement).getDevice().toArray();	
 		} else if (parentElement instanceof Device) {
-			try {
-				DeviceImpl device=(DeviceImpl)parentElement;
-				GatewayImpl gateway=(GatewayImpl)device.eContainer();
-				if(ModelEditor.getInstance().getServicesId(gateway.getName(),device.getName()).size()==0){
-					ModelUpdater.getInstance().updateServices(gateway.getName(),device.getName(), true);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				DeviceImpl device=(DeviceImpl)parentElement;
+//				GatewayImpl gateway=(GatewayImpl)device.eContainer();
+//				if(ModelEditor.getInstance().getServicesId(gateway.getName(),device.getName()).size()==0)
+//					ModelUpdater.getInstance().updateServices(gateway.getName(),device.getName());				
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			return ((Device) parentElement).getService().toArray();
 		} else if (parentElement instanceof Service) {
 			return ((Service) parentElement).getResource().toArray();

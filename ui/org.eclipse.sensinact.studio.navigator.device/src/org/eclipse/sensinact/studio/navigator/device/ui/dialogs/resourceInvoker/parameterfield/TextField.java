@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -32,7 +33,7 @@ public class TextField extends ParameterField {
 	}
 
 	public static List<String> getAcceptedTypes() {
-		return Arrays.asList("string", JSONObject.class.getName());
+		return Arrays.asList("string", "object", "array", JSONArray.class.getName(), JSONObject.class.getName());
 	}
 
 	protected Control createWidget(Composite parameterListComposite, final String name) {

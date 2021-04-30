@@ -16,17 +16,22 @@
 package org.eclipse.sensinact.studio.navigator.device;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.ResourceSetChangeEvent;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceUpdateManager;
 import org.eclipse.sensinact.studio.model.manager.listener.modelset.ResourceModelSetListener;
 import org.eclipse.sensinact.studio.model.manager.listener.modelset.ResourceModelSetManager;
 import org.eclipse.sensinact.studio.model.manager.modelupdater.ModelEditor;
+import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
 import org.eclipse.sensinact.studio.navigator.device.commands.OpenResourceInvokerHandler;
 import org.eclipse.sensinact.studio.navigator.device.doubleclick.BasicQueryResourceHelper;
 import org.eclipse.sensinact.studio.navigator.device.filter.SensinactFilteredTree;
@@ -34,6 +39,7 @@ import org.eclipse.sensinact.studio.navigator.device.filter.SensinactPatternFilt
 import org.eclipse.sensinact.studio.navigator.device.toolbar.dialog.GatewayConfigDialog;
 import org.eclipse.sensinact.studio.preferences.ConfigurationManager;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
+import org.eclipse.sensinact.studio.resource.Device;
 import org.eclipse.sensinact.studio.resource.Gateway;
 import org.eclipse.sensinact.studio.resource.Resource;
 import org.eclipse.swt.SWT;
@@ -55,7 +61,7 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * @author Etienne Gandrille
  */
-public class DeviceNavigatorFilterView extends ViewPart implements ResourceModelSetListener,IDoubleClickListener {
+public class DeviceNavigatorFilterView extends ViewPart implements ResourceModelSetListener,IDoubleClickListener, ISelectionChangedListener {
 
 	private static final Logger logger = Logger.getLogger(DeviceNavigatorFilterView.class);
 
@@ -90,6 +96,7 @@ public class DeviceNavigatorFilterView extends ViewPart implements ResourceModel
 		Transfer[] transfers = new Transfer[] { TextTransfer.getInstance() };
 		viewer.addDragSupport(ops, transfers, cd);
 		viewer.addDoubleClickListener(this);
+		viewer.addSelectionChangedListener(this);
 		
 		try {
 			tree.getViewer().setInput(ModelEditor.getInstance().getViewerInput());
@@ -135,7 +142,7 @@ public class DeviceNavigatorFilterView extends ViewPart implements ResourceModel
 				MessageDialog.openError(parent, "Error", "Can't find gateway " + gateway.getName());
 				logger.error("Can't find gateway " + gateway.getName());
 			} else {
-				GatewayConfigDialog dialog = new GatewayConfigDialog(parent, config.getName(), config.getURL().getHost(), config.getURL().getPort(), config.getTimeout(), config.getUsername(), config.getPassword());
+				GatewayConfigDialog dialog = new GatewayConfigDialog(parent, config.getName(), config.getURL().getHost(), config.getURL().getPort(), config.getTimeout(), config.getUsername(), config.getPassword(), config.getVersion());
 				
 				if (dialog.open() == Window.OK) {
 					GatewayHttpConfig gatewayConfig = dialog.getGateway();
@@ -165,5 +172,40 @@ public class DeviceNavigatorFilterView extends ViewPart implements ResourceModel
 	@Override
 	public void setFocus() {
 		viewer.getTree().setFocus();		
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+		Object element = selection.getFirstElement();
+		if(element != null && element instanceof EObject) {			
+			while(true) {
+				if(element instanceof Device) {
+					break;
+				}
+				if(((EObject)element).eContainer()==null) {
+					element = null;
+					break;
+				}
+				element = ((EObject)element).eContainer();
+			}
+		}
+		if(element == null)
+			return;		
+		Device device = (Device) element;
+		String location = device.getLocation();
+		if(location == null)
+			return;
+		String[] coordinates = location.split(":");
+		if(coordinates.length != 2)
+			return;
+		try {			
+			DeviceUpdateManager manager =DeviceUpdateManager.getInstance();
+			double lat = Double.valueOf(coordinates[0]);
+			double lon = Double.valueOf(coordinates[1]);
+			manager.updateDeviceSelection(new GPScoordinates(lat, lon));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
 	}
 }
