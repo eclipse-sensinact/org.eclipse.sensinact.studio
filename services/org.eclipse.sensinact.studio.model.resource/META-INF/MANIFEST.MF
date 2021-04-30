@@ -12,11 +12,13 @@ Export-Package: org.eclipse.sensinact.studio.resource,
  org.eclipse.sensinact.studio.resource.impl,
  org.eclipse.sensinact.studio.resource.util,
  org.eclipse.sensinact.studio.model.resource.utils
+Import-Package: org.eclipse.sensinact.studio.http.messages.snamessage
 Require-Bundle: org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.transaction,
  org.json,
  org.restlet,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.sensinact.studio.preferences
+ org.eclipse.sensinact.studio.preferences,
+ org.eclipse.sensinact.studio.http.messages
 Bundle-ActivationPolicy: lazy

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 CEA.
+ * Copyright (c) 2018 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,25 +10,27 @@
  */
 package org.eclipse.sensinact.studio.model.resource.utils;
 
+import org.eclipse.sensinact.studio.http.messages.snamessage.ObjectNameTypeValue;
 
 /**
  * @author Etienne Gandrille
  */
-public class ResourceDescriptor {
+public class ResourceDescriptor extends AbstractDescriptor {
 
-	private final String gateway;
 	private final String device;
 	private final String service;
 	private final String resource;
+	private ObjectNameTypeValue initial;
 
 	public ResourceDescriptor(String gateway, String device, String service, String resource) {
-		this.gateway = gateway;
+		super(gateway);
 		this.device = device;
 		this.service = service;
 		this.resource = resource;
 	}
 
 	public ResourceDescriptor(String text) {
+		super(null);
 		// The substring removes the prefix and suffix used to refer to a resource in the SNA DSL, respectively remove the '[' and ']'.
 		text = text.trim();
 		if (text.startsWith("/") || text.startsWith("["))
@@ -40,16 +42,24 @@ public class ResourceDescriptor {
 		if (tokens.length != 4 && tokens.length != 5)
 			throw new RuntimeException("Parsing fail while building ResourceDescriptor");
 		 
-		this.gateway  = tokens[0];
+		super.gateway  = tokens[0];
 		this.device   = tokens[1];
 		this.service  = tokens[2];
 		this.resource = tokens[3];
+	}
+
+	public void setInitial(ObjectNameTypeValue initial){
+		this.initial = initial;
+	}
+
+	public ObjectNameTypeValue getInitial(){
+		return this.initial;
 	}
 	
 	public DeviceDescriptor toDeviceDescriptor() {
 		return new DeviceDescriptor(gateway, device);
 	}
-	
+
 	public String getDevice() {
 		return device;
 	}
@@ -62,13 +72,9 @@ public class ResourceDescriptor {
 		return resource;
 	}
 
-	public String getGateway() {
-		return gateway;
-	}
-	
 	@Override
-	public String toString() {
-		return getGateway() + "/" + getDevice() + "/" + getService() + "/" + getResource();
+	public String getPath() {
+		return  "/" + getDevice()+ "/" + getService()+ "/" + getResource();
 	}
 	
 	public boolean equals(Object other) {

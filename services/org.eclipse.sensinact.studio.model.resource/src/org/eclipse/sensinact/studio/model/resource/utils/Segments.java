@@ -32,7 +32,6 @@ public class Segments {
 	private final String gateway;
 
 	private static final String ROOT_SEGMENT = "sensinact";
-	private static final String JSON_ROOT_SEGMENT = "jsonpath:sensinact";
 	private static final String PROVIDERS  = "providers";
 	private static final String SERVICES = "services";
 	private static final String RESOURCES = "resources";
@@ -109,19 +108,15 @@ public class Segments {
 		public BuilderReady root() {
 			return new BuilderReady(gateway, ROOT_SEGMENT);
 		}
-		
+
+		public BuilderReady root(String expr) {
+			return new BuilderReady(gateway, ROOT_SEGMENT + "?" + expr);
+		}
+
 		public BuilderReady devices() {
 			return new BuilderReady(gateway, ROOT_SEGMENT, PROVIDERS);
 		}
 		
-		public BuilderReady jsonPath() {
-			return new BuilderReady(gateway, JSON_ROOT_SEGMENT);
-		}
-		
-		public BuilderReady jsonPath(String expr) {
-			return new BuilderReady(gateway, JSON_ROOT_SEGMENT + "?" + expr);
-		}
-
 		public BuilderReady login() {
 			return new BuilderReady(gateway, LOGIN);
 		}

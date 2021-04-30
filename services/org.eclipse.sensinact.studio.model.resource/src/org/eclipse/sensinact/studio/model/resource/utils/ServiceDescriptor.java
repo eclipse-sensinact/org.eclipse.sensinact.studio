@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 CEA.
+ * Copyright (c) 2018 CEA.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,26 +10,25 @@
  */
 package org.eclipse.sensinact.studio.model.resource.utils;
 
+
 /**
  * @author Etienne Gandrille
  */
-public class ServiceDescriptor {
-	
-	private final String gateway;
+public class ServiceDescriptor extends AbstractDescriptor {
+
 	private final String device;
 	private final String service;
-	
+
 	public ServiceDescriptor(String gateway, String device, String service) {
-		super();
-		this.gateway = gateway;
+		super(gateway);
 		this.device = device;
 		this.service = service;
 	}
 
-	public String getGateway() {
-		return gateway;
+	public DeviceDescriptor toDeviceDescriptor() {
+		return new DeviceDescriptor(gateway, device);
 	}
-
+	
 	public String getDevice() {
 		return device;
 	}
@@ -39,44 +38,39 @@ public class ServiceDescriptor {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((device == null) ? 0 : device.hashCode());
-		result = prime * result + ((gateway == null) ? 0 : gateway.hashCode());
-		result = prime * result + ((service == null) ? 0 : service.hashCode());
-		return result;
+	public String getPath() {
+		return  "/" + getDevice()+ "/" + getService();
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	
+	public boolean equals(Object other) {
+		if (this == other)
 			return true;
-		if (obj == null)
+		if (!(other instanceof ServiceDescriptor))
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ServiceDescriptor other = (ServiceDescriptor) obj;
-		if (device == null) {
-			if (other.device != null)
-				return false;
-		} else if (!device.equals(other.device))
-			return false;
-		if (gateway == null) {
-			if (other.gateway != null)
-				return false;
-		} else if (!gateway.equals(other.gateway))
-			return false;
-		if (service == null) {
-			if (other.service != null)
-				return false;
-		} else if (!service.equals(other.service))
-			return false;
-		return true;
+		final ServiceDescriptor that = (ServiceDescriptor) other;
+		return eqStr(this.getGateway(), that.getGateway()) 
+				&& eqStr(this.getDevice(), that.getDevice()) 
+				&& eqStr(this.getService(), that.getService());
 	}
 
-	@Override
-	public String toString() {
-		return "ServiceDescriptor [gateway=" + gateway + ", device=" + device + ", service=" + service + "]";
+	public int hashCode() {
+		return hash(gateway) * hash(device) * hash(service);
+	}
+
+	private boolean eqStr(String str1, String str2) {
+		if (str1 == null)
+			if (str2 == null)
+				return true;
+			else
+				return false;
+		else
+			return str1.equals(str2);
+	}
+	
+	private int hash(String str) {
+		if (str == null)
+			return 2;
+		else
+			return str.hashCode();
 	}
 }

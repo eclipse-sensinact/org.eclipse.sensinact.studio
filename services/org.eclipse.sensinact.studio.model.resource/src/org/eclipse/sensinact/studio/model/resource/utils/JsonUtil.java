@@ -60,6 +60,9 @@ public class JsonUtil {
 		final String objectBooleanType = Boolean.class.getName(); // java.lang.Boolean
 		final String stringType = String.class.getName(); // java.lang.String
 		final String JSONObjectType = JSONObject.class.getName(); // org.json.JSONObject
+		final String JSONObjectTypeShort = "object"; // org.json.JSONObject
+		final String JSONArrayType = JSONArray.class.getName(); // org.json.JSONObject
+		final String JSONArrayTypeShort = "array"; // org.json.JSONObject
 		
 		retval.put(NAME_KEY, name);
 
@@ -129,8 +132,8 @@ public class JsonUtil {
 		}
 
 		// JSON Object
-		if (JSONObjectType.equals(type)) {
-			retval.put(TYPE_KEY, JSONObjectType);
+		if (JSONObjectType.equals(type) || JSONObjectTypeShort.equals(type)) {
+			retval.put(TYPE_KEY, JSONObjectTypeShort);
 			if (value instanceof JSONObject) {
 				retval.put(VALUE_KEY, (JSONObject) value);
 				return retval;
@@ -142,6 +145,19 @@ public class JsonUtil {
 			}
 		}
 
+		// JSON Array
+		if (JSONArrayType.equals(type) || JSONArrayTypeShort.equals(type)) {
+			retval.put(TYPE_KEY, JSONArrayTypeShort);
+			if (value instanceof JSONArray) {
+				retval.put(VALUE_KEY, (JSONArray) value);
+				return retval;
+			} else if (value instanceof String) {
+				retval.put(VALUE_KEY, new JSONArray((String) value));
+				return retval;
+			} else {
+				throw new RuntimeException("expected type is " + type + " but value is of type " + value.getClass().getCanonicalName());
+			}
+		}
 		// Other...
 		throw new RuntimeException("Should never happen");
 	}
