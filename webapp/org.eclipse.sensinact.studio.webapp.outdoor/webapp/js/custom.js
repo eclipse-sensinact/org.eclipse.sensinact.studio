@@ -1,14 +1,13 @@
 /*
- * Copyright (c) 2018 CEA.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- *  Contributors:
- *     CEA - initial API and implementation and/or initial documentation
- */
-
+*   Copyright (c) 2020 - 2021 Kentyou.
+*   All rights reserved. This program and the accompanying materials
+*   are made available under the terms of the Eclipse Public License v1.0
+*   which accompanies this distribution, and is available at
+*   http://www.eclipse.org/legal/epl-v10.html
+*  
+*   Contributors:
+*      Kentyou - initial API and implementation
+*/
 
 // For debug purpose, for the eclipse webview...
 function toStr(obj) {
@@ -20,14 +19,30 @@ function toStr(obj) {
   return output;
 }
 
-var init = eval('(' + synchronusGET("/webapp/outdoor/init") + ')');
+function initialization(){
+ try{
+   return eval('(' + synchronusGET("/webapp/outdoor/init") + ')');
+ } catch(err){
+   console.error(err);
+   var tmp = {};
+   
+   tmp["lat"] = 45.19954840972916;
+   tmp["lng"] = 5.702977180480957;
+   tmp["zoom"]= 15;
+   return tmp;
+ }
+}
 
-var map = L.map('map',{maxZoom:23}).setView([init.lat, init.lng], init.zoom);
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 23,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors - <a href="#" onclick="window.location.reload()">reload</a>'
-}).addTo(map);
+var init = initialization();
 
+var map = L.map('map',{maxZoom:25}).setView([init.lat,init.lng], init.zoom);
+var rawLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 25,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors - <a href="#" onclick="window.location.reload()">reload</a>'
+});
 
+rawLayer.addTo(map);
+
+var markers = {};
 var icons = {};
 
 var defaultIcon = L.icon({
@@ -76,12 +91,16 @@ icons['restaurant']=restaurantIcon;
 
 imageBounds4022 = [[45.19317,5.70630],[45.19350,5.70675]];
 imageBoundsPTL = [[45.19591,5.70564],[45.19555,5.70617]];
+
 var bat4022=L.imageOverlay('/webapp/outdoor/static/images/cea4022etage2.png', imageBounds4022);
 var batPTL=L.imageOverlay('/webapp/outdoor/static/images/ceaptl.png', imageBoundsPTL);
+
 bat4022.addTo(map);
 bat4022.setOpacity(0.0);
+
 batPTL.addTo(map);
 batPTL.setOpacity(0.0);
+
 map.on('zoomend', function(e) {
     console.log(e.target._zoom);
   if(e.target._zoom >= 20) {
@@ -92,9 +111,6 @@ map.on('zoomend', function(e) {
 	batPTL.setOpacity(0.0);
   }
 });
-
-
-var markers = {};
 
 function synchronusGET(url){
     return $.ajax({
@@ -121,7 +137,7 @@ function updateDeviceLocation(lat, lng, deviceName, iconName) {
 	var markerCache = markers[deviceName]; 
 
     if (markerCache === undefined) {
-        var iconObject = getIcon(deviceName, iconName)
+        var iconObject = getIcon(iconName)
 		var content = "<p><b>" + deviceName + "</b></p><p> please wait during information refresh...</p>";
 		var marker = L.marker([lat, lng], {draggable:true, title:deviceName, icon:iconObject}).bindPopup(content,{maxWidth:600}).addTo(map);
 		marker.on('dragend', markerDrag);
@@ -134,19 +150,33 @@ function updateDeviceLocation(lat, lng, deviceName, iconName) {
     return Boolean("true");
 }
 
-function getIcon(deviceName, iconName) {
-  if (deviceName.includes('/SEM_'))
-    return icons['busStop'];
-  if (deviceName.includes('/RIE_'))
-    return icons['restaurant'];
-  if (deviceName.includes('/user_'))
-    return icons['user'];
-  return icons['default'];         
+function updateDeviceIcon(deviceName, iconName) {	
+ try{        
+		var markerCache = markers[deviceName];
+		if (markerCache === undefined) {
+		    return Boolean("false");
+		}
+		var iconObject = getIcon(iconName)
+		markerCache.setIcon(iconObject);
+		markerCache.update();
+		return Boolean("true");
+    }catch(error){
+    	console.error(error);
+    }
+ }
+
+function getIcon(iconName) {
+	var ic; 
+	if(iconName!==undefined)
+    	ic = icons[iconName];
+    if (ic === undefined) 
+        return icons['default'];       
+    return ic;  
 }
 
 function deleteMarker(deviceName) {
-    var marker = markers[deviceName]; 
-    if (marker != undefined) {
+    var marker = markers[deviceName];
+    if (marker !== undefined) {
       map.removeLayer(marker);
       markers[deviceName] = undefined;
     }
@@ -228,4 +258,77 @@ function showImage(imageUrl) {
 
 function closeImage(imageUrl) {
   document.getElementById("image").style.visibility = "hidden";
+}
+
+var geo = null;
+var geo_json = null;
+var geo_markers_arr = {};
+var geo_layers_arr = {};
+
+var plus = document.getElementById("plus");
+var plus_button = document.getElementById("plus_button");
+
+var less = document.getElementById("less");
+var less_button = document.getElementById("less_button");
+
+var geo_extra = document.getElementById("geo_extra");
+var geodef = document.getElementById("geodef");		
+
+var validator = document.getElementById("validator");
+var geodef_name = document.getElementById("geodef_name");
+var geo_markers = document.getElementById("geo_markers");
+
+plus_button.onclick=function(e){
+	less.style.display="table-cell";
+	plus.style.display="none";
+	geo_extra.style.display="flex";
+}
+
+less_button.onclick=function(e){
+	plus.style.display="table-cell";
+	less.style.display="none";
+	geo_extra.style.display="none";
+	geodef.value = '';
+}
+
+validator.onclick = function(e){
+	geo_json = JSON.parse(geodef.value);			   
+	var name = geodef_name.value;
+	var length = Object.keys(geo_markers_arr).length;
+	   
+	if(name===undefined || name==='')
+	    name = "GeoJSON_"+length;
+	   		
+	geodef_name.value = '';
+	geodef.value = '';
+
+	geo_markers_arr[name] = geo_json;
+	   			   
+	var block_to_insert = document.createElement( 'a' );
+	block_to_insert.ping = false;
+	block_to_insert.name = name;
+	block_to_insert.style="display:table-cell"
+	block_to_insert.type = "geoanchor";
+	block_to_insert.innerHTML = name ;
+	block_to_insert.onclick = function(e){
+		try{
+			var src = event.srcElement;
+	  		var enabled_ = (src.ping==='true');
+	   		var name_  = src.name;
+	   		if(enabled_){
+	   			 src.ping=false;
+	   			 src.type="geoanchor";
+				 geo_layers_arr[name_].clearLayers();
+				 geo_layers_arr[name_]=null;
+	   		} else {
+	   			 src.ping=true;
+	   			 src.type="geoanchor-enabled";
+	   			 geo_layers_arr[name_]= L.geoJSON(geo_markers_arr[name_]).addTo(map);
+	   		}			   		
+		} catch(err){
+			console.error(err);
+		}
+	} 			  
+	geo_markers.appendChild( block_to_insert ); 
+	   		   
 }

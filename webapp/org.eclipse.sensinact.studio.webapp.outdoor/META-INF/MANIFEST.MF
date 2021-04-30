@@ -4,7 +4,7 @@ Bundle-Name: Outdoor WebApp
 Bundle-SymbolicName: org.eclipse.sensinact.studio.webapp.outdoor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.sensinact.studio.webapp.outdoor.Activator
-Bundle-Vendor: CEA-LETI
+Bundle-Vendor: Kentyou
 Require-Bundle: org.eclipse.core.runtime,
  org.restlet,
  org.eclipse.sensinact.studio.http.messages,

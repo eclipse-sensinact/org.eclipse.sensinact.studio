@@ -1,14 +1,12 @@
 <!--
-
-    Copyright (c) 2018 CEA.
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-
-     Contributors:
-        CEA - initial API and implementation and/or initial documentation
-
+   Copyright (c) 2020 - 2021 Kentyou.
+   All rights reserved. This program and the accompanying materials
+   are made available under the terms of the Eclipse Public License v1.0
+   which accompanies this distribution, and is available at
+   http://www.eclipse.org/legal/epl-v10.html
+  
+   Contributors:
+      Kentyou - initial API and implementation
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,11 +17,56 @@
 		<title>Outdoor Map</title>
 		<link rel="stylesheet" href="css/leaflet.css" />
 		<link rel="stylesheet" href="css/custom.css" />
+		<style>
+			a[type=geoanchor] {
+			  background-color: #F79F81;
+			  color: gray;
+			  padding: 6px 10px;
+			  margin-left: 2px;
+			  border: none;
+			  border-radius: 4px;
+			  cursor: pointer;
+			  float: left;
+			}
+			
+			a[type=geoanchor-enabled] {
+			  background-color: #F79F81;
+			  color: white;
+			  padding: 6px 10px;
+			  margin-left: 2px;
+			  border: none;
+			  border-radius: 4px;
+			  cursor: pointer;
+			  float: left;
+			}
+			
+			a[type=geoanchor]:hover,a[type=geoanchor-enabled]:hover {
+			  background-color: #F5D0A9;
+			}
+	</style>
 	</head>
 	<body>
-		<div id="map"></div>
+		<div id="map" style="display:flex"></div>
+		<div id="geo_markers" style="display:table-row"></div>
+		<div style="display:table-row">
+		    <div id="plus" style="width:50%;left:5px;display:table-cell;">
+		        <a id="plus_button"><image src="css/images/plus_.png" style="width:20px;height:20px;"/></a>
+		    </div>
+		    <div id="less" style="width:50%;left:5px;display:none;">
+		        <a id="less_button"><image src="css/images/moins_.png" style="width:20px;height:20px;"/></a>
+		    </div>
+		</div>
+		<div id="geo_extra" style="display:none;">
+			<div style="display:inline">
+				<input id="geodef_name" type="text" style="width:80%"/>			
+				<a id="validator"><image src="css/images/validation.png" style="width:20px;height:20px;"/></a>
+			</div>
+			<div style="display:inline">
+				<textarea id="geodef" rows="5" cols="150"></textarea>
+			</div>
+		</div>
+		<div id="notif"><a href="javascript:window.location.reload()">reload view</a></div>
 		<div id="image"></div>
-	    <div id="notif"><a href="javascript:window.location.reload()">reload view</a></div>
 		<script src="js/jquery-2.2.0.min.js"></script>
 		<script src="js/leaflet.js"></script>
 		<script src="js/custom.js"></script>
