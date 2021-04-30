@@ -30,6 +30,7 @@ public class ConfigurationManager {
 	private static String STUDIO_NODE = "studio";
 	private static String ADDRESS_KEY = "address";
 	private static String PORT_KEY = "port";
+	private static String VERSION_KEY = "version";	
 	private static String TIMEOUT_KEY = "timeout";
 	private static String USERNAME_KEY = "username";
 	private static String PASSWORD_KEY = "password";
@@ -68,12 +69,13 @@ public class ConfigurationManager {
 				Preferences gwPref = gatewaysNode.node(name);
 				String address = gwPref.get(ADDRESS_KEY, "");
 				int port = gwPref.getInt(PORT_KEY, 0);
+				int version = gwPref.getInt(VERSION_KEY, 2);
 				int timeout = gwPref.getInt(TIMEOUT_KEY, 0);
 				String username = gwPref.get(USERNAME_KEY, "");
 				String password = gwPref.get(PASSWORD_KEY, "");
 				
 				try {
-					GatewayHttpConfig gateway = new GatewayHttpConfig(name, address, port, timeout, username, password);
+					GatewayHttpConfig gateway = new GatewayHttpConfig(name, address, port, timeout, username, password, version);
 					gateways.add(gateway);
 				} catch (IllegalArgumentException e) {
 					// ignore
@@ -121,6 +123,7 @@ public class ConfigurationManager {
 		curGatewayNode.put(ADDRESS_KEY, gateway.getURL().getHost());
 		curGatewayNode.putInt(PORT_KEY, gateway.getURL().getPort());
 		curGatewayNode.putInt(TIMEOUT_KEY, gateway.getTimeout());
+		curGatewayNode.putInt(VERSION_KEY, gateway.getVersion());
 		curGatewayNode.put(USERNAME_KEY, gateway.getUsername());
 		curGatewayNode.put(PASSWORD_KEY, gateway.getPassword());	
 		

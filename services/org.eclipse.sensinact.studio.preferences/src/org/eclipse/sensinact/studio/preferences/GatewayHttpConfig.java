@@ -21,13 +21,14 @@ import java.net.URL;
 public class GatewayHttpConfig {
 
 	private final String name;
+	private final int version;
 	private final URL gatewayURL;
 	private final int timeout;
 	private final String username;
 	private final String password;
 	
-	public GatewayHttpConfig(String name, String address, int port, int timeout, String username, String password) {
-		this(name, generateGatewayURL(address, port), timeout, username, password);		
+	public GatewayHttpConfig(String name, String address, int port, int timeout, String username, String password, int version) {
+		this(name, generateGatewayURL(address, port), timeout, username, password, version);		
 	}
 	
 	private static URL generateGatewayURL(String address, int port) {
@@ -47,11 +48,11 @@ public class GatewayHttpConfig {
 		}
 	}
 
-	public GatewayHttpConfig(String name, URL gatewayURL, int timeout, String username, String password) {	
+	public GatewayHttpConfig(String name, URL gatewayURL, int timeout, String username, String password, int version) {	
+		this.version = version;
 		if (name == null || name.isEmpty())
 			throw new IllegalArgumentException("name can't be null or empty");
 		this.name = name;
-		
 		if (gatewayURL == null)
 			throw new IllegalArgumentException("gatewayURL can't be null");
 		this.gatewayURL = gatewayURL ;
@@ -80,10 +81,21 @@ public class GatewayHttpConfig {
 		URL url = getURL();
 		String host = url.getHost();
 		int port = url.getPort();
-		String wsuri = String.format("ws://%s:%d/ws", host, port);
+		String wsuri = null;
+		if(version == 2)
+			wsuri = String.format("ws://%s:%d/ws/sensinact", host, port);
+		else 
+			wsuri = String.format("ws://%s:%d/ws", host, port);
+		System.out.println("------------------------------------");
+		System.out.println(wsuri);
+		System.out.println("------------------------------------");
 		return new URI(wsuri);
 	}
-		
+
+	public int getVersion() {
+		return version;
+	}
+	
 	public int getTimeout() {
 		return timeout;
 	}
