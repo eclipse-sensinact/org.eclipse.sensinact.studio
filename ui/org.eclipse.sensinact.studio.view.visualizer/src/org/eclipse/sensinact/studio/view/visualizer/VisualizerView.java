@@ -24,7 +24,7 @@ import org.eclipse.sensinact.studio.http.messages.snamessage.ObjectNameTypeValue
 import org.eclipse.sensinact.studio.http.messages.snamessage.ValueType;
 import org.eclipse.sensinact.studio.http.messages.snamessage.attributevalueupdated.MsgAttributeValueUpdated;
 import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifDispatcher;
-import org.eclipse.sensinact.studio.http.services.client.connectionmanager.NotifSubscriptionListener;
+import org.eclipse.sensinact.studio.http.services.client.listener.NotifSubscriptionListener;
 import org.eclipse.sensinact.studio.model.resource.utils.ResourceDescriptor;
 import org.eclipse.sensinact.studio.view.visualizer.graphmanager.GraphManager;
 import org.eclipse.swt.SWT;
@@ -162,6 +162,11 @@ public class VisualizerView implements NotifSubscriptionListener {
 
 	@Override
 	public void onLocationEvent(String gateway, List<MsgSensinact> message) {
+		// do nothing
+	}
+	
+	@Override
+	public void onIconEvent(String gateway, List<MsgSensinact> message) {
 		// do nothing
 	}
 
