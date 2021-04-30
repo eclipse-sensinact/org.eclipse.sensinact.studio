@@ -14,7 +14,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.sensinact.studio.http.services.server.SensinactServerResource;
-import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceLocationManager;
+import org.eclipse.sensinact.studio.model.manager.listener.devicelocation.DeviceUpdateManager;
 import org.eclipse.sensinact.studio.model.resource.utils.DeviceDescriptor;
 import org.eclipse.sensinact.studio.model.resource.utils.GPScoordinates;
 import org.json.JSONException;
@@ -35,13 +35,11 @@ public class UpdateLocationRoute extends SensinactServerResource {
 	public Response getValue(String params) throws UnsupportedEncodingException {
 		Response response = getResponse();
 
-		DeviceLocationManager locationManager = DeviceLocationManager.getInstance();
+		DeviceUpdateManager locationManager = DeviceUpdateManager.getInstance();
 		String gatewayName = getRequestAttribute("gateway");
 		String deviceName = getRequestAttribute("device");
 		DeviceDescriptor deviceDescriptor = new DeviceDescriptor(gatewayName, deviceName);
 		GPScoordinates oldLocation = locationManager.getKnownLocation(deviceDescriptor);
-		
-		
 		try {		
 			JSONObject jsonMsg = new JSONObject(params);
 			double lat = (Double) jsonMsg.get("lat");
@@ -55,7 +53,7 @@ public class UpdateLocationRoute extends SensinactServerResource {
 				response.setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 				setCoordinatesInEntity(response, oldLocation.getLat(), oldLocation.getLng());
 			}
-		} catch (JSONException e) {
+		} catch (NullPointerException | JSONException e) {
 			logger.error("Update Location Route", e);
 			setCoordinatesInEntity(response, oldLocation.getLat(), oldLocation.getLng());
 			response.setStatus(Status.SERVER_ERROR_INTERNAL);

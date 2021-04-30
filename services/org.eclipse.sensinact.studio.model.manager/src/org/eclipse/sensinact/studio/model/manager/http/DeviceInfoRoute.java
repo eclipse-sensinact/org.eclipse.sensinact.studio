@@ -41,7 +41,7 @@ public class DeviceInfoRoute extends SensinactServerResource {
 			sb.append("<b>" + fullName + "</b><br/>");
 			List<String> serviceIds = ModelEditor.getInstance().getServicesId(gatewayName, deviceName);
 			if(serviceIds.size()==0){
-				ModelUpdater.getInstance().updateServices(gatewayName, deviceName, true);
+				ModelUpdater.getInstance().updateServices(gatewayName, deviceName);
 				serviceIds = ModelEditor.getInstance().getServicesId(gatewayName, deviceName);
 			}
 			for (String serviceId : serviceIds) {
@@ -51,9 +51,6 @@ public class DeviceInfoRoute extends SensinactServerResource {
 			}
 			
 			return sb.toString();
-		} catch (InterruptedException e) {
-			logger.error("DeviceInfoRoute", e);
-			return "ERROR - see logs";
 		} catch (UnsupportedEncodingException e) {
 			logger.error("DeviceInfoRoute - decode error", e);
 			return "ERROR - see logs";
