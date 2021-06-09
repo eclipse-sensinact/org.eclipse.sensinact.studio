@@ -175,7 +175,7 @@ public class DeviceUpdateManager implements INotifyChangedListener {
 		return (! newCoordinates.equals(oldCoordinates));
 	}
 
-	public void removeDeviceIconistener(DeviceIconListener listener) {
+	public void removeDeviceIconListener(DeviceIconListener listener) {
 		iconListeners.remove(listener);
 	}
 
