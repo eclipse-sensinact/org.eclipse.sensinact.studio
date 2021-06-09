@@ -315,12 +315,13 @@ public class ModelUpdater implements NotifSubscriptionListener {
 		new Thread(runnableWithTry).start();
     }
 
+
+	@Override
 	public void onIconEvent(String gateway, List<MsgSensinact> messages) {
 		for (MsgSensinact message : messages)
 			onIconEvent(gateway, message);
 	}
-
-	@Override
+	
 	public void onIconEvent(String gateway, MsgSensinact message) {
 		if(!(message instanceof MsgAttributeValueUpdated) || !((MsgAttributeValueUpdated)message).isIconValue()){
 			return;
