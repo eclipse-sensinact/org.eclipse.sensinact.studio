@@ -1,0 +1,23 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-SymbolicName: ${p};singleton:=true
+Bundle-ActivationPolicy: lazy
+
+-includeresource.plugin: \
+	plugin.xml
+		
+-buildpath: \
+	org.apache.log4j,\
+	org.eclipse.sensinact.studio.http.services;version=project,\
+	org.restlet,\
+	org.eclipse.sensinact.studio.model.resource;version=project,\
+	org.eclipse.sensinact.studio.http.messages;version=project,\
+	org.eclipse.emf.ecore,\
+	org.eclipse.emf.common,\
+	org.eclipse.emf.edit,\
+	org.eclipse.emf.transaction,\
+	org.eclipse.sensinact.studio.preferences;version=project,\
+	org.eclipse.core.runtime,\
+	org.eclipse.equinox.common,\
+	osgi.cmpn,\
+	osgi.annotation,\
+	json

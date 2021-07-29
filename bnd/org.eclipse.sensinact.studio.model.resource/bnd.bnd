@@ -1,0 +1,17 @@
+src: ${^src},src-gen
+
+-enable-gecko-emf: true
+
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-SymbolicName: ${p};singleton:=true
+Bundle-ActivationPolicy: lazy
+
+-includeresource.model: \
+	model=models,\
+	plugin.properties,\
+	plugin.xml
+	
+-buildpath: \
+	org.eclipse.sensinact.studio.http.messages,\
+	json,\
+	org.restlet

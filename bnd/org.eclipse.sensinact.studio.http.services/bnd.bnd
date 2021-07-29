@@ -1,0 +1,14 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+-buildpath: \
+	org.eclipse.sensinact.studio.preferences,\
+	org.apache.log4j,\
+	org.eclipse.sensinact.studio.http.messages,\
+	org.eclipse.sensinact.studio.model.resource,\
+	org.restlet,\
+	json,\
+	org.eclipse.emf.common,\
+	org.eclipse.jetty.websocket.client,\
+	org.eclipse.jetty.websocket.common,\
+	org.eclipse.jetty.websocket.api,\
+	osgi.annotation,\
+	org.eclipse.jetty.util

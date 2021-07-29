@@ -1,0 +1,13 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+
+-buildpath: \
+	org.eclipse.core.runtime,\
+	org.restlet,\
+	json,\
+	org.apache.log4j,\
+	org.eclipse.sensinact.studio.preferences;version=project,\
+	com.fasterxml.jackson.core.jackson-databind,\
+	com.fasterxml.jackson.core.jackson-core,\
+	org.eclipse.jetty.websocket.common,\
+	com.fasterxml.jackson.core.jackson-annotations,\
+	osgi.annotation

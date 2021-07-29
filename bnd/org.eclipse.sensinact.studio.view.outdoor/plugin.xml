@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2018 CEA.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+     Contributors:
+        CEA - initial API and implementation and/or initial documentation
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <e4view
+            category="org.eclipse.sensinact.studio.views.category"
+            class="org.eclipse.sensinact.studio.view.outdoor.OutdoorDeploymentView"
+            id="org.eclipse.sensinact.studio.view.outdoor.view"
+            name="Deployment"
+            restorable="true">
+      </e4view>
+   </extension>
+</plugin>

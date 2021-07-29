@@ -1,0 +1,30 @@
+src: ${^src},src-gen,xtend-gen
+
+-enable-gecko-emf: true
+
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-ActivationPolicy: lazy
+
+-buildpath: \
+	com.google.inject,\
+	org.eclipse.xtext.xtext.generator,\
+	org.eclipse.emf.mwe2.runtime,\
+	org.eclipse.emf.mwe.core,\
+	org.eclipse.xtext,\
+	org.eclipse.xtext.xbase,\
+	org.eclipse.equinox.common,\
+	org.eclipse.xtext.xbase.lib,\
+	org.eclipse.xtext.util,\
+	org.eclipse.xtend.lib,\
+	org.apache.log4j,\
+	org.antlr.runtime,\
+	org.eclipse.sensinact.studio.model.resource;version=project,\
+	org.eclipse.sensinact.studio.model.manager;version=project,\
+	org.eclipse.xtext.ui,\
+	org.eclipse.xtext.ide,\
+	com.google.guava;version=latest,\
+	org.eclipse.sensinact.studio.language.sensinact;version=project
+Export-Package: \
+	org.eclipse.sensinact.studio.language.ide,\
+	org.eclipse.sensinact.studio.language.ide.contentassist.antlr,\
+	org.eclipse.sensinact.studio.language.ide.contentassist.antlr.internal

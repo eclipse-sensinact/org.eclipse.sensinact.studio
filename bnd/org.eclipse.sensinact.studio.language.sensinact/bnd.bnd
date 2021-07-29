@@ -1,0 +1,48 @@
+src: ${^src},src-gen,xtend-gen
+
+-enable-gecko-emf: true
+
+Bundle-Version: 1.0.0-SNAPSHOT
+Bundle-SymbolicName: ${p};singleton:=true
+Bundle-ActivationPolicy: lazy
+
+-includeresource.model: \
+	model=model/generated,\
+	plugin.xml
+	
+-buildpath: \
+	com.google.inject,\
+	org.eclipse.xtext.xtext.generator,\
+	org.eclipse.emf.mwe2.runtime,\
+	org.eclipse.emf.mwe.core,\
+	org.eclipse.xtext,\
+	org.eclipse.xtext.xbase,\
+	org.eclipse.equinox.common,\
+	org.eclipse.xtext.xbase.lib,\
+	org.eclipse.xtext.util,\
+	org.eclipse.xtend.lib,\
+	org.apache.log4j,\
+	org.antlr.runtime,\
+	org.eclipse.sensinact.studio.model.resource;version=project,\
+	org.eclipse.sensinact.studio.model.manager;version=project,\
+	org.gecko.eclipse.compatibility,\
+	org.gecko.eclipse.compatibility.equinox.config,\
+	com.google.guava;version=latest,\
+	org.eclipse.xtend.lib.macro,\
+	org.eclipse.xtext.xbase.lib,\
+	org.gecko.bnd.eclipse.launcher.plugin,\
+	org.eclipse.draw2d
+	
+Export-Package: \
+	org.eclipse.sensinact.studio.language,\
+	org.eclipse.sensinact.studio.language.parser.antlr,\
+	org.eclipse.sensinact.studio.language.parser.antlr.internal,\
+	org.eclipse.sensinact.studio.language.scoping,\
+	org.eclipse.sensinact.studio.language.sensinact,\
+	org.eclipse.sensinact.studio.language.sensinact.impl,\
+	org.eclipse.sensinact.studio.language.sensinact.util,\
+	org.eclipse.sensinact.studio.language.serializer,\
+	org.eclipse.sensinact.studio.language.services,\
+	org.eclipse.sensinact.studio.language.validation,\
+	org.eclipse.sensinact.studio.language.generator
+	

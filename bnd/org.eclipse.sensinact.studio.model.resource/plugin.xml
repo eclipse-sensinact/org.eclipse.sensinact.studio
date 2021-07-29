@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2018 CEA.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+     Contributors:
+        CEA - initial API and implementation and/or initial documentation
+
+-->
+<?eclipse version="3.0"?>
+
+<plugin>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated sensinact-resource -->
+      <package
+            uri="http://eclipse.org/sensinact/resource"
+            class="org.eclipse.sensinact.studio.resource.ResourcePackage"
+            genModel="models/resource.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated sensinact-resource -->
+      <parser
+            type="resource"
+            class="org.eclipse.sensinact.studio.resource.impl.ResourceFactoryImpl"/>
+   </extension>
+</plugin>

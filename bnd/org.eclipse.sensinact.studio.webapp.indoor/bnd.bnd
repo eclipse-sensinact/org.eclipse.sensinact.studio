@@ -1,0 +1,7 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+-buildpath: \
+	osgi.cmpn,\
+	org.eclipse.sensinact.studio.http.services;version=project,\
+	org.restlet
+-includeresource.webapp: \
+	webapp=webapp

@@ -1,0 +1,18 @@
+-include: launch_base.bndrun
+
+-runsystemcapabilities: ${native_capability;osname=Linux;osversion=3.14;processor=x86_64}
+-runprovidedcapabilities: ${native_capability;osname=Linux;osversion=3.14;processor=x86_64}
+
+
+-runrequires.win32: \
+	bnd.identity;id='org.eclipse.swt.gtk.linux.x86_64',\
+	bnd.identity;id='org.eclipse.core.filesystem.linux.x86_64',\
+	bnd.identity;id='org.eclipse.core.net.linux.x86_64',\
+	bnd.identity;id='org.eclipse.equinox.security.linux.x86_64'
+	
+-runbundles.win32: \
+	org.eclipse.core.filesystem.linux.x86_64;version='[1.4.200,1.4.201)',\
+	org.eclipse.core.net.linux.x86_64;version='[1.1.400,1.1.401)',\
+	org.eclipse.equinox.security.linux.x86_64;version='[1.1.200,1.1.201)',\
+	org.eclipse.swt.gtk.linux.x86_64;version='[3.112.0,3.112.1)'
+

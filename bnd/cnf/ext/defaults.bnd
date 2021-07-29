@@ -1,0 +1,49 @@
+java: java
+javac: javac
+javac.source: 1.8
+javac.target: 1.8
+javac.debug:  on
+
+#Bundle-DocURL: https://yourdoc.de
+Bundle-License: Eclipse Public License 1.0
+Bundle-Vendor: CEA LETI
+
+#if you want bnd to tell you more during the build
+#-verbose: true
+
+# Includes sources from bundle
+-sources: true
+
+-includeresource.license: \
+	${workspace}/cnf/license/about.html
+
+		
+-removeheaders: Bnd-LastModified, Tool, Created-By
+
+# String to substitute for "SNAPSHOT" in the bundle version's qualifier.
+#-snapshot: ${tstamp}
+-releaserepo: Release
+
+# Enable semantic versioning for all bundles
+-baselinerepo: Release
+-baseline: *
+
+-maven-release: pom
+
+# Provide a useful group-id
+-groupid: org.eclipse.sensinact.studio
+
+# Ignore files for baselining
+-diffignore: *.xml,\
+    */pom.properties,\
+     OSGI-OPT/*
+
+# define global blacklist
+-runblacklist.default: osgi.identity;filter:='(osgi.identity=osgi.cmpn)'
+
+-resolve.effective: active
+#-resolve.effective: active;skip:="osgi.service"
+
+# > Java 8 runtime
+#modules: --add-opens=java.base/jdk.internal.loader=ALL-UNNAMED, --add-opens=java.base/java.lang=ALL-UNNAMED, --add-opens=java.base/java.net=ALL-UNNAMED, --add-opens=java.base/java.security=ALL-UNNAMED
+#-runvm.default: ${if;${isempty;${system_allow_fail;java --list-modules}};;${modules}}

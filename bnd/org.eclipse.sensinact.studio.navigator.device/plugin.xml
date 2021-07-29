@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2018 CEA.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+     Contributors:
+        CEA - initial API and implementation and/or initial documentation
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.eclipse.sensinact.studio.views.category"
+            class="org.eclipse.sensinact.studio.navigator.device.DeviceNavigatorFilterView"
+            id="org.eclipse.sensinact.studio.navigator.device"
+            name="Device Navigator"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="org.eclipse.sensinact.studio.navigator.device.DeviceNavigatorContentProvider"
+            id="org.eclipse.sensinact.studio.navigator.device.navigatorContent"
+            labelProvider="org.eclipse.sensinact.studio.navigator.device.DeviceNavigatorLabelProvider"
+            name="Device Navigator Content"
+            priority="normal">
+         <triggerPoints>
+            <or>
+               <instanceof
+                     value="org.eclipse.sensinact.studio.resource.Studio">
+               </instanceof>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof
+                     value="org.eclipse.sensinact.studio.resource.Resource">
+               </instanceof>
+               <instanceof
+                     value="org.eclipse.sensinact.studio.resource.Device">
+               </instanceof>
+               <instanceof
+                     value="org.eclipse.sensinact.studio.resource.Service">
+               </instanceof>
+               <instanceof
+                     value="org.eclipse.sensinact.studio.resource.Gateway">
+               </instanceof>
+            </or>
+         </possibleChildren>
+         <dropAssistant
+               class="org.eclipse.sensinact.studio.navigator.device.SensinactDropAdapterAssistant"
+               id="org.eclipse.sensinact.studio.navigator.device.SensinactDropAdapterAssistant">
+            <possibleDropTargets>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="org.eclipse.sensinact.studio.resource.Device">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </possibleDropTargets>
+         </dropAssistant>
+         <commonSorter
+               class="org.eclipse.sensinact.studio.navigator.device.DeviceNavigatorSorter">
+         </commonSorter>
+      </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewer
+            popupMenuId="org.eclipse.sensinact.studio.navigator.device"
+            viewerId="org.eclipse.sensinact.studio.navigator.device">
+      </viewer>
+      <viewerContentBinding
+            viewerId="org.eclipse.sensinact.studio.navigator.device">
+         <includes>
+            <contentExtension
+                  isRoot="false"
+                  pattern="org.eclipse.sensinact.studio.navigator.device.navigatorContent">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+      <dragAssistant
+            class="org.eclipse.sensinact.studio.navigator.device.SensinactDragAdapterAssistant"
+            viewerId="org.eclipse.sensinact.studio.navigator.device">
+      </dragAssistant>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.sensinact.studio.navigator.device.openResourceInvokerHandler"
+            name="Open Resource Invoker">
+      </command>
+      <command id="org.eclipse.sensinact.studio.navigator.device.toolbar.add" name="Add Gateway"></command>
+      <command id="org.eclipse.sensinact.studio.navigator.device.toolbar.remove" name="Remove Gateway"></command>
+      <command id="org.eclipse.sensinact.studio.navigator.device.toolbar.connect" name="Connect Gateway"></command>
+      <command id="org.eclipse.sensinact.studio.navigator.device.toolbar.disconnect" name="Disconnect Gateway"></command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.sensinact.studio.navigator.device">
+         <command
+               commandId="org.eclipse.sensinact.studio.navigator.device.openResourceInvokerHandler"
+               label="Open resource invoker"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="org.eclipse.sensinact.studio.resource.Resource">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.sensinact.studio.navigator.device">
+         <command 
+               commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.add"
+               icon="icons/add.png"
+               label="Add Gateway"
+               style="push">
+         </command>
+         <command 
+               commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.remove"
+               icon="icons/remove.png"
+               label="Remove Gateway"
+               style="push">
+         </command>
+         <command 
+               commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.connect"
+               icon="icons/connect.png"
+               label="Connect Gateway"
+               style="push">
+         </command>
+         <command 
+               commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.disconnect"
+               icon="icons/disconnect.png"
+               label="Disconnect Gateway"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.sensinact.studio.navigator.device.commands.OpenResourceInvokerHandler"
+            commandId="org.eclipse.sensinact.studio.navigator.device.openResourceInvokerHandler">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="org.eclipse.sensinact.studio.resource.Resource">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.eclipse.sensinact.studio.navigator.device.toolbar.AddHandler"
+            commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.add">
+      </handler>
+      <handler
+            class="org.eclipse.sensinact.studio.navigator.device.toolbar.RemoveHandler"
+            commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.remove">
+      </handler>
+      <handler
+            class="org.eclipse.sensinact.studio.navigator.device.toolbar.ConnectHandler"
+            commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.connect">
+      </handler>
+      <handler
+            class="org.eclipse.sensinact.studio.navigator.device.toolbar.DisconnectHandler"
+            commandId="org.eclipse.sensinact.studio.navigator.device.toolbar.disconnect">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="org.eclipse.sensinact.studio.navigator.device.DeviceNavigatorDecorator"
+            id="org.eclipse.sensinact.studio.navigator.device.decorators.ReadOnly"
+            label="SNA decorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <or>
+               <objectClass name="org.eclipse.sensinact.studio.resource.Device"></objectClass>
+               <objectClass name="org.eclipse.sensinact.studio.resource.Service"></objectClass>
+               <objectClass name="org.eclipse.sensinact.studio.resource.Resource"></objectClass>
+             </or>
+         </enablement>
+      </decorator>
+   </extension>
+
+</plugin>

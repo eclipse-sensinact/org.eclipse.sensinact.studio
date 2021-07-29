@@ -1,0 +1,26 @@
+-buildpath: \
+	org.eclipse.ui.workbench,\
+	org.eclipse.core.runtime,\
+	org.eclipse.equinox.common,\
+	osgi.core,\
+	org.apache.log4j,\
+	org.eclipse.jface,\
+	org.eclipse.swt.win32.win32.x86_64,\
+	org.eclipse.sensinact.studio.model.resource;version=project,\
+	org.eclipse.draw2d,\
+	org.eclipse.nebula.visualization.xygraph,\
+	org.eclipse.sensinact.studio.http.messages;version=project,\
+	org.eclipse.sensinact.studio.http.services;version=project,\
+	org.eclipse.sensinact.studio.model.manager;version=project,\
+	org.eclipse.emf.ecore,\
+	org.eclipse.sensinact.studio.preferences,\
+	org.eclipse.emf.edit,\
+	org.eclipse.sensinact.studio.webapp.outdoor,\
+	osgi.annotation
+	
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-SymbolicName: ${p};singleton:=true
+Bundle-ActivationPolicy: lazy
+
+-includeresource.model: \
+	plugin.xml

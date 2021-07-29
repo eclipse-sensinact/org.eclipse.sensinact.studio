@@ -1,0 +1,222 @@
+grammar org.eclipse.sensinact.studio.language.Sensinact with org.eclipse.xtext.common.Terminals
+
+generate sensinact "http://www.eclipse.org/sensinact/studio/language/Sensinact"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+
+// ==============
+// Main structure
+// ==============
+
+Sensinact:
+    {Sensinact}
+    (eca=DSL_SENSINACT)
+;
+
+DSL_SENSINACT:
+	autostart=DSL_FLAG_AUTOSTART? (resources+=DSL_Resource)+ (cep+=DSL_CEP_STATEMENT)* on=DSL_On eca=DSL_ECA_STATEMENT  
+;
+
+DSL_FLAG_AUTOSTART:
+	'option' 'autostart' '=' activated=BOOLEAN
+;
+
+DSL_Resource:
+    'resource' name=ID '=' '[' gatewayID=EXTENDED_ID '/' deviceID=EXTENDED_ID '/' serviceID=EXTENDED_ID '/' resourceID=EXTENDED_ID ']' 
+;
+
+DSL_On:
+	'on' triggers+=DSL_REF_CONDITION (',' triggers+=DSL_REF_CONDITION)*
+;
+
+DSL_ECA_STATEMENT:
+	ifdo=DSL_IfDo (elseIfdo+=DSL_ElseIfDo)* elsedo=DSL_ElseDo? 'end if' 	
+;
+
+DSL_IfDo:
+	'if' condition=DSL_Expression_Or 'do' actions=DSL_ListActions 
+;
+
+DSL_ElseIfDo:
+	'else if' condition=DSL_Expression_Or 'do' actions=DSL_ListActions 
+;
+
+DSL_ElseDo:
+	'else do' actions=DSL_ListActions
+;
+
+
+// ============
+// Basic values
+// ============
+
+terminal BOOLEAN returns ecore::EBoolean: 'true' | 'false';
+
+// IMPORTANT : we are mixing terminal and non terminal rules
+//  * terminal rules are parsed in a FIRST & stupid step (but fast) way by the "lexer"
+//  * DataTypes rules are parsed in a SECOND step by the "parser"
+//
+// INFO : remember that terminal rules are executed one after the other, IN THE ORDER OF WRITING
+
+terminal INT returns ecore::EInt: ('0'..'9')+;
+NUMBER returns ecore::EBigDecimal: INT | INT '.' INT; 
+
+terminal ID : ('a'..'z'|'A'..'Z'|'_'|'0'..'9'|':'|'-')+;
+EXTENDED_ID : ID ('.' ID)*;
+
+
+// ================
+// Basic structures 
+// ================
+
+DSL_REF:
+	DSL_CEP_STATEMENT | DSL_Resource
+;
+
+
+// =============
+// REF condition
+// =============
+
+DSL_REF_CONDITION:
+	ref=[DSL_REF] '.' 'subscribe' '(' ')' 
+;
+
+
+// ==========
+// CEP engine
+// ==========
+
+DSL_CEP_STATEMENT:
+	'define' name=ID '=' operation=(DSL_CEP_AFTER | DSL_CEP_BEFORE | DSL_CEP_COINCIDE | DSL_CEP_MIN | DSL_CEP_MAX | DSL_CEP_AVG | DSL_CEP_SUM | DSL_CEP_COUNT)  
+;
+
+DSL_CEP_AFTER:
+	'after' '(' ref1=DSL_REF_CONDITION ','  ref2=DSL_REF_CONDITION ',' (start=DSL_CEP_DURATION ',')? end=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_BEFORE:
+	'before' '(' ref1=DSL_REF_CONDITION ','  ref2=DSL_REF_CONDITION ',' (start=DSL_CEP_DURATION ',')? end=DSL_CEP_DURATION ')' 
+;
+
+DSL_CEP_COINCIDE:
+	'coincide' '(' ref1=DSL_REF_CONDITION ','  ref2=DSL_REF_CONDITION ',' window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_MIN:
+	'min' '(' ref=DSL_REF_CONDITION ','  window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_MAX:
+	'max' '(' ref=DSL_REF_CONDITION ','  window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_AVG:
+	'avg' '(' ref=DSL_REF_CONDITION ','  window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_SUM:
+	'sum' '(' ref=DSL_REF_CONDITION ','  window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_COUNT:
+	'count' '(' ref=DSL_REF_CONDITION ','  window=DSL_CEP_DURATION ')'
+;
+
+DSL_CEP_DURATION:
+	(units+=(DSL_CEP_DURATION_MIN | DSL_CEP_DURATION_SEC))+
+;
+
+DSL_CEP_DURATION_MIN:
+	min=NUMBER 'min'
+;
+
+DSL_CEP_DURATION_SEC:
+	sec=NUMBER 'sec'
+;
+
+
+// ============================
+// ECA engine : DSL_ListActions 
+// ============================
+
+DSL_ListActions:
+	 actionList+=DSL_ResourceAction (',' actionList+=DSL_ResourceAction)* 
+;
+
+DSL_ResourceAction:
+    (variable=ID '=')? ref=[DSL_REF] '.' actiontype=('act'|'set') '(' listParam=DSL_ListParam? ')'
+;
+
+DSL_ListParam:
+	param+=DSL_Expression_Or (',' param+=DSL_Expression_Or )*
+;
+
+// ===========
+// Expressions
+// ===========
+
+// 
+// 7  ()   functions : not, concatenate 
+// 6  *    /    %
+// 5  +    -
+// 4  <    >    <=   >=
+// 3  ==   !=
+// 2  and
+// 1  or
+// 
+
+
+// Or: left associative, priority 1
+DSL_Expression_Or returns DSL_Expression:
+    DSL_Expression_And ('or' {DSL_Expression_Or.left=current} right=DSL_Expression_And)*;
+ 
+// And: left associative, priority 2
+DSL_Expression_And returns DSL_Expression:
+    DSL_Expression_DiffEqual ('and' {DSL_Expression_And.left=current} right=DSL_Expression_DiffEqual)*;
+ 
+// different/equal: left associative, priority 3
+DSL_Expression_DiffEqual returns DSL_Expression:
+    DSL_Expression_Compare (
+        ('!='  {DSL_Expression_Diff.left=current} right=DSL_Expression_Compare) |
+        ('=='  {DSL_Expression_Equal.left=current} right=DSL_Expression_Compare)
+    )*
+;
+
+// Comparisons: left associative, priority 4
+DSL_Expression_Compare returns DSL_Expression:
+    DSL_Expression_PlusMinus (
+        ('>'  {DSL_Expression_Larger.left=current} right=DSL_Expression_PlusMinus) |
+        ('>=' {DSL_Expression_Larger_Equal.left=current} right=DSL_Expression_PlusMinus) |
+        ('<'  {DSL_Expression_Smaller.left=current} right=DSL_Expression_PlusMinus) |
+        ('<=' {DSL_Expression_Smaller_Equal.left=current} right=DSL_Expression_PlusMinus)
+    )*
+;
+ 
+// addition/subtraction: left associative, priority 5
+DSL_Expression_PlusMinus returns DSL_Expression:
+    DSL_Expression_MultiplicationDivision (
+        ('+'  {DSL_Expression_Plus.left=current} right=DSL_Expression_MultiplicationDivision) |
+        ('-'  {DSL_Expression_Minus.left=current} right=DSL_Expression_MultiplicationDivision)
+    )*
+;
+ 
+// multiplication/division, left associative, priority 6
+DSL_Expression_MultiplicationDivision returns DSL_Expression:
+    DSL_Expression_Unary (
+        ('*'  {DSL_Expression_Multiplication.left=current} right=DSL_Expression_Unary) |
+        ('/'  {DSL_Expression_Division.left=current} right=DSL_Expression_Unary) |
+        ('%'  {DSL_Expression_Modulo.left=current} right=DSL_Expression_Unary)
+    )*
+;
+ 
+// Unary operators: right associative, priority 7
+DSL_Expression_Unary returns DSL_Expression:
+    {DSL_Object_Number}   value=NUMBER    | 
+    {DSL_Object_String}   value=STRING    |
+    {DSL_Object_Boolean}  value=BOOLEAN   |
+    {DSL_Object_Ref}      value=[DSL_REF] '.get()' |
+    '(' DSL_Expression_Or ')'|
+    'not' {DSL_Expression_Negate} exp=DSL_Expression_Unary
+;

@@ -1,0 +1,46 @@
+-plugin.project: \
+	aQute.bnd.repository.maven.provider.MavenBndRepository; \
+		releaseUrl='https://repo.maven.apache.org/maven2/,https://maven.restlet.talend.com/'; \
+		index=${.}/project.maven; \
+		name="Project Specific Maven Central"
+
+#-plugin.eclipse.2019.09: \
+#		aQute.bnd.repository.osgi.OSGiRepository;\
+#		name=Eclipse_2020.06;\
+#		locations=file:///c:/Users/ungei/.p2/test/pool/plugins/index.xml
+		
+-plugin.Eclipse:\
+    aQute.bnd.repository.osgi.OSGiRepository;\
+        name="Eclipse 2020-06";\
+        locations="https://bndtools.jfrog.io/bndtools/bnd-build/eclipse/4.16/index.xml.gz";\
+        poll.time=-1;\
+        cache="${workspace}/cnf/cache/stable/Eclipse-2020-06"
+
+#eclipse.importpackage: \
+# org.eclipse.*;bundle-symbolic-name="${@bundlesymbolicname}";bundle-version="${range;[==,+);${@bundleversion}}";version=!;ui.workbench=!;common=!;registry=!;texteditor=!;text=!
+
+-plugin.xtext: aQute.bnd.repository.p2.provider.P2Repository;\
+		location			= ${workspace}/cnf/cache/xtext;\
+		name                ='XText P2 2.22';\
+		url                 ='https://download.eclipse.org/modeling/tmf/xtext/updates/releases/2.22.0/'
+
+-plugin.mwq: aQute.bnd.repository.p2.provider.P2Repository;\
+		location			= ${workspace}/cnf/cache/mwe;\
+		name                ='MWE P2 2.11';\
+		url                 ='https://download.eclipse.org/modeling/emft/mwe/updates/releases/2.11.3/'
+
+-plugin.xpand: aQute.bnd.repository.p2.provider.P2Repository;\
+		location			= ${workspace}/cnf/cache/xpand;\
+		name                ='XPand P2 2.2.0';\
+		url                 ='https://download.eclipse.org/modeling/m2t/xpand/updates/releases/R201605260315/'
+
+-plugin.nebula: aQute.bnd.repository.p2.provider.P2Repository;\
+		location			= ${workspace}/cnf/cache/nebula;\
+		name                ='Nebula P2 1.1.0';\
+		url                 ='https://download.eclipse.org/nebula/releases/1.1.0'
+
+-plugin.misc: aQute.bnd.repository.p2.provider.P2Repository;\
+		location			= ${workspace}/cnf/cache/misc;\
+		name                ='Misc P2 1.1.0';\
+		url                 ='${fileuri;${workspace}/cnf/p2/targetPlatform.target}'
+

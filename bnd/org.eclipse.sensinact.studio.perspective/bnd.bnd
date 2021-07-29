@@ -1,0 +1,11 @@
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-SymbolicName: ${p};singleton:=true
+Bundle-ActivationPolicy: lazy
+
+-includeresource.model: \
+	plugin.xml
+-buildpath: \
+	org.eclipse.ui.workbench,\
+	org.eclipse.sensinact.studio.view.visualizer;version=project,\
+	org.eclipse.sensinact.studio.view.outdoor;version=project,\
+	org.eclipse.sensinact.studio.navigator.device;version=project

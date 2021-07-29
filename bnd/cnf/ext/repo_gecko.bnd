@@ -1,0 +1,21 @@
+#-plugin.gecko: \
+#	aQute.bnd.repository.maven.provider.MavenBndRepository;\
+#		releaseUrl=https://devel.data-in-motion.biz/nexus/repository/dim-release/;\
+#		snapshotUrl=https://devel.data-in-motion.biz/nexus/repository/dim-snapshot/;\
+#		index=${.}/dim_release.maven;\
+#		name='DIM_Release',\
+#	aQute.bnd.repository.maven.provider.MavenBndRepository;\
+#		releaseUrl=https://devel.data-in-motion.biz/nexus/repository/maven-public/;\
+#		index=${.}/dim_nexus.maven;\
+#		name='DIM_Nexus'
+
+-plugin.geckorcp:\
+	aQute.bnd.repository.maven.pom.provider.BndPomRepository;\
+        name="Gecko Equinox RCP";\
+        releaseUrls="https://devel.data-in-motion.biz/nexus/repository/dim-release/,https://repo.maven.apache.org/maven2/";\
+        snapshotUrls=https://devel.data-in-motion.biz/nexus/repository/dim-snapshot/;\
+        revision="org.geckoprojects.equinox:org.gecko.bnd.eclipse.bom:1.1.1"
+        
+-include: \
+	https://gitlab.com/gecko.io/geckoEMF/-/raw/master/cnf/geckoEMF/geckoEMF.bnd,\
+	https://gitlab.com/gecko.io/geckoBndTemplates/-/raw/develop/cnf/common/slf4j.bnd

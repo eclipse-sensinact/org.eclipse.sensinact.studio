@@ -1,0 +1,6 @@
+-buildpath: \
+	org.eclipse.core.runtime,\
+	osgi.annotation,\
+	org.eclipse.equinox.preferences,\
+	org.apache.log4j
+Bundle-Version: 1.0.0.SNAPSHOT
