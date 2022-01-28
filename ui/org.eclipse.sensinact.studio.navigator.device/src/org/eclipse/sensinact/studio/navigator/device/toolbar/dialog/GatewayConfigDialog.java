@@ -10,8 +10,6 @@
  */
 package org.eclipse.sensinact.studio.navigator.device.toolbar.dialog;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.sensinact.studio.preferences.GatewayHttpConfig;
@@ -106,9 +104,10 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 		addressText.setToolTipText("The address of the gateway.\navailable addresses:\nhttp://localhost\nhttp://192.168.1.69\nlocalhost\n192.168.1.69");				
 		
 		versionList = createList(container, "Version", new String[] {"1","2"}, version);
+		versionList.select(versionList.getItemCount() - 1);
 		
 		// Spinner fields
-		portSpinner = createSpinnerField(container, "Port", 10000, port);
+		portSpinner = createSpinnerField(container, "Port", 65535, port);
 		timeoutSpinner = createSpinnerField(container, "Timeout (ms)", 60000, timeout);		
 	
 		// credentials
@@ -181,7 +180,6 @@ public class GatewayConfigDialog extends TitleAreaDialog {
 			if(Integer.parseInt(versions[i]) == initValue)
 				break;
 		}
-		final AtomicInteger index = new AtomicInteger(i);
 		list.setItems(versions);
 		list.select(i);
 		list.addSelectionListener(new SelectionListener() {
